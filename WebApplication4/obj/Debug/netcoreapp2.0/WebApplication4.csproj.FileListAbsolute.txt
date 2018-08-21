@@ -31,3 +31,14 @@ C:\Users\salva\Source\Repos\CodeGuruASPNETCoreSample\WebApplication4\obj\Debug\n
 C:\Users\salva\Source\Repos\CodeGuruASPNETCoreSample\WebApplication4\obj\Debug\netcoreapp2.0\WebApplication4.AssemblyInfo.cs
 C:\Users\salva\Source\Repos\CodeGuruASPNETCoreSample\WebApplication4\obj\Debug\netcoreapp2.0\WebApplication4.dll
 C:\Users\salva\Source\Repos\CodeGuruASPNETCoreSample\WebApplication4\obj\Debug\netcoreapp2.0\WebApplication4.pdb
+C:\Users\salva\Source\Repos\kgtserver\WebApplication4\bin\Debug\netcoreapp2.0\WebApplication4.deps.json
+C:\Users\salva\Source\Repos\kgtserver\WebApplication4\bin\Debug\netcoreapp2.0\WebApplication4.runtimeconfig.json
+C:\Users\salva\Source\Repos\kgtserver\WebApplication4\bin\Debug\netcoreapp2.0\WebApplication4.runtimeconfig.dev.json
+C:\Users\salva\Source\Repos\kgtserver\WebApplication4\bin\Debug\netcoreapp2.0\WebApplication4.dll
+C:\Users\salva\Source\Repos\kgtserver\WebApplication4\bin\Debug\netcoreapp2.0\WebApplication4.pdb
+C:\Users\salva\Source\Repos\kgtserver\WebApplication4\obj\Debug\netcoreapp2.0\WebApplication4.csprojAssemblyReference.cache
+C:\Users\salva\Source\Repos\kgtserver\WebApplication4\obj\Debug\netcoreapp2.0\WebApplication4.csproj.CoreCompileInputs.cache
+C:\Users\salva\Source\Repos\kgtserver\WebApplication4\obj\Debug\netcoreapp2.0\WebApplication4.AssemblyInfoInputs.cache
+C:\Users\salva\Source\Repos\kgtserver\WebApplication4\obj\Debug\netcoreapp2.0\WebApplication4.AssemblyInfo.cs
+C:\Users\salva\Source\Repos\kgtserver\WebApplication4\obj\Debug\netcoreapp2.0\WebApplication4.dll
+C:\Users\salva\Source\Repos\kgtserver\WebApplication4\obj\Debug\netcoreapp2.0\WebApplication4.pdb

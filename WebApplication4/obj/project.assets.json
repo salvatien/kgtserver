@@ -12541,11 +12541,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\salva\\Source\\Repos\\CodeGuruASPNETCoreSample\\WebApplication4\\WebApplication4.csproj",
+      "projectUniqueName": "C:\\Users\\salva\\Source\\Repos\\kgtserver\\WebApplication4\\WebApplication4.csproj",
       "projectName": "WebApplication4",
-      "projectPath": "C:\\Users\\salva\\Source\\Repos\\CodeGuruASPNETCoreSample\\WebApplication4\\WebApplication4.csproj",
+      "projectPath": "C:\\Users\\salva\\Source\\Repos\\kgtserver\\WebApplication4\\WebApplication4.csproj",
       "packagesPath": "C:\\Users\\salva\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\salva\\Source\\Repos\\CodeGuruASPNETCoreSample\\WebApplication4\\obj\\",
+      "outputPath": "C:\\Users\\salva\\Source\\Repos\\kgtserver\\WebApplication4\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
