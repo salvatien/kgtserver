@@ -16,7 +16,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "WebApplication4": {
+    "DogsServer": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "api/employee",

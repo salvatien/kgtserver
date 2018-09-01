@@ -3,66 +3,53 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using WebApplication4.Models;
+using DogsServer.Models;
 using Microsoft.EntityFrameworkCore;
+using DogsServer.Repositories;
 
-namespace WebApplication4.Controllers
+
+namespace DogsServer.Controllers
 {
     [Route("api/[controller]")]
     public class EmployeeController : Controller
     {
+        private UnitOfWork unitOfWork = new UnitOfWork(new AppDbContext());
+
         [HttpGet]
         public List<Employee> Get()
         {
-            using (EmployeeDbContext db = new
-               EmployeeDbContext())
-            {
-                return db.Employees.ToList();
-            }
+            return unitOfWork.EmployeeRepository.GetAll().ToList();
         }
 
         [HttpGet("{id}")]
         public Employee Get(int id)
         {
-            using (EmployeeDbContext db = new
-               EmployeeDbContext())
-            {
-                return db.Employees.Find(id);
-            }
+            return unitOfWork.EmployeeRepository.GetById(id);
         }
 
         [HttpPost]
         public IActionResult Post([FromBody]Employee obj)
         {
-            using (EmployeeDbContext db = new EmployeeDbContext())
-            {
-                db.Employees.Add(obj);
-                db.SaveChanges();
-                return new ObjectResult("Employee added successfully!");
-            }
+            unitOfWork.EmployeeRepository.Insert(obj);
+            unitOfWork.Commit();
+            return new ObjectResult("Employee added successfully!");
         }
 
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody]Employee obj)
         {
-            using (EmployeeDbContext db = new EmployeeDbContext())
-            {
-                db.Entry<Employee>(obj).State = EntityState.Modified;
-                db.SaveChanges();
-                return new ObjectResult("Employee modified successfully!");
-            }
+            var employee = unitOfWork.EmployeeRepository.GetById(id);
+            employee = obj;
+            unitOfWork.Commit();
+            return new ObjectResult("Employee modified successfully!");
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            using (EmployeeDbContext db = new EmployeeDbContext())
-            {
-
-                db.Employees.Remove(db.Employees.Find(id));
-                db.SaveChanges();
-                return new ObjectResult("Employee deleted successfully!");
-            }
+            unitOfWork.EmployeeRepository.Delete(unitOfWork.EmployeeRepository.GetById(id));
+            unitOfWork.Commit();
+            return new ObjectResult("Employee deleted successfully!");
         }
     }
 }

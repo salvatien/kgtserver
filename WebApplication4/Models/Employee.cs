@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebApplication4.Models
+namespace DogsServer.Models
 {
     [Table("Employees")]
     public class Employee
