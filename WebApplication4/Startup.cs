@@ -25,6 +25,10 @@ namespace DogsServer
         {
             services.AddMvc();
             services.AddEntityFrameworkSqlServer();
+            services.AddDistributedMemoryCache();
+            services.AddSession(options => {
+                options.IdleTimeout = TimeSpan.FromMinutes(1);//You can set Time   
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -34,9 +38,10 @@ namespace DogsServer
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.UseSession();
             //app.UseMvcWithDefaultRoute();
             app.UseMvc();
+
         }
     }
 }
