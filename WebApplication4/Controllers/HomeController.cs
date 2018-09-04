@@ -22,6 +22,11 @@ namespace DogsServer.Controllers
             HttpContext.Session.SetInt32(SessionAge, 24);
             return HttpContext.Session.GetString(SessionName);
         }
+        [HttpGet("getsessionname")]
+        public string GetSessionName()
+        {
+            return HttpContext.Session.GetString(SessionName);
+        }
 
     }
 }
