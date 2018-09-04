@@ -40,6 +40,12 @@ namespace DogsServer
             }
             app.UseSession();
             //app.UseMvcWithDefaultRoute();
+            //app.UseMvc(routes =>
+            //{
+            //    routes.MapRoute(
+            //        name: "default",
+            //        template: "api/{controller=Home}/{action=Index}/{id?}");
+            //});
             app.UseMvc();
 
         }
