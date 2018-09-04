@@ -23,21 +23,5 @@ namespace DogsServer.Controllers
             return HttpContext.Session.GetString(SessionName);
         }
 
-        public IActionResult About()
-        {
-            ViewBag.Name = HttpContext.Session.GetString(SessionName);
-            ViewBag.Age = HttpContext.Session.GetInt32(SessionAge);
-            ViewData["Message"] = "Asp.Net Core !!!.";
-
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
-
     }
 }
