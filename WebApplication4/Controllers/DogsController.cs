@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using DogsServer.Models;
 using Microsoft.EntityFrameworkCore;
 using DogsServer.Repositories;
-
+using Newtonsoft.Json.Linq;
 
 namespace DogsServer.Controllers
 {
@@ -28,18 +28,25 @@ namespace DogsServer.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody]Dog obj)
+        public IActionResult Post([FromBody]JObject obj)
         {
-            unitOfWork.DogRepository.Insert(obj);
+            var dog = obj.ToObject<Dog>();
+            unitOfWork.DogRepository.Insert(dog);
             unitOfWork.Commit();
             return new ObjectResult("Dog added successfully!");
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody]Dog obj)
+        public IActionResult Put(int id, [FromBody]JObject obj)
         {
             var Dog = unitOfWork.DogRepository.GetById(id);
-            Dog = obj;
+            var updatedDog = obj.ToObject<Dog>();
+            Dog.Name = updatedDog.Name;
+            //Dog.Guide = updatedDog.Guide; //THIS SHOULD NOT BE COMMENTED BUT NOW CLIENT SENDS NEW GUIDE() WHICH GENERATES ERRORS
+            Dog.DateOfBirth = updatedDog.DateOfBirth;
+            Dog.Level = updatedDog.Level;
+            Dog.Notes = updatedDog.Notes;
+            Dog.Workmode = updatedDog.Workmode;
             unitOfWork.Commit();
             return new ObjectResult("Dog modified successfully!");
         }
