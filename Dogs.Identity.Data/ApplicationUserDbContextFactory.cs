@@ -14,7 +14,7 @@ namespace Dogs.Identity.Data
                new ConfigurationBuilder()
                    .AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), $"appsettings.json"))
                    .Build()
-                   .GetConnectionString("DatabaseConnection")
+                   .GetConnectionString("DogsIdentityDb")
                ).Options);
 
             dbContext.Database.Migrate();
