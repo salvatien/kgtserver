@@ -21,8 +21,6 @@ namespace DogsServer.Repositories
            new Repository<Models.Action>(_dbContext);
         public IRepository<Event> EventRepository =>
            new Repository<Event>(_dbContext);
-        public IRepository<Models.Enums.Wrappers.DogWorkmodeWrapper> DogWorkmodeWrapperRepository =>
-           new Repository<Models.Enums.Wrappers.DogWorkmodeWrapper>(_dbContext);
 
         #endregion
         public UnitOfWork(AppDbContext dbContext)

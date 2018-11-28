@@ -19,7 +19,7 @@ namespace Dogs.Identity.Api.Models
 
         [Required]
         [Compare("Password")]
-        //[RegularExpression("^.{4,20}$", ErrorMessage = "Hasło musi mieć minimum 4 i maksimum 20 znaków")]
+        [RegularExpression("^(?=.*\\d).{6,20}$", ErrorMessage = "Hasło musi mieć minimum 6 i maksimum 20 znaków oraz zawierać minimum 1 cyfrę.")]
         public String PasswordConfirmation { get; set; }
     }
 }
