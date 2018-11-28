@@ -5,6 +5,10 @@ VisualStudioVersion = 15.0.27004.2009
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DogsServer", "WebApplication4\DogsServer.csproj", "{5FCA1924-C207-4464-A1FB-C03EA8D3DADF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dogs.Identity.Data", "Dogs.Identity.Data\Dogs.Identity.Data.csproj", "{C1D3EB7D-26DE-4954-957B-31BD6CE31F20}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dogs.Identity.Api", "Dogs.Identity.Api\Dogs.Identity.Api.csproj", "{95490FCD-B23C-41D7-9A14-A877E06AB571}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{5FCA1924-C207-4464-A1FB-C03EA8D3DADF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5FCA1924-C207-4464-A1FB-C03EA8D3DADF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5FCA1924-C207-4464-A1FB-C03EA8D3DADF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1D3EB7D-26DE-4954-957B-31BD6CE31F20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1D3EB7D-26DE-4954-957B-31BD6CE31F20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1D3EB7D-26DE-4954-957B-31BD6CE31F20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1D3EB7D-26DE-4954-957B-31BD6CE31F20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95490FCD-B23C-41D7-9A14-A877E06AB571}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95490FCD-B23C-41D7-9A14-A877E06AB571}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95490FCD-B23C-41D7-9A14-A877E06AB571}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95490FCD-B23C-41D7-9A14-A877E06AB571}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
