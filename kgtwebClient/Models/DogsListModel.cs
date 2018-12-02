@@ -5,8 +5,8 @@ using System.Web;
 
 namespace kgtwebClient.Models
 {
-    public class DogsList
+    public class DogsListModel
     {
-        public List<Dog> ListOfDogs { get; set; }
+        public List<DogModel> ListOfDogs { get; set; }
     }
 }

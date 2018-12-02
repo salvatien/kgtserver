@@ -148,20 +148,19 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\DogHelpers.cs" />
     <Compile Include="Helpers\EnumHelpers.cs" />
     <Compile Include="Models\Account\LoginModel.cs" />
     <Compile Include="Models\Account\RegisterModel.cs" />
-    <Compile Include="Models\Action.cs" />
-    <Compile Include="Models\Dog.cs" />
-    <Compile Include="Models\DogsList.cs" />
-    <Compile Include="Models\Employee.cs" />
-    <Compile Include="Models\EmployeeInfo.cs" />
+    <Compile Include="Models\ActionModel.cs" />
+    <Compile Include="Models\DogModel.cs" />
+    <Compile Include="Models\DogsListModel.cs" />
     <Compile Include="Models\Enums\DogLevel.cs" />
     <Compile Include="Models\Enums\DogWorkmode.cs" />
-    <Compile Include="Models\Event.cs" />
-    <Compile Include="Models\Guide.cs" />
-    <Compile Include="Models\GuideAction.cs" />
-    <Compile Include="Models\GuideEvent.cs" />
+    <Compile Include="Models\EventModel.cs" />
+    <Compile Include="Models\GuideModel.cs" />
+    <Compile Include="Models\GuideActionModel.cs" />
+    <Compile Include="Models\GuideEventModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -18,7 +18,7 @@
     var EnumCount = Enum.GetValues(typeof(DogWorkmode)).Length;
 }
 
-@model kgtwebClient.Models.Dog
+@model kgtwebClient.Models.DogModel
 
 @*
 
@@ -54,21 +54,17 @@
                                     <tr>
                                         <td>Imię</td>
                                         <td>@Html.TextBoxFor(m => m.Name, new { @Value = Model.Name }) </td>
-                                        @*<td><input type="text" class="dogUpdate" name="updateDogName" value="@Html.DisplayFor(model => model.Name)"></td>*@
                                     </tr>
                                     <tr>
                                         <td>Data urodzenia</td>
-                                        <td>@Html.TextBoxFor(m => m.DateOfBirth, new { @Value = Model.DateOfBirth, type = "date" }) </td>
-                                        @*<td><input type="text" class="dogUpdate" name="updateDogLevel" value="@Html.DisplayFor(model => model.DateOfBirth)"></td>*@
+                                        <td>@Html.TextBoxFor(m => m.DateOfBirth, new { @Value = Model.DateOfBirth.Date, type = "date" }) </td>
                                     </tr>
                                     <tr>
                                         <td>Poziom</td>
                                         <td>@Html.EnumDropDownListFor(m => m.Level, new { @class = "form-control" }) </td>
-                                        @*<td><input type="text" class="dogUpdate" name="updateDogLevel" value="@Html.DisplayFor(model => model.Level)"></td>*@
                                     </tr>
                                     <tr>
                                         <td>Tryb pracy</td>
-                                        @*<td>@Html.ListBoxFor(m => selected, workmodeList) </td> *@
                                         <td>
                                             @foreach (int workmode in Enum.GetValues(typeof(DogWorkmode)))
                                             {
@@ -94,6 +90,11 @@
                                         <td>Notatki</td>
                                         <td>@Html.TextAreaFor(m => m.Notes, new { @Value = Model.Notes }) </td>
                                         @*<td><input type="text" class="dogUpdate" name="updateDogNotes" value="@Html.DisplayFor(model => model.Notes)"></td>*@
+                                    </tr>
+                                    <tr>
+                                        <td>Przewodnik</td>
+                                        <td>@Html.TextBoxFor(m => m.GuideId, new { @Value = Model.GuideId }) </td>
+                                        <td>@Html.TextBoxFor(m => m.GuideName, new { @Value = Model.GuideName }) </td>
                                     </tr>
 
                                 </table>

@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 namespace kgtwebClient.Models
 {
     [Table("Dogs")]
-    public class Dog
+    public class DogModel
     {
-        [DatabaseGenerated(DatabaseGeneratedOption
-           .Identity)]
-        [Required]
+        //[DatabaseGenerated(DatabaseGeneratedOption
+         //  .Identity)]
+        //[Required]
         public int DogID { get; set; }
         [Required]
         public string Name { get; set; }
@@ -23,9 +23,9 @@ namespace kgtwebClient.Models
         public DogLevel Level { get; set; }
         public DogWorkmode? Workmodes { get; set; }
         public string Notes { get; set; }
-        //[Required]
-        public virtual Guide Guide { get; set; }
-
+        [Required]
+        public int GuideId { get; set; }
+        public string GuideName { get; set; }
 
     }
 }

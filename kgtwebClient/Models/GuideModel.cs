@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace kgtwebClient.Models
 {
     [Table("Guides")]
-    public class Guide
+    public class GuideModel
     {
         [DatabaseGenerated(DatabaseGeneratedOption
            .Identity)]
@@ -27,8 +27,8 @@ namespace kgtwebClient.Models
         public string Phone { get; set; }
         public string Fitness { get; set; }
         public string Notes { get; set; }
-        public virtual List<Dog> Dogs { get; set; }
-        public virtual IList<GuideAction> GuideActions { get; set; }
-        public virtual IList<GuideEvent> GuideEvents { get; set; }
+        public virtual List<DogModel> Dogs { get; set; }
+        public virtual IList<GuideActionModel> GuideActions { get; set; }
+        public virtual IList<GuideEventModel> GuideEvents { get; set; }
     }
 }

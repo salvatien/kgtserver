@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 
 namespace kgtwebClient.Models
 {
-    public class GuideEvent
+    public class GuideEventModel
     {
         public int GuideId { get; set; }
-        public Guide Guide { get; set; }
+        public GuideModel Guide { get; set; }
 
         public int EventId { get; set; }
-        public Event Event { get; set; }
+        public EventModel Event { get; set; }
     }
 }
