@@ -1,0 +1,113 @@
+﻿@using kgtwebClient.Helpers;
+@using kgtwebClient.Models.Enums;
+
+@model kgtwebClient.Models.Dog
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var EnumCount = Enum.GetValues(typeof(DogWorkmode)).Length;
+}
+
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+</head>
+<body>
+    <div style="margin:100px">
+        <div style="float:left">
+        @using (Html.BeginForm("AddDog", "Dogs",@*new { id = Model.DogID},*@ FormMethod.Post, new { enctype = "multipart/form-data", onsubmit = "caculateWorkmodeSum()" }))
+        {
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(m => m.DogID)
+        <fieldset>
+            <table>
+                <tr>
+                    <td>Imię</td>
+                    <td>@Html.TextBoxFor(m => m.Name) </td>
+                    @*<td><input type="text" class="dogUpdate" name="updateDogName" value="@Html.DisplayFor(model => model.Name)"></td>*@
+                </tr>
+                <tr>
+                    <td>Data urodzenia</td>
+                    <td>@Html.TextBoxFor(m => m.DateOfBirth, new { type = "date" }) </td>
+                    @*<td><input type="text" class="dogUpdate" name="updateDogLevel" value="@Html.DisplayFor(model => model.DateOfBirth)"></td>*@
+                </tr>
+                <tr>
+                    <td>Poziom</td>
+                    <td>@Html.EnumDropDownListFor(m => m.Level, new { @class = "form-control" }) </td>
+                    @*<td><input type="text" class="dogUpdate" name="updateDogLevel" value="@Html.DisplayFor(model => model.Level)"></td>*@
+                </tr>
+                <tr>
+                    <td>Tryb pracy</td>
+                    <td>
+
+                        @foreach (int workmode in Enum.GetValues(typeof(DogWorkmode)))
+                        {
+                            var workmodeName = Enum.GetName(typeof(DogWorkmode), workmode);
+                            // if (currentWorkmodes.Contains(Enum.Parse(typeof(DogWorkmode), workmodeName)))
+                            // {
+                            @Html.CheckBox(workmodeName, false, new { @id = "dogWorkmode" + workmode })
+                            @Html.DisplayName(workmodeName)
+                            <br />
+                            // }
+                            //else
+                            //{
+                            //    @Html.CheckBox(workmodeName, false, new { @id = "dogWorkmode" + workmode })
+                            //    @Html.DisplayName(workmodeName)
+                            //    <br />
+                            //}
+                        }
+                    </td>
+                    @Html.HiddenFor(m => m.Workmodes, new { @id = "workmodeSum" })
+                    @*<td><input type="text" class="dogUpdate" name="updateDogLevel" value="@Html.DisplayFor(model => model.Workmode)"></td>*@
+                </tr>
+                <tr>
+                    <td>Notatki</td>
+                    <td>@Html.TextAreaFor(m => m.Notes) </td>
+                    @*<td><input type="text" class="dogUpdate" name="updateDogNotes" value="@Html.DisplayFor(model => model.Notes)"></td>*@
+                </tr>
+                @*
+            <tr>
+            <td>Przewodnik</td>
+            <td>@Html.TextBoxFor(m => m.Guide, new { @Value = Model.Workmode }) </td> // pobierz dane przewodnika z konta zalogowanego
+            </tr>
+                *@
+            </table>
+            <input type="submit" value="Dodaj do bazy" />
+        </fieldset>
+    }
+
+        </div>
+        <div class="picture">
+            <img src="~/Images/piesek1.jpg" height="400" width="400">
+            <br />
+            Wybierz nowe zdjęcie: <input type="file" name="file" />
+
+        </div>
+    </div>
+
+
+    <script>
+    function caculateWorkmodeSum() {
+        var workmodeSum = 0;
+        for (var i = 0; i < @EnumCount; i++) {
+
+            console.log('#dogWorkmode' + Math.pow(2, i));
+            console.log("tuu");
+            console.log($('#dogWorkmode' + Math.pow(2, i)).prop('checked'));
+
+
+            if ($('#dogWorkmode' + Math.pow(2, i)).is(':checked')) {
+                workmodeSum += Math.pow(2, i);
+            }
+        }
+        console.log(@EnumCount);
+        console.log("workmode: " + workmodeSum);
+        $('#workmodeSum').val(workmodeSum);
+    }
+    </script>
+</body>
+</html>
