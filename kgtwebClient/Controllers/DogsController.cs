@@ -15,7 +15,8 @@ namespace kgtwebClient.Controllers
     {
 
         //The URL of the WEB API Service
-        static string url = "http://kgt.azurewebsites.net/api/";
+        static string url = "http://localhost:12321/api/";
+        // static string url = "http://kgt.azurewebsites.net/api/";
         private static readonly HttpClient client = new HttpClient { BaseAddress = new Uri(url) };
 
 
