@@ -1,16 +1,27 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace DogsServer.Models.Enums
 {
-    public enum DogWorkmode
+    //public enum DogWorkmode
+    //{
+    //    Tracking, //tropiacy
+    //    Terrain, //terenowy
+    //    Rescue, //ratowniczy
+    //    Rubble, //gruzowy
+    //    Water //wodny
+    //}
+    [Flags]
+    [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+    public enum DogWorkmode : int
     {
-        Tracking, //tropiacy
-        Terrain, //terenowy
-        Rescue, //ratowniczy
-        Rubble, //gruzowy
-        Water //wodny
-    }
+        Tracking = 1, //tropiacy
+        Terrain = 2, //terenowy
+        Rescue = 4, //ratowniczy
+        Rubble = 8, //gruzowy
+        Water = 16 //wodny
+    };
 }

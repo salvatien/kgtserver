@@ -14,7 +14,6 @@ namespace DogsServer.Repositories
         IRepository<Dog> DogRepository { get; }
         IRepository<Models.Action> ActionRepository { get; }
         IRepository<Models.Event> EventRepository { get; }
-        IRepository<Models.Enums.Wrappers.DogWorkmodeWrapper> DogWorkmodeWrapperRepository { get; }
 
         /// <summary>
         /// Commits all changes

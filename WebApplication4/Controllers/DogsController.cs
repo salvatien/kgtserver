@@ -39,16 +39,23 @@ namespace DogsServer.Controllers
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody]JObject obj)
         {
-            var Dog = unitOfWork.DogRepository.GetById(id);
-            var updatedDog = obj.ToObject<Dog>();
-            Dog.Name = updatedDog.Name;
-            //Dog.Guide = updatedDog.Guide; //THIS SHOULD NOT BE COMMENTED BUT NOW CLIENT SENDS NEW GUIDE() WHICH GENERATES ERRORS
-            Dog.DateOfBirth = updatedDog.DateOfBirth;
-            Dog.Level = updatedDog.Level;
-            Dog.Notes = updatedDog.Notes;
-            Dog.Workmode = updatedDog.Workmode;
-            unitOfWork.Commit();
-            return new ObjectResult("Dog modified successfully!");
+            try
+            {
+                var Dog = unitOfWork.DogRepository.GetById(id);
+                var updatedDog = obj.ToObject<Dog>();
+                Dog.Name = updatedDog.Name;
+                //Dog.Guide = updatedDog.Guide; //THIS SHOULD NOT BE COMMENTED BUT NOW CLIENT SENDS NEW GUIDE() WHICH GENERATES ERRORS
+                Dog.DateOfBirth = updatedDog.DateOfBirth;
+                Dog.Level = updatedDog.Level;
+                Dog.Notes = updatedDog.Notes;
+                Dog.Workmodes = updatedDog.Workmodes;
+                unitOfWork.Commit();
+                return new ObjectResult("Dog modified successfully!");
+            }
+            catch (Exception e)
+            {
+                return new ObjectResult(e.Message);
+            }
         }
 
         [HttpDelete("{id}")]
