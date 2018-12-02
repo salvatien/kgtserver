@@ -10,8 +10,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using Dogs.Identity.Api.Models;
 using Dogs.Identity.Data.Entities;
+using Dogs.ViewModels.Data.Models.Account;
 
 namespace Dogs.Identity.Api.Controllers
 {

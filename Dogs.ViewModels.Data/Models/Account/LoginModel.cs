@@ -1,14 +1,9 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
-
-namespace kgtwebClient.Models.Account
+namespace Dogs.ViewModels.Data.Models.Account
 {
     public class LoginModel
     {
-        [Required]
         public String Username { get; set; }
-
-        [Required]
         public String Password { get; set; }
     }
 }

@@ -7,6 +7,7 @@ using DogsServer.Models;
 using Microsoft.EntityFrameworkCore;
 using DogsServer.Repositories;
 using Newtonsoft.Json.Linq;
+using Dogs.ViewModels.Data.Models;
 
 namespace DogsServer.Controllers
 {
@@ -30,7 +31,18 @@ namespace DogsServer.Controllers
         [HttpPost]
         public IActionResult Post([FromBody]JObject obj)
         {
-            var dog = obj.ToObject<Dog>();
+            var dogModel = obj.ToObject<DogModel>();
+            var guide = unitOfWork.GuideRepository.GetById(dogModel.GuideId);
+            var dog = new Dog
+            {
+                DateOfBirth = dogModel.DateOfBirth,
+                Guide = guide,
+                //Level = dogModel.Level,
+                Name = dogModel.Name,
+                Notes = dogModel.Notes,
+                //Workmodes = dogModel.Workmodes
+            };
+            
             unitOfWork.DogRepository.Insert(dog);
             unitOfWork.Commit();
             return new ObjectResult("Dog added successfully!");

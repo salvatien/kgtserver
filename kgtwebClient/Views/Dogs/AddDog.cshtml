@@ -1,7 +1,8 @@
 ﻿@using kgtwebClient.Helpers;
-@using kgtwebClient.Models.Enums;
+@using Dogs.ViewModels.Data.Models.Enums;
+@using Dogs.ViewModels.Data.Models;
 
-@model kgtwebClient.Models.Dog
+@model Dogs.ViewModels.Data.Models.DogModel
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     var EnumCount = Enum.GetValues(typeof(DogWorkmode)).Length;
@@ -44,9 +45,9 @@
                     <td>Tryb pracy</td>
                     <td>
 
-                        @foreach (int workmode in Enum.GetValues(typeof(DogWorkmode)))
+                        @foreach (int workmode in Enum.GetValues(typeof(Dogs.ViewModels.Data.Models.Enums.DogWorkmode)))
                         {
-                            var workmodeName = Enum.GetName(typeof(DogWorkmode), workmode);
+                            var workmodeName = Enum.GetName(typeof(Dogs.ViewModels.Data.Models.Enums.DogWorkmode), workmode);
                             // if (currentWorkmodes.Contains(Enum.Parse(typeof(DogWorkmode), workmodeName)))
                             // {
                             @Html.CheckBox(workmodeName, false, new { @id = "dogWorkmode" + workmode })
@@ -72,7 +73,7 @@
                 @*
             <tr>
             <td>Przewodnik</td>
-            <td>@Html.TextBoxFor(m => m.Guide, new { @Value = Model.Workmode }) </td> // pobierz dane przewodnika z konta zalogowanego
+            <td>@Html.TextBoxFor(m => m.GuideId, new { @Value = Model.Workmode }) </td> // pobierz dane przewodnika z konta zalogowanego
             </tr>
                 *@
             </table>

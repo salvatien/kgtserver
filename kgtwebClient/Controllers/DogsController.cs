@@ -1,4 +1,4 @@
-﻿using kgtwebClient.Models;
+﻿using Dogs.ViewModels.Data.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -15,7 +15,11 @@ namespace kgtwebClient.Controllers
     {
 
         //The URL of the WEB API Service
+#if DEBUG
+        static string url = "http://localhost:12321/api/";
+#else 
         static string url = "http://kgt.azurewebsites.net/api/";
+#endif
         private static readonly HttpClient client = new HttpClient { BaseAddress = new Uri(url) };
 
 
@@ -31,12 +35,12 @@ namespace kgtwebClient.Controllers
             {
                 var responseData = responseMessage.Content.ReadAsStringAsync().Result;
 
-                var dogs = JsonConvert.DeserializeObject<List<Dog>>(responseData);
+                var dogs = JsonConvert.DeserializeObject<List<DogModel>>(responseData);
 
                 //return View(Employees);
                 //ViewBag.Persons = data;
 
-                var dogsList = new DogsList
+                var dogsList = new DogsListModel
                 {
                     ListOfDogs = dogs
                 };
@@ -61,7 +65,7 @@ namespace kgtwebClient.Controllers
             {
                 var responseData = responseMessage.Content.ReadAsStringAsync().Result;
 
-                var dog = JsonConvert.DeserializeObject<Dog>(responseData);
+                var dog = JsonConvert.DeserializeObject<DogModel>(responseData);
 
                 //return View(Employees);
                 //ViewBag.Persons = data;
@@ -83,7 +87,7 @@ namespace kgtwebClient.Controllers
         }
 
         [HttpPost]
-        public JsonResult /*Task<ActionResult>*/ AddDog(Dog addedDog)
+        public JsonResult /*Task<ActionResult>*/ AddDog(DogModel addedDog)
         {
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -97,7 +101,7 @@ namespace kgtwebClient.Controllers
             // TODO zamienić kolejność poniższych linii
             HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, client.BaseAddress + "dogs/");
 
-            var dog = new Dog
+            var dog = new DogModel
             {
                 //DogID = 1,
                 Name = addedDog.Name,
@@ -105,7 +109,7 @@ namespace kgtwebClient.Controllers
                 Level = addedDog.Level,
                 Workmodes = addedDog.Workmodes,
                 Notes = addedDog.Notes,
-                Guide = new Guide() //IT DOESNT WORK, IT SHOULD BE A REAL GUIDE, NOW SERVER JUST IGNORES GUIDE AND LEAVES THE OLD ONE UNCHANGED!
+                GuideId = addedDog.GuideId
             };
 
             var dogSerialized = JsonConvert.SerializeObject(dog);
@@ -168,7 +172,7 @@ namespace kgtwebClient.Controllers
             {
                 var responseData = responseMessage.Content.ReadAsStringAsync().Result;
 
-                var dog = JsonConvert.DeserializeObject<Dog>(responseData);
+                var dog = JsonConvert.DeserializeObject<DogModel>(responseData);
                 
 
                 return View(dog);
@@ -177,7 +181,7 @@ namespace kgtwebClient.Controllers
         }
 
         [HttpPost]
-        public bool UpdateDog(/*int? id*/Dog updatedDog)    //? -> może być null
+        public bool UpdateDog(/*int? id*/DogModel updatedDog)    //? -> może być null
         {
             //client.BaseAddress = new Uri(url);
             client.DefaultRequestHeaders.Accept.Clear();
@@ -189,7 +193,7 @@ namespace kgtwebClient.Controllers
               //                                  System.Text.Encoding.UTF8, "application/json");
              
             HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Put, client.BaseAddress + "dogs/" + updatedDog.DogID.ToString());
-            var dog = new Dog
+            var dog = new DogModel
             {
                 DogID = updatedDog.DogID,
                 Name = updatedDog.Name,
@@ -197,7 +201,7 @@ namespace kgtwebClient.Controllers
                 Level = updatedDog.Level,
                 Workmodes = updatedDog.Workmodes,
                 Notes = updatedDog.Notes,
-                Guide = new Guide() //IT DOESNT WORK, IT SHOULD BE A REAL GUIDE, NOW SERVER JUST IGNORES GUIDE AND LEAVES THE OLD ONE UNCHANGED!
+                GuideId = updatedDog.GuideId
             };
 
             var dogSerialized = JsonConvert.SerializeObject(dog);

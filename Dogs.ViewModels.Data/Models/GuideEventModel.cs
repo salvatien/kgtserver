@@ -3,14 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace kgtwebClient.Models
+namespace Dogs.ViewModels.Data.Models
 {
-    public class GuideEvent
+    public class GuideEventModel
     {
         public int GuideId { get; set; }
-        public Guide Guide { get; set; }
-
         public int EventId { get; set; }
-        public Event Event { get; set; }
     }
 }
