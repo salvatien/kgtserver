@@ -1,0 +1,157 @@
+﻿/*
+body {
+    background-color: palegreen;
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-bottom: 20px;
+}
+*/
+body, html {
+    height: 100%;
+    margin: 0;
+}
+
+#navbar {
+    overflow: hidden;
+    background-color: #34495e;
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
+#openMenu {
+    font-size:30px;
+    cursor:pointer;
+    color: white;
+}
+.menu {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #34495e;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+}
+
+.menu a, ul {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: white;
+    display: block;
+    transition: 0.3s;
+}
+
+    .menu a:hover {
+        color: #f1f1f1;
+    }
+
+.menu .menuCloseButton {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+#content {
+    transition: margin-left .5s;
+    height: 100%;
+}
+
+.tables {
+    padding: 50px;
+}
+
+#dogsTable table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    border: 1px solid #ddd;
+}
+
+#dogsTable th, td {
+    text-align: left;
+    padding: 16px;
+}
+
+#dogsTable th {
+    background-color: crimson
+}
+
+#dogsTable tr:nth-child(even) {
+    background-color: #f2f2f2
+}
+
+#dogsTable tr:nth-child(odd) {
+    background-color: #0094ff
+}
+
+#dogsSearch {
+    /*background-image: url('/css/searchicon.png');
+    background-position: 10px 10px;
+    background-repeat: no-repeat; */
+    position: relative;
+    width: 100%;
+    font-size: 16px;
+    padding: 12px 20px 12px 40px;
+    border: 1px solid #ddd;
+    margin-bottom: 12px;
+    /*z-index: -1;*/
+}
+
+    #dogsSearch:before {
+        content: "\f007"; /* this is your text. You can also use UTF-8 character codes as I do here */
+        font-family: 'Font Awesome\ 5 Free';
+        left: -5px;
+        position: absolute;
+        top: 0;
+        font-weight: 900;
+        /*z-index: -1;*/
+    }
+
+.deleteButton, .updateButton, .displayButton {
+    font-size: 16px;
+    padding: 12px 20px 12px 20px;
+    border: 1px solid #ddd;
+    margin-bottom: 12px;
+    max-width: 100px;
+    /*background-color: #34495e;*/
+    color: white
+}
+
+.deleteButton {
+    background-color: red;
+}
+
+.updateButton {
+    background-color: cornflowerblue;
+}
+
+.displayButton {
+    background-color: yellowgreen;
+}
+.mainPageBackground {
+
+    background-image: url("/Images/kgt.jpg");
+    height: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: block;
+
+}
+
+.picture {
+    padding-left: 50%
+}
+
+img {
+    width: 100%;
+    max-width: 500px;
+    max-height: 500px;
+}

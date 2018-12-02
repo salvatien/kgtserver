@@ -84,8 +84,6 @@ namespace Dogs.Identity.Api.Controllers
             {
                 var user = new ApplicationUser
                 {
-                    //TODO: Use Automapper instaed of manual binding  
-
                     UserName = registerModel.Username,
                     FirstName = registerModel.FirstName,
                     LastName = registerModel.LastName,

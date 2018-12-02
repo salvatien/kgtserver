@@ -1,0 +1,62 @@
+﻿@model kgtwebClient.Models.Dog
+
+@{
+    ViewBag.Title = "Dog";
+}
+
+
+<div style="margin:60px">
+    <div>
+        <h4>@Html.DisplayFor(model => model.Name)</h4>
+        <hr />
+        <dl class="dl-horizontal" style="float:left">
+            <dt>
+                @Html.DisplayNameFor(model => model.Guide)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Guide)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Level)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Level)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Workmodes)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Workmodes)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.DateOfBirth)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.DateOfBirth)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Notes)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Notes)
+            </dd>
+
+        </dl>
+    </div>
+    <div class="picture">
+        <img src="~/Images/januszek.jpg" height="400" width="400">
+    </div>
+</div>
+<p style="margin:60px">
+    @Html.ActionLink("--Update Dog--", "UpdateDog", "Dogs", new {id = Model.DogID}, null)
+
+
+    @Html.ActionLink("Edit", "Edit", new { id = Model.DogID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
