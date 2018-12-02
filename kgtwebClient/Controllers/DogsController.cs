@@ -101,18 +101,18 @@ namespace kgtwebClient.Controllers
             // TODO zamienić kolejność poniższych linii
             HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, client.BaseAddress + "dogs/");
 
-            var dog = new DogModel
-            {
-                //DogID = 1,
-                Name = addedDog.Name,
-                DateOfBirth = addedDog.DateOfBirth,
-                Level = addedDog.Level,
-                Workmodes = addedDog.Workmodes,
-                Notes = addedDog.Notes,
-                GuideId = addedDog.GuideId
-            };
+            //var dog = new DogModel
+            //{
+            //    //DogID = 1,
+            //    Name = addedDog.Name,
+            //    DateOfBirth = addedDog.DateOfBirth,
+            //    Level = addedDog.Level,
+            //    Workmodes = addedDog.Workmodes,
+            //    Notes = addedDog.Notes,
+            //    GuideId = addedDog.GuideIdAndName.GuideId
+            //};
 
-            var dogSerialized = JsonConvert.SerializeObject(dog);
+            var dogSerialized = JsonConvert.SerializeObject(addedDog);
 
             message.Content = new StringContent(dogSerialized, System.Text.Encoding.UTF8, "application/json");
 
@@ -193,18 +193,18 @@ namespace kgtwebClient.Controllers
               //                                  System.Text.Encoding.UTF8, "application/json");
              
             HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Put, client.BaseAddress + "dogs/" + updatedDog.DogID.ToString());
-            var dog = new DogModel
-            {
-                DogID = updatedDog.DogID,
-                Name = updatedDog.Name,
-                DateOfBirth = updatedDog.DateOfBirth,
-                Level = updatedDog.Level,
-                Workmodes = updatedDog.Workmodes,
-                Notes = updatedDog.Notes,
-                GuideId = updatedDog.GuideId
-            };
+            //var dog = new DogModel
+            //{
+            //    DogID = updatedDog.DogID,
+            //    Name = updatedDog.Name,
+            //    DateOfBirth = updatedDog.DateOfBirth,
+            //    Level = updatedDog.Level,
+            //    Workmodes = updatedDog.Workmodes,
+            //    Notes = updatedDog.Notes,
+            //    GuideId = updatedDog.GuideId
+            //};
 
-            var dogSerialized = JsonConvert.SerializeObject(dog);
+            var dogSerialized = JsonConvert.SerializeObject(updatedDog);
             
 
             message.Content = new StringContent(dogSerialized, System.Text.Encoding.UTF8, "application/json"); //dog serialized id.ToString()

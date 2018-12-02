@@ -14,6 +14,7 @@ namespace DogsServer.Models
            .Identity)]
         [Required]
         public int GuideID { get; set; }
+        public string IdentityId { get; set; }
         [Required]
         public string FirstName { get; set; }
         [Required]

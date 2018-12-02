@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using DogsServer.Repositories;
 using Newtonsoft.Json.Linq;
 using Dogs.ViewModels.Data.Models;
+using Dogs.ViewModels.Data.Models.Enums;
+using DogsServer.Models.Enums;
 
 namespace DogsServer.Controllers
 {
@@ -23,24 +25,40 @@ namespace DogsServer.Controllers
         }
 
         [HttpGet("{id}")]
-        public Dog Get(int id)
+        public DogModel Get(int id)
         {
-            return unitOfWork.DogRepository.GetById(id);
+            var dog = unitOfWork.DogRepository.GetById(id);
+            var dogModel = new DogModel
+            {
+                DateOfBirth = dog.DateOfBirth,
+                DogID = dog.DogID,
+                GuideIdAndName = new GuideIdNameModel
+                {
+                    GuideId = dog.Guide != null ? dog.Guide.GuideID : 0,
+                    GuideName = dog.Guide != null ? dog.Guide.FirstName + " " + dog.Guide.LastName : "Pies nie ma jeszcze przewodnika"
+                },
+                Level = dog.Level,
+                Name = dog.Name,
+                Notes = dog.Notes,
+                Workmodes = dog.Workmodes
+            };
+            return dogModel;
         }
 
         [HttpPost]
         public IActionResult Post([FromBody]JObject obj)
         {
             var dogModel = obj.ToObject<DogModel>();
-            var guide = unitOfWork.GuideRepository.GetById(dogModel.GuideId);
+            var guideId = dogModel.GuideIdAndName != null ? dogModel.GuideIdAndName.GuideId : 1;
+            var guide = unitOfWork.GuideRepository.GetById(guideId);
             var dog = new Dog
             {
                 DateOfBirth = dogModel.DateOfBirth,
                 Guide = guide,
-                //Level = dogModel.Level,
+                Level = dogModel.Level,
                 Name = dogModel.Name,
                 Notes = dogModel.Notes,
-                //Workmodes = dogModel.Workmodes
+                Workmodes = dogModel.Workmodes
             };
             
             unitOfWork.DogRepository.Insert(dog);
@@ -54,13 +72,20 @@ namespace DogsServer.Controllers
             try
             {
                 var Dog = unitOfWork.DogRepository.GetById(id);
-                var updatedDog = obj.ToObject<Dog>();
+                var updatedDog = obj.ToObject<DogModel>();
                 Dog.Name = updatedDog.Name;
-                //Dog.Guide = updatedDog.Guide; //THIS SHOULD NOT BE COMMENTED BUT NOW CLIENT SENDS NEW GUIDE() WHICH GENERATES ERRORS
                 Dog.DateOfBirth = updatedDog.DateOfBirth;
                 Dog.Level = updatedDog.Level;
                 Dog.Notes = updatedDog.Notes;
                 Dog.Workmodes = updatedDog.Workmodes;
+                if (updatedDog.GuideIdAndName != null)
+                {
+                    if (Dog.Guide == null || Dog.Guide.GuideID != updatedDog.GuideIdAndName.GuideId)
+                    {
+                        var guide = unitOfWork.GuideRepository.GetById(updatedDog.GuideIdAndName.GuideId);
+                        Dog.Guide = guide;
+                    }
+                }
                 unitOfWork.Commit();
                 return new ObjectResult("Dog modified successfully!");
             }

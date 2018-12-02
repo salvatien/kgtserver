@@ -1,4 +1,4 @@
-﻿using DogsServer.Models.Enums;
+﻿using Dogs.ViewModels.Data.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
