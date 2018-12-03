@@ -5833,6 +5833,16 @@
         "runtime": {
           "lib/netstandard1.3/Microsoft.WindowsAzure.Storage.dll": {}
         }
+      },
+      "Dogs.ViewModels.Data/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "compile": {
+          "bin/placeholder/Dogs.ViewModels.Data.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Dogs.ViewModels.Data.dll": {}
+        }
       }
     }
   },
@@ -15259,10 +15269,16 @@
         "windowsazure.storage.8.1.4.nupkg.sha512",
         "windowsazure.storage.nuspec"
       ]
+    },
+    "Dogs.ViewModels.Data/1.0.0": {
+      "type": "project",
+      "path": "../Dogs.ViewModels.Data/Dogs.ViewModels.Data.csproj",
+      "msbuildProject": "../Dogs.ViewModels.Data/Dogs.ViewModels.Data.csproj"
     }
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v2.1": [
+      "Dogs.ViewModels.Data >= 1.0.0",
       "EntityFramework >= 6.2.0",
       "Google.Apis >= 1.36.1",
       "Google.Apis.Auth >= 1.36.1",
@@ -15310,7 +15326,11 @@
       },
       "frameworks": {
         "netcoreapp2.1": {
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\user\\Source\\Repos\\kgtserver\\Dogs.ViewModels.Data\\Dogs.ViewModels.Data.csproj": {
+              "projectPath": "C:\\Users\\user\\Source\\Repos\\kgtserver\\Dogs.ViewModels.Data\\Dogs.ViewModels.Data.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

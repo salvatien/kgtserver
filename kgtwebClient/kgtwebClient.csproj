@@ -139,6 +139,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Dogs.ViewModels.Data\Dogs.ViewModels.Data.csproj" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -150,17 +153,6 @@
     </Compile>
     <Compile Include="Helpers\DogHelpers.cs" />
     <Compile Include="Helpers\EnumHelpers.cs" />
-    <Compile Include="Models\Account\LoginModel.cs" />
-    <Compile Include="Models\Account\RegisterModel.cs" />
-    <Compile Include="Models\ActionModel.cs" />
-    <Compile Include="Models\DogModel.cs" />
-    <Compile Include="Models\DogsListModel.cs" />
-    <Compile Include="Models\Enums\DogLevel.cs" />
-    <Compile Include="Models\Enums\DogWorkmode.cs" />
-    <Compile Include="Models\EventModel.cs" />
-    <Compile Include="Models\GuideModel.cs" />
-    <Compile Include="Models\GuideActionModel.cs" />
-    <Compile Include="Models\GuideEventModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

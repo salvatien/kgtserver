@@ -11,7 +11,7 @@ namespace DogsServer.Repositories
     {
         IRepository<Employee> EmployeeRepository { get; }
         IRepository<Guide> GuideRepository { get; }
-        IRepository<Dog> DogRepository { get; }
+        DogRepository DogRepository { get; }
         IRepository<Models.Action> ActionRepository { get; }
         IRepository<Models.Event> EventRepository { get; }
 

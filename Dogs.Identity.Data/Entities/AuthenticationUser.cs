@@ -14,5 +14,7 @@ namespace Dogs.Identity.Data.Entities
         [MaxLength(250)]
         public String LastName { get; set; }
 
+        public int KgtId { get; set; }
+
     }
 }

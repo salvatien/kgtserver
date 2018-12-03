@@ -1,4 +1,5 @@
-﻿@model kgtwebClient.Models.DogModel
+﻿@using Dogs.ViewModels.Data.Models;
+@model Dogs.ViewModels.Data.Models.DogModel
 
 @{
     ViewBag.Title = "Dog";
@@ -11,11 +12,11 @@
         <hr />
         <dl class="dl-horizontal" style="float:left">
             <dt>
-                @Html.DisplayNameFor(model => model.GuideId)
+                @Html.DisplayNameFor(model => model.GuideIdAndName.GuideId)
             </dt>
 
             <dd>
-                @Html.DisplayFor(model => model.GuideId)
+                @Html.DisplayFor(model => model.GuideIdAndName.GuideId)
             </dd>
             <dt>
                 @Html.DisplayNameFor(model => model.Level)
