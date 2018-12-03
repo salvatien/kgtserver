@@ -10,7 +10,7 @@ namespace DogsServer.Repositories
     public interface IUnitOfWork
     {
         IRepository<Employee> EmployeeRepository { get; }
-        IRepository<Guide> GuideRepository { get; }
+        GuideRepository GuideRepository { get; }
         DogRepository DogRepository { get; }
         IRepository<Models.Action> ActionRepository { get; }
         IRepository<Models.Event> EventRepository { get; }

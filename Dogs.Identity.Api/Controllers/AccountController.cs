@@ -12,6 +12,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Dogs.Identity.Data.Entities;
 using Dogs.ViewModels.Data.Models.Account;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using Newtonsoft.Json;
 
 namespace Dogs.Identity.Api.Controllers
 {
@@ -80,33 +83,54 @@ namespace Dogs.Identity.Api.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] RegisterModel registerModel)
         {
-            if (ModelState.IsValid)
-            {
-                var user = new ApplicationUser
+            try {
+                if (ModelState.IsValid)
                 {
-                    UserName = registerModel.Username,
-                    FirstName = registerModel.FirstName,
-                    LastName = registerModel.LastName,
-                    Email = registerModel.Email
-                };
+                    var user = new ApplicationUser
+                    {
+                        UserName = registerModel.Username,
+                        FirstName = registerModel.FirstName,
+                        LastName = registerModel.LastName,
+                        Email = registerModel.Email
+                    };
 
-                var identityResult = await this.userManager.CreateAsync(user, registerModel.Password);
-                if (identityResult.Succeeded)
-                {
-                    await signInManager.SignInAsync(user, isPersistent: false);
-                    return Ok(GetToken(user));
+                    var identityResult = await this.userManager.CreateAsync(user, registerModel.Password);
+                    if (identityResult.Succeeded)
+                    {
+                        await signInManager.SignInAsync(user, isPersistent: false);
+                        var token = GetToken(user);
+                        var url = "http://localhost:12321/api/";
+                        HttpClient client = new HttpClient { BaseAddress = new Uri(url) };
+
+                        client.DefaultRequestHeaders.Accept.Clear();
+                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+                        HttpResponseMessage responseMessage = await client.GetAsync("guides/GetFreeGuideId");
+                        if (responseMessage.IsSuccessStatusCode)
+                        {
+                            var responseData = responseMessage.Content.ReadAsStringAsync().Result;
+                            var freeId = JsonConvert.DeserializeObject<int>(responseData);
+                            user.KgtId = freeId;
+                            var updatedIdentityResult = await this.userManager.UpdateAsync(user);
+                            if (updatedIdentityResult.Succeeded)
+                                return Ok(GetToken(user));
+                        }
+                    }
+                    else
+                    {
+                        return BadRequest(identityResult.Errors);
+                    }
                 }
-                else
-                {
-                    return BadRequest(identityResult.Errors);
-                }
+                return BadRequest(ModelState);
             }
-            return BadRequest(ModelState);
-
-
+            catch(Exception e)
+            {
+                return BadRequest();
+            }
         }
 
-        private String GetToken(IdentityUser user)
+        private String GetToken(ApplicationUser user)
         {
             var utcNow = DateTime.UtcNow;
 
@@ -116,6 +140,7 @@ namespace Dogs.Identity.Api.Controllers
                         new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName),
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                         new Claim(JwtRegisteredClaimNames.Iat, utcNow.ToString()),
+                        new Claim("KgtId", user.KgtId.ToString())
             };
 
             var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.configuration.GetValue<String>("Tokens:Key")));

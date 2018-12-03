@@ -13,8 +13,8 @@ namespace DogsServer.Repositories
         #region Repositories
         public IRepository<Employee> EmployeeRepository =>
            new Repository<Employee>(_dbContext);
-        public IRepository<Guide> GuideRepository =>
-           new Repository<Guide>(_dbContext);
+        public GuideRepository GuideRepository =>
+           new GuideRepository(_dbContext);
         public DogRepository DogRepository =>
            new DogRepository(_dbContext);
         public IRepository<Models.Action> ActionRepository =>

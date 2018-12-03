@@ -51,5 +51,11 @@ namespace DogsServer.Controllers
             unitOfWork.Commit();
             return new ObjectResult("Guide deleted successfully!");
         }
+
+        [HttpGet("getfreeguideid")]
+        public int GetFreeGuideId()
+        {
+            return unitOfWork.GuideRepository.GetFreeId();
+        }
     }
 }
