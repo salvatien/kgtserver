@@ -27,6 +27,7 @@ namespace DogsServer.Repositories
 
         public new IQueryable<Dog> GetAll()
         {
+            //return DbSet;
             return DbSet.Include(x => x.Guide);
         }
 

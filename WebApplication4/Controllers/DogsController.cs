@@ -19,9 +19,29 @@ namespace DogsServer.Controllers
         private UnitOfWork unitOfWork = new UnitOfWork(new AppDbContext());
 
         [HttpGet]
-        public List<Dog> Get()
+        public List<DogModel> Get()
         {
-            return unitOfWork.DogRepository.GetAll().ToList();
+            var dogs = unitOfWork.DogRepository.GetAll().ToList();
+            var dogModels = new List<DogModel>();
+            foreach(var dog in dogs)
+            {
+                var dogModel = new DogModel
+                {
+                    DateOfBirth = dog.DateOfBirth,
+                    DogID = dog.DogID,
+                    GuideIdAndName = new GuideIdNameModel
+                    {
+                        GuideId = dog.Guide != null ? dog.Guide.GuideID : 0,
+                        GuideName = dog.Guide != null ? dog.Guide.FirstName + " " + dog.Guide.LastName : "Pies nie ma jeszcze przewodnika"
+                    },
+                    Level = dog.Level,
+                    Name = dog.Name,
+                    Notes = dog.Notes,
+                    Workmodes = dog.Workmodes
+                };
+                dogModels.Add(dogModel);
+            }
+            return dogModels;
         }
 
         [HttpGet("{id}")]

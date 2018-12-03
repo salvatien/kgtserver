@@ -15,7 +15,7 @@ namespace DogsServer.Repositories
            new Repository<Employee>(_dbContext);
         public IRepository<Guide> GuideRepository =>
            new Repository<Guide>(_dbContext);
-        public IRepository<Dog> DogRepository =>
+        public DogRepository DogRepository =>
            new DogRepository(_dbContext);
         public IRepository<Models.Action> ActionRepository =>
            new Repository<Models.Action>(_dbContext);
