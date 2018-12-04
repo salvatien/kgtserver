@@ -1,0 +1,77 @@
+﻿
+@{
+    ViewBag.Title = "Guide";
+}
+
+@using Dogs.ViewModels.Data.Models;
+@model Dogs.ViewModels.Data.Models.GuideModel
+
+
+<div style="margin:60px">
+    <div class="data">
+        <h4>@Html.DisplayFor(model => model.FirstName) @Html.DisplayFor(model => model.LastName)</h4>
+        <hr />
+        <dl class="dl-horizontal" style="float:left">
+            <dt>
+                @Html.DisplayNameFor(model => model.DogIds)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.DogIds)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.City)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.City)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Address)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Address)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Phone)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Phone)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.DateOfBirth)
+            </dt>
+
+            <dd>
+                @Model.DateOfBirth.ToString("MM/dd/yyyy")
+
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Fitness)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Fitness)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Notes)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Notes)
+            </dd>
+
+        </dl>
+    </div>
+    <div class="picture">
+        <img src="~/Images/januszek.jpg" height="400" width="400">
+    </div>
+</div>
+<p style="margin:60px">
+    @Html.ActionLink("--Update Guide--", "UpdateGuide", "Guides", new { id = Model.GuideID }, null)
+
+    @Html.ActionLink("Back to List", "Index")
+</p>
+

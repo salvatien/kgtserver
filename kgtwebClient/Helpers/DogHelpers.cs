@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
-using kgtwebClient.Models;
+//using kgtwebClient.Models;
+using Dogs.ViewModels.Data.Models;
 
 namespace kgtwebClient.Helpers
 {
