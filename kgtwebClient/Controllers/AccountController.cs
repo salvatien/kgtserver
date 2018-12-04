@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net.Http;
@@ -87,31 +88,34 @@ namespace kgtwebClient.Controllers
 
 
 
-                //string url = "https://localhost:44350/api/";
-                //HttpClient client = new HttpClient { BaseAddress = new Uri(url) };
-                //client.DefaultRequestHeaders.Accept.Clear();
-                //client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                //HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, client.BaseAddress + "account/register");
+                string url = "https://localhost:44350/api/";
+                HttpClient client = new HttpClient { BaseAddress = new Uri(url) };
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, client.BaseAddress + "account/register");
 
 
-                //var dogSerialized = JsonConvert.SerializeObject(model);
-                //message.Content = new StringContent(dogSerialized, System.Text.Encoding.UTF8, "application/json");
-                //HttpResponseMessage responseMessage = client.SendAsync(message).Result;
-                //if (responseMessage.IsSuccessStatusCode)    //200 OK
-                //{
-                //    var responseData = responseMessage.Content.ReadAsStringAsync().Result;
-                //    var stream = responseData;
-
-
-                if(true)
+                var modelSerialized = JsonConvert.SerializeObject(model);
+                message.Content = new StringContent(modelSerialized, System.Text.Encoding.UTF8, "application/json");
+                HttpResponseMessage responseMessage = client.SendAsync(message).Result;
+                if (responseMessage.IsSuccessStatusCode)    //200 OK
                 {
-                    var stream = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmMGU3ZDAyYy1jNzA3LTRkOGMtOGNmNS1lMTY1NTAzZDBiNjQiLCJ1bmlxdWVfbmFtZSI6InRlc3RlcjEwIiwianRpIjoiZmMxYTg0MDgtMjFhYS00ZWUzLTkyMzAtMGViYjJhYWQ3YmE2IiwiaWF0IjoiMjAxOC0xMi0wMyAyMDo1MDoyNyIsIktndElkIjoiMiIsIm5iZiI6MTU0Mzg3MDIyNywiZXhwIjoxNTQzOTU2NjI3LCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjUwMDAiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjQwMDAifQ.rMKzHgm_sCvaIHbK-oeivdUORMcSIAbSNQOJ6l8AiNY";
+                    var responseData = responseMessage.Content.ReadAsStringAsync().Result;
+                    var stream = responseData;
                     SecurityToken validatedToken;
-                    TokenValidationParameters validationParameters = new TokenValidationParameters();
-                    validationParameters.IssuerSigningKey = 
-                        new SymmetricSecurityKey(Encoding.UTF8.GetBytes("1516CBA666B4F0EFD8C487A132DA2E64A4838D2DB04AD9A0DC4436262411E146"));
+                    var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(ConfigurationManager.AppSettings["Tokens:Key"]));
+                    var validationParameters = new TokenValidationParameters()
+                    {
+                        IssuerSigningKey = signingKey,
+                        ValidateAudience = true,
+                        ValidAudience = ConfigurationManager.AppSettings["Tokens:Audience"],
+                        ValidateIssuer = true,
+                        ValidIssuer = ConfigurationManager.AppSettings["Tokens:Issuer"],
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true
+                    };
 
-                    new JwtSecurityTokenHandler().ValidateToken("stream", validationParameters, out validatedToken);
+                    new JwtSecurityTokenHandler().ValidateToken(stream, validationParameters, out validatedToken);
 
                     var token = new JwtSecurityToken(jwtEncodedString: stream);
                     Console.WriteLine("email => " + token.Claims.First(c => c.Type == "email").Value);

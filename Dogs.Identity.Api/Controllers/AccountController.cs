@@ -154,6 +154,23 @@ namespace Dogs.Identity.Api.Controllers
                 issuer: this.configuration.GetValue<String>("Tokens:Issuer")
                 );
 
+            var handler = new JwtSecurityTokenHandler();
+            var tkn = handler.WriteToken(jwt);
+            SecurityToken validatedToken;
+
+            var validationParameters = new TokenValidationParameters()
+            {
+                IssuerSigningKey = signingKey,
+                ValidateAudience = true,
+                ValidAudience = this.configuration.GetValue<String>("Tokens:Audience"),
+                ValidateIssuer = true,
+                ValidIssuer = this.configuration.GetValue<String>("Tokens:Issuer"),
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true
+            };
+
+            new JwtSecurityTokenHandler().ValidateToken(tkn, validationParameters, out validatedToken);
+
             return new JwtSecurityTokenHandler().WriteToken(jwt);
 
         }
