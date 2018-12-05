@@ -35,12 +35,15 @@
                 @Html.TextBoxFor(m => m.LastName, new { @Value = Model.LastName, @class = "form-control" })
             </div>
         </div>
+        @* property not to update?
         <div class="form-group">
             @Html.LabelFor(m => m.DogIds, new { @class = "col-md-2 control-label form-field" })
             <div class="col-md-10 form-field">
                 @Html.TextAreaFor(m => m.DogIds, new { @Value = Model.DogIds, @class = "form-control" })
             </div>
         </div>
+
+        *@
         <div class="form-group">
             @Html.LabelFor(m => m.DateOfBirth, new { @class = "col-md-2 control-label form-field" })
             <div class="col-md-10  form-field">

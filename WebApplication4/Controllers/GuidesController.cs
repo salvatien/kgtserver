@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using DogsServer.Models;
 using Microsoft.EntityFrameworkCore;
 using DogsServer.Repositories;
-
+using Dogs.ViewModels.Data.Models;
 
 namespace DogsServer.Controllers
 {
@@ -36,10 +36,21 @@ namespace DogsServer.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody]Guide obj)
+        public IActionResult Put(int id, [FromBody]GuideModel obj)
         {
-            var Guide = unitOfWork.GuideRepository.GetById(id);
-            Guide = obj;
+            var guide = unitOfWork.GuideRepository.GetById(id);
+            var guideModel = obj;
+
+            guide.Address = guideModel.Address;
+            guide.City = guideModel.City;
+            guide.DateOfBirth = guideModel.DateOfBirth;
+            guide.FirstName = guideModel.FirstName;
+            guide.Fitness = guideModel.Fitness;
+            guide.GuideID = guideModel.GuideID;
+            guide.LastName = guideModel.LastName;
+            guide.Notes = guideModel.Notes;
+            guide.Phone = guideModel.Phone;
+
             unitOfWork.Commit();
             return new ObjectResult("Guide modified successfully!");
         }

@@ -168,7 +168,7 @@ namespace kgtwebClient.Controllers
         }
 
         [HttpPost]
-        public bool UpdateDog(GuideModel updatedGuide)    //? -> może być null
+        public bool UpdateGuide(GuideModel updatedGuide)    //? -> może być null
         {
             // add validation function
             /*
