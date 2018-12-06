@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using DogsServer.Models;
 using Microsoft.EntityFrameworkCore;
 using DogsServer.Repositories;
-
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using System.Net.Http;
 
 namespace DogsServer.Controllers
 {
@@ -51,11 +53,13 @@ namespace DogsServer.Controllers
             unitOfWork.Commit();
             return new ObjectResult("Guide deleted successfully!");
         }
-
+        [Authorize]
         [HttpGet("getfreeguideid")]
         public int GetFreeGuideId()
         {
             return unitOfWork.GuideRepository.GetFreeId();
         }
+
+        [Authorize]
     }
 }
