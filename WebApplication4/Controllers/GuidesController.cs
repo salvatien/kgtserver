@@ -59,7 +59,5 @@ namespace DogsServer.Controllers
         {
             return unitOfWork.GuideRepository.GetFreeId();
         }
-
-        [Authorize]
     }
 }
