@@ -83,7 +83,8 @@ namespace DogsServer.Controllers
             
             unitOfWork.DogRepository.Insert(dog);
             unitOfWork.Commit();
-            return new ObjectResult("Dog added successfully!");
+            var x = dog.DogID;
+            return new ObjectResult(x);
         }
 
         [HttpPut("{id}")]
@@ -91,23 +92,23 @@ namespace DogsServer.Controllers
         {
             try
             {
-                var Dog = unitOfWork.DogRepository.GetById(id);
+                var dog = unitOfWork.DogRepository.GetById(id);
                 var updatedDog = obj.ToObject<DogModel>();
-                Dog.Name = updatedDog.Name;
-                Dog.DateOfBirth = updatedDog.DateOfBirth;
-                Dog.Level = updatedDog.Level;
-                Dog.Notes = updatedDog.Notes;
-                Dog.Workmodes = updatedDog.Workmodes;
+                dog.Name = updatedDog.Name;
+                dog.DateOfBirth = updatedDog.DateOfBirth;
+                dog.Level = updatedDog.Level;
+                dog.Notes = updatedDog.Notes;
+                dog.Workmodes = updatedDog.Workmodes;
                 if (updatedDog.GuideIdAndName != null)
                 {
-                    if (Dog.Guide == null || Dog.Guide.GuideID != updatedDog.GuideIdAndName.GuideId)
+                    if (dog.Guide == null || dog.Guide.GuideID != updatedDog.GuideIdAndName.GuideId)
                     {
                         var guide = unitOfWork.GuideRepository.GetById(updatedDog.GuideIdAndName.GuideId);
-                        Dog.Guide = guide;
+                        dog.Guide = guide;
                     }
                 }
                 unitOfWork.Commit();
-                return new ObjectResult("Dog modified successfully!");
+                return new ObjectResult(dog);
             }
             catch (Exception e)
             {
