@@ -42,6 +42,8 @@
         </div>*@
     <div id="navbar">
         <span id="openMenu" onclick="openMenu()">&#9776; Menu</span>
+        @Html.ActionLink("Zarejestruj", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })
+        @Html.ActionLink("Zaloguj", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
     </div>
     @*<div id="mySidenav" class="sidenav">   *@
     <div id="menu" class="menu">
@@ -54,7 +56,7 @@
             Dane
             <li> @Html.ActionLink("Psy", "Index", "Dogs")</li>      @*nazwa widoczna w aplikacji - metoda - kontroler*@
            @* <li><a href="#">Psy</a></li>*@
-            <li><a href="#">Przewodnicy</a></li>
+            <li>@Html.ActionLink("Przewodnicy", "Index", "Guides")</li>
             <li><a href="#">Treningi</a></li>
             <li><a href="#">Akcje</a></li>
             <li><a href="#">Wydarzenia</a></li>
@@ -68,10 +70,10 @@
     <div id="content">
 
         @RenderBody()
-        <hr />
+        @*<hr />
         <footer>
             <p>&copy; @DateTime.Now.Year — moja aplikacja platformy ASP.NET</p>
-        </footer>
+        </footer>*@
     </div>
 
 

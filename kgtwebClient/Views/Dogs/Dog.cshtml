@@ -7,7 +7,7 @@
 
 
 <div style="margin:60px">
-    <div>
+    <div class="data">
         <h4>@Html.DisplayFor(model => model.Name)</h4>
         <hr />
         <dl class="dl-horizontal" style="float:left">
@@ -37,7 +37,8 @@
             </dt>
 
             <dd>
-                @Html.DisplayFor(model => model.DateOfBirth)
+                @Model.DateOfBirth.ToString("MM/dd/yyyy")
+
             </dd>
 
             <dt>
@@ -58,6 +59,5 @@
     @Html.ActionLink("--Update Dog--", "UpdateDog", "Dogs", new {id = Model.DogID}, null)
 
 
-    @Html.ActionLink("Edit", "Edit", new { id = Model.DogID }) |
     @Html.ActionLink("Back to List", "Index")
 </p>

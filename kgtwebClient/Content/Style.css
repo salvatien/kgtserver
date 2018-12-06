@@ -95,7 +95,7 @@ body, html {
     /*background-image: url('/css/searchicon.png');
     background-position: 10px 10px;
     background-repeat: no-repeat; */
-    position: relative;
+   /* position: relative;*/
     width: 100%;
     font-size: 16px;
     padding: 12px 20px 12px 40px;
@@ -135,6 +135,18 @@ body, html {
 .displayButton {
     background-color: yellowgreen;
 }
+
+.addButton {
+    /*position: relative; */
+    width: 15%;
+    color: white;
+    font-size: 16px;
+    padding: 12px 20px 12px 20px;
+    border: 1px solid #ddd;
+    margin-bottom: 12px;
+    background-color: #34495e;
+}
+
 .mainPageBackground {
 
     background-image: url("/Images/kgt.jpg");
@@ -154,4 +166,8 @@ img {
     width: 100%;
     max-width: 500px;
     max-height: 500px;
+}
+
+.form-field {
+    position:static
 }

@@ -1,5 +1,10 @@
-﻿@using Dogs.ViewModels.Data.Models;
-@model Dogs.ViewModels.Data.Models.DogsListModel
+﻿ 
+@{
+    ViewBag.Title = "Index";
+}
+
+@using Dogs.ViewModels.Data.Models;
+@model Dogs.ViewModels.Data.Models.GuideListModel
 
 
 @{
@@ -10,59 +15,47 @@
 @*<div class="jumbotron"> *@
 <div class="tables">
     <input type="text" id="dogsSearch" onkeyup="searchByDogOrGuideName()" placeholder="Search for names.." title="Type in a name">
-    <button class="addButton" onclick="location.href='@Url.Action("AddDog", "Dogs")'">dodaj Psa</button>
+    <button class="addButton" onclick="location.href='@Url.Action("AddGuide", "Guides")'">dodaj przewodnika</button>
     @*<button id="button1" onclick="location.href='@Url.Action("DeleteDog","Dogs",new { id=7})'">delete</button> *@
     <div>
-        <table id="dogsTable">
+        <table id="guidesTable">
             <tr>
                 <th>ID</th>
                 <th>Imię</th>
                 @*<th>Data urodzenia</th>
-                <th>Poziom</th>
-                <th>Tryb pracy</th>
-                <th>Notatki</th>
+                    <th>Poziom</th>
+                    <th>Tryb pracy</th>
+                    <th>Notatki</th>
                 *@
-                <th>Przewodnik</th>
+                <th>Nazwisko</th>
 
 
             </tr>
-            @foreach (var item in Model.ListOfDogs)
+            @foreach (var item in Model.ListOfGuides)
 
             {
             <tr @*onclick="document.location = 'http://kgtwebclient.azurewebsites.net/Dogs/Dog/' + @item.DogID;"  *@>
                 <td class="tdOnclick">
-                    @item.DogID
+                    @item.FirstName
                 </td>
                 <td class="tdOnclick">
-                    @item.Name
+                    @item.LastName
                 </td>
-                @*<td class="tdOnclick">
-            @item.DateOfBirth
-        </td>
-        <td class="tdOnclick">
-            @item.Level
-        </td>
-        <td class="tdOnclick">
-            @item.Workmode
-        </td>
-        <td class="tdOnclick">
-            @item.Notes
-        </td>
-                *@
 
 
-                <td class="tdOnclick">@item.GuideIdAndName.GuideName</td>
+
+                @*<td class="tdOnclick">@item.GuideIdAndName.GuideName</td>*@
 
 
                 <td style="background-color:white">
                     @*location.href='@Url.Action("DeleteDog", "Dogs", new { id = @item.DogID })'*@
-                    <button class="deleteButton" onclick="deleteDog(@item.DogID)" id="@("deleteDogButton" + item.DogID)">usuń</button>
+                    <button class="deleteButton" onclick="deleteGuide(@item.GuideID)" id="@("deleteGuideButton" + item.GuideID)">usuń</button>
                 </td>
                 <td style="background-color:white">
-                    <button class="updateButton" onclick="location.href='@Url.Action("UpdateDog", "Dogs", new { id = @item.DogID })'">zmień</button>
+                    <button class="updateButton" onclick="location.href='@Url.Action("UpdateGuide", "Guides", new { id = @item.GuideID })'">zmień</button>
                 </td>
                 <td style="background-color:white">
-                    <button class="displayButton" onclick="location.href='@Url.Action("Dog", "Dogs", new { id = @item.DogID })'">wyświetl</button>
+                    <button class="displayButton" onclick="location.href='@Url.Action("Guide", "Guides", new { id = @item.GuideID })'">wyświetl</button>
                 </td>
             </tr>
 
@@ -80,9 +73,9 @@
         tr = table.getElementsByTagName("tr");
         for (i = 0; i < tr.length; i++) {
              /* search by dog's name*/
-            tdDogName = tr[i].getElementsByTagName("td")[1];  
+            tdDogName = tr[i].getElementsByTagName("td")[1];
             /* search by guide's  name*/
-            tdGuideName = tr[i].getElementsByTagName("td")[2]; 
+            tdGuideName = tr[i].getElementsByTagName("td")[2];
             if (tdDogName || tdGuideName) {
                 if (tdDogName.innerHTML.toUpperCase().indexOf(filter) > -1 || tdGuideName.innerHTML.toUpperCase().indexOf(filter) > -1) {
                     tr[i].style.display = "";
@@ -94,16 +87,16 @@
     }
     @* location.href='@Url.Action("DeleteDog", "Dogs", new { id = @item.DogID })' *@
 
-    function deleteDog(dogId) {
+    function deleteGuide(guideId) {
        // var id = dogId;
-        alert("Delete dog: " + dogId);
+        alert("Delete guide: " + guideId);
         //document.getElementById("disp").innerHTML = "hi";
         $.ajax({
-            url: "@Url.Action("DeleteDog", "Dogs")",
+            url: "@Url.Action("Deleteuide", "Guides")",
             method: "POST", //First change type to method here
 
             data: {
-                id: dogId, // Second add quotes on the value.
+                id: guideId, // Second add quotes on the value.
             },
             success: function (response) {
                 if (response) {
@@ -111,10 +104,10 @@
                     var resp = response;
                     //console.log(resp);
                     if (resp.success) {
-                        alert("udało się usunac psa o id: " + resp.id);
+                        alert("udało się usunac przewodnika o id: " + resp.id);
                         //usunięcie z tabeli tr ktory zawiera button o id deleteDogButton<id>
                         //var buttonId = "deleteDogButton" + dogId;
-                    var button = $("#deleteDogButton" + resp.id );
+                    var button = $("#deleteGuideButton" + resp.id );
 
                     var tableRow = button.closest("tr");
                         //alert(button.text());
@@ -140,3 +133,4 @@
     </div>
 
 *@
+

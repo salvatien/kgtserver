@@ -160,10 +160,12 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\DogsController.cs" />
+    <Compile Include="Controllers\GuidesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\DogHelpers.cs" />
     <Compile Include="Helpers\EnumHelpers.cs" />
     <Compile Include="Helpers\LoginHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -296,10 +298,15 @@
     <Content Include="Views\Dogs\Dog.cshtml" />
     <Content Include="Views\Dogs\UpdateDog.cshtml" />
     <Content Include="Views\Dogs\AddDog.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\Guides\Index.cshtml" />
+    <Content Include="Views\Guides\UpdateGuide.cshtml" />
+    <Content Include="Views\Guides\Guide.cshtml" />
+    <Content Include="Views\Guides\AddGuide.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Account\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
