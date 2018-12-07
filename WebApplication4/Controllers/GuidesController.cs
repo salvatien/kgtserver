@@ -84,7 +84,7 @@ namespace DogsServer.Controllers
             };
             unitOfWork.GuideRepository.Insert(guide);
             unitOfWork.Commit();
-            var accessToken = HttpContext.GetTokenAsync("access_token").Result;
+            //var accessToken = HttpContext.GetTokenAsync("access_token").Result;
 
             return new ObjectResult(guide.GuideID);
         }

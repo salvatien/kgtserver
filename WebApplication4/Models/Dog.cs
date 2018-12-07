@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace DogsServer.Models
 {
+    //TODO add dog breed!!!
     [Table("Dogs")]
     public class Dog
     {
