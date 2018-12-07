@@ -16,6 +16,9 @@ namespace Dogs.ViewModels.Data.Models
         public string Phone { get; set; }
         public string Fitness { get; set; }
         public string Notes { get; set; }
+        public string Email { get; set; }
+        public bool IsMember { get; set; }
+        public bool IsAdmin { get; set; }
         public virtual List<int> DogIds { get; set; }
     }
 }

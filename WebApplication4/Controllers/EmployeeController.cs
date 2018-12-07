@@ -11,7 +11,7 @@ using DogsServer.Repositories;
 namespace DogsServer.Controllers
 {
     [Route("api/[controller]")]
-    public class EmployeeController : Controller
+    public class EmployeeController : BaseController
     {
         private UnitOfWork unitOfWork = new UnitOfWork(new AppDbContext());
 

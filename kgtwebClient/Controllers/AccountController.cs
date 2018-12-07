@@ -101,7 +101,53 @@ namespace kgtwebClient.Controllers
                 if (responseMessage.IsSuccessStatusCode)    //200 OK
                 {
                     var responseData = responseMessage.Content.ReadAsStringAsync().Result;
-                    var stream = responseData;
+                    //var stream = responseData;
+                    //SecurityToken validatedToken;
+                    //var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(ConfigurationManager.AppSettings["Tokens:Key"]));
+                    //var validationParameters = new TokenValidationParameters()
+                    //{
+                    //    IssuerSigningKey = signingKey,
+                    //    ValidateAudience = true,
+                    //    ValidAudience = ConfigurationManager.AppSettings["Tokens:Audience"],
+                    //    ValidateIssuer = true,
+                    //    ValidIssuer = ConfigurationManager.AppSettings["Tokens:Issuer"],
+                    //    ValidateLifetime = true,
+                    //    ValidateIssuerSigningKey = true
+                    //};
+
+                    //new JwtSecurityTokenHandler().ValidateToken(stream, validationParameters, out validatedToken);
+
+                    //var token = new JwtSecurityToken(jwtEncodedString: stream);
+                    //Console.WriteLine("email => " + token.Claims.First(c => c.Type == "email").Value);
+                    //var handler = new JwtSecurityTokenHandler();
+                    //var tokenS = handler.ReadToken(stream) as JwtSecurityToken;
+                    //var jti = tokenS.Claims.First(claim => claim.Type == "jti").Value;
+                    //var ticket = new FormsAuthenticationTicket(1, model.Email, DateTime.Now, DateTime.Now, true, "");
+                    //string encryptedTicket = FormsAuthentication.Encrypt(ticket);
+                    //var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
+                    //cookie.HttpOnly = true;
+                    //Response.Cookies.Add(cookie);
+                    var token = responseData;
+                    token = token.Replace("\"", "");
+
+                    var url2 = "http://localhost:12321/api/";
+                    HttpClient client2 = new HttpClient { BaseAddress = new Uri(url2) };
+
+                    client2.DefaultRequestHeaders.Accept.Clear();
+                    client2.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client2.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+                    HttpRequestMessage message2 = new HttpRequestMessage(HttpMethod.Post, client2.BaseAddress + "guides/register");
+                    message2.Content = new StringContent(modelSerialized, System.Text.Encoding.UTF8, "application/json");
+                    HttpResponseMessage responseMessage2 = client2.SendAsync(message2).Result;
+                    if (responseMessage2.IsSuccessStatusCode)    //200 OK
+                    {
+                        var responseData2 = responseMessage2.Content.ReadAsStringAsync().Result;
+
+                        System.Web.HttpContext.Current.Session["CurrentUserId"] = responseData2;
+                        System.Web.HttpContext.Current.Session["token"] = token;
+                    }
+
                     SecurityToken validatedToken;
                     var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(ConfigurationManager.AppSettings["Tokens:Key"]));
                     var validationParameters = new TokenValidationParameters()
@@ -115,18 +161,30 @@ namespace kgtwebClient.Controllers
                         ValidateIssuerSigningKey = true
                     };
 
-                    new JwtSecurityTokenHandler().ValidateToken(stream, validationParameters, out validatedToken);
+                    new JwtSecurityTokenHandler().ValidateToken(token, validationParameters, out validatedToken);
 
-                    var token = new JwtSecurityToken(jwtEncodedString: stream);
-                    Console.WriteLine("email => " + token.Claims.First(c => c.Type == "email").Value);
-                    var handler = new JwtSecurityTokenHandler();
-                    var tokenS = handler.ReadToken(stream) as JwtSecurityToken;
-                    var jti = tokenS.Claims.First(claim => claim.Type == "jti").Value;
-                    var ticket = new FormsAuthenticationTicket(1, model.Email, DateTime.Now, tokenS.ValidTo, true, tokenS.RawPayload);
-                    string encryptedTicket = FormsAuthentication.Encrypt(ticket);
-                    var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
-                    cookie.HttpOnly = true;
-                    Response.Cookies.Add(cookie);
+                    var tk = new JwtSecurityTokenHandler().WriteToken(validatedToken);
+
+                    var id = System.Web.HttpContext.Current.Session["CurrentUserId"];
+                    var tkn = System.Web.HttpContext.Current.Session["token"];
+
+                    //var url3 = "http://localhost:12321/api/";
+                    //HttpClient client3 = new HttpClient { BaseAddress = new Uri(url3) };
+
+                    //client3.DefaultRequestHeaders.Accept.Clear();
+                    //client3.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    //client3.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tk);
+
+                    //HttpRequestMessage message3 = new HttpRequestMessage(HttpMethod.Post, client3.BaseAddress + "guides/Register");
+                    //message3.Content = new StringContent(modelSerialized, System.Text.Encoding.UTF8, "application/json");
+                    //HttpResponseMessage responseMessage3 = client3.SendAsync(message3).Result;
+                    //if (responseMessage3.IsSuccessStatusCode)    //200 OK
+                    //{
+                    //    var responseData3 = responseMessage3.Content.ReadAsStringAsync().Result;
+
+                    //    System.Web.HttpContext.Current.Session["CurrentUserId"] = responseData3;
+                    //    System.Web.HttpContext.Current.Session["token"] = tk;
+                    //}
 
                     //var user = new User
                     //{

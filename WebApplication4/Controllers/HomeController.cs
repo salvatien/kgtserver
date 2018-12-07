@@ -10,7 +10,7 @@ using DogsServer.Models;
 namespace DogsServer.Controllers
 {
     [Route("api/[controller]")]
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
 
         const string SessionName = "_Name";

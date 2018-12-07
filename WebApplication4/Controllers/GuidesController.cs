@@ -10,11 +10,12 @@ using Dogs.ViewModels.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using System.Net.Http;
+using Microsoft.AspNetCore.Authentication;
 
 namespace DogsServer.Controllers
 {
     [Route("api/[controller]")]
-    public class GuidesController : Controller
+    public class GuidesController : BaseController
     {
         private UnitOfWork unitOfWork = new UnitOfWork(new AppDbContext());
 
@@ -30,14 +31,6 @@ namespace DogsServer.Controllers
             return unitOfWork.GuideRepository.GetById(id);
         }
 
-        [HttpPost]
-        public IActionResult Post([FromBody]Guide obj)
-        {
-            unitOfWork.GuideRepository.Insert(obj);
-            unitOfWork.Commit();
-            return new ObjectResult("Guide added successfully!");
-        }
-
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody]GuideModel obj)
         {
@@ -46,14 +39,14 @@ namespace DogsServer.Controllers
 
             guide.Address = guideModel.Address;
             guide.City = guideModel.City;
-            guide.DateOfBirth = guideModel.DateOfBirth;
             guide.FirstName = guideModel.FirstName;
-            guide.Fitness = guideModel.Fitness;
             guide.GuideID = guideModel.GuideID;
             guide.LastName = guideModel.LastName;
             guide.Notes = guideModel.Notes;
             guide.Phone = guideModel.Phone;
-
+            guide.Email = guideModel.Email;
+            guide.IsAdmin = guideModel.IsAdmin;
+            guide.IsMember = guideModel.IsMember;
             unitOfWork.Commit();
             return new ObjectResult("Guide modified successfully!");
         }
@@ -70,6 +63,30 @@ namespace DogsServer.Controllers
         public int GetFreeGuideId()
         {
             return unitOfWork.GuideRepository.GetFreeId();
+        }
+
+        [Authorize]
+        [HttpPost("register")]
+        public IActionResult Register([FromBody]GuideModel obj)
+        {
+            var guide = new Guide
+            {
+                Address = obj.Address,
+                City = obj.City,
+                Email = obj.Email,
+                FirstName = obj.FirstName,
+                IdentityId = GetCurrentUserIdentityId(),
+                IsAdmin = false,
+                IsMember = false,
+                LastName = obj.LastName,
+                Notes = obj.Notes,
+                Phone = obj.Phone
+            };
+            unitOfWork.GuideRepository.Insert(guide);
+            unitOfWork.Commit();
+            var accessToken = HttpContext.GetTokenAsync("access_token").Result;
+
+            return new ObjectResult(guide.GuideID);
         }
     }
 }

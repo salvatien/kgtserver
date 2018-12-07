@@ -11,7 +11,7 @@ using DogsServer.Repositories;
 namespace DogsServer.Controllers
 {
     [Route("api/[controller]")]
-    public class EventsController : Controller
+    public class EventsController : BaseController
     {
         private UnitOfWork unitOfWork = new UnitOfWork(new AppDbContext());
 

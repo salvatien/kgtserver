@@ -140,7 +140,8 @@ namespace Dogs.Identity.Api.Controllers
                         new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName),
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                         new Claim(JwtRegisteredClaimNames.Iat, utcNow.ToString()),
-                        new Claim("KgtId", user.KgtId.ToString())
+                        new Claim("KgtId", user.KgtId.ToString()),
+                        new Claim("IdentityId", user.Id)
             };
 
             var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.configuration.GetValue<String>("Tokens:Key")));

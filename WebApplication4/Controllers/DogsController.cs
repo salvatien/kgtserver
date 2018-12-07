@@ -14,7 +14,7 @@ using DogsServer.Models.Enums;
 namespace DogsServer.Controllers
 {
     [Route("api/[controller]")]
-    public class DogsController : Controller
+    public class DogsController : BaseController
     {
         private UnitOfWork unitOfWork = new UnitOfWork(new AppDbContext());
 

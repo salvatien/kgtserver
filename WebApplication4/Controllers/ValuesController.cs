@@ -7,7 +7,7 @@ namespace DogsServer.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class ValuesController : ControllerBase
+    public class ValuesController : BaseController
     {
         // GET api/values
         [HttpGet]
