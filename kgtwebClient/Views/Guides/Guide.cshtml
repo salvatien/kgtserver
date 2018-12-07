@@ -13,12 +13,16 @@
         <hr />
         <dl class="dl-horizontal" style="float:left">
             <dt>
-                @Html.DisplayNameFor(model => model.DogIds)
+                @Html.DisplayNameFor(model => model.Dogs)
             </dt>
-
             <dd>
-                @Html.DisplayFor(model => model.DogIds)
+                @{
+                    foreach (var dog in Model.Dogs) { 
+                        @Html.DisplayFor(m => dog.Name)
+                    }
+                }
             </dd>
+
             <dt>
                 @Html.DisplayNameFor(model => model.City)
             </dt>
@@ -41,19 +45,25 @@
                 @Html.DisplayFor(model => model.Phone)
             </dd>
             <dt>
-                @Html.DisplayNameFor(model => model.DateOfBirth)
+                @Html.DisplayNameFor(model => model.IsAdmin)
             </dt>
 
             <dd>
-                @Model.DateOfBirth.ToString("MM/dd/yyyy")
-
+                @Html.DisplayFor(model => model.IsAdmin)
             </dd>
             <dt>
-                @Html.DisplayNameFor(model => model.Fitness)
+                @Html.DisplayNameFor(model => model.IsMember)
             </dt>
 
             <dd>
-                @Html.DisplayFor(model => model.Fitness)
+                @Html.DisplayFor(model => model.IsMember)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Email)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Email)
             </dd>
             <dt>
                 @Html.DisplayNameFor(model => model.Notes)

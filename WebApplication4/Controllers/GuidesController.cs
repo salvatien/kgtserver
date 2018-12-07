@@ -38,21 +38,27 @@ namespace DogsServer.Controllers
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody]GuideModel obj)
         {
+            /**/
             var guide = unitOfWork.GuideRepository.GetById(id);
             var guideModel = obj;
 
             guide.Address = guideModel.Address;
             guide.City = guideModel.City;
-            guide.DateOfBirth = guideModel.DateOfBirth;
+            guide.Email = guideModel.Email;
             guide.FirstName = guideModel.FirstName;
-            guide.Fitness = guideModel.Fitness;
-            guide.GuideID = guideModel.GuideID;
             guide.LastName = guideModel.LastName;
             guide.Notes = guideModel.Notes;
             guide.Phone = guideModel.Phone;
+            guide.IsAdmin = guideModel.IsAdmin;
+            guide.IsMember = guideModel.IsMember;
+
+            var allDogs = unitOfWork.DogRepository.GetAll();
+            var dogIds = guideModel.Dogs.Select(x => x.Id).ToList();
+            var dogs = allDogs.Where(d => dogIds.Contains(d.DogID)).ToList();
+            guide.Dogs = dogs;
 
             unitOfWork.Commit();
-            return new ObjectResult("Guide modified successfully!");
+            return new ObjectResult(guide.GuideID);
         }
 
         [HttpDelete("{id}")]

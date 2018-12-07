@@ -17,8 +17,8 @@
 
 <div style="margin:60px">
 
-    @using (Html.BeginForm("UpdateGuide", "Guides", FormMethod.Post, new { enctype = "multipart/form-data"}))
-{
+    @using (Html.BeginForm("UpdateGuide", "Guides", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
 @Html.ValidationSummary(true)
 @Html.HiddenFor(m => m.GuideID)
 @* <fieldset>*@
@@ -35,19 +35,31 @@
                 @Html.TextBoxFor(m => m.LastName, new { @Value = Model.LastName, @class = "form-control" })
             </div>
         </div>
-        @* property not to update?
+        @* property not to update? *@
         <div class="form-group">
-            @Html.LabelFor(m => m.DogIds, new { @class = "col-md-2 control-label form-field" })
+            @Html.LabelFor(m => m.Dogs, new { @class = "col-md-2 control-label form-field" })
             <div class="col-md-10 form-field">
-                @Html.TextAreaFor(m => m.DogIds, new { @Value = Model.DogIds, @class = "form-control" })
+                @{
+                    if (Model.Dogs != null)
+                    {
+                        foreach (var dog in Model.Dogs)
+                        {
+                            @Html.TextBoxFor(m => dog.Name, new { @Value = dog.Name, @class = "form-control" })
+                        }
+                    }
+                    else
+                    {
+                        @*<button class="addButton" onclick="location.href='@Url.Action("AddDog", "Dogs")'">dodaj psa</button>*@
+                    }
+                }
             </div>
         </div>
 
-        *@
+        
         <div class="form-group">
-            @Html.LabelFor(m => m.DateOfBirth, new { @class = "col-md-2 control-label form-field" })
+            @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label form-field" })
             <div class="col-md-10  form-field">
-                @Html.TextBoxFor(m => m.DateOfBirth, new { @Value = Model.DateOfBirth.ToString("yyyy-MM-dd"), type = "date", @class = "form-control" })
+                @Html.TextBoxFor(m => m.Email, new { @Value = Model.Email, @class = "form-control" })
             </div>
         </div>
         <div class="form-group">
@@ -69,9 +81,15 @@
             </div>
         </div>
         <div class="form-group">
-            @Html.LabelFor(m => m.Fitness, new { @class = "col-md-2 control-label form-field" })
+            @Html.LabelFor(m => m.IsAdmin, new { @class = "col-md-2 control-label form-field" })
             <div class="col-md-10 form-field">
-                @Html.TextBoxFor(m => m.Fitness, new { @Value = Model.Fitness, @class = "form-control" })
+                @Html.CheckBoxFor(m => m.IsAdmin, new { @Value = Model.IsAdmin, @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.IsMember, new { @class = "col-md-2 control-label form-field" })
+            <div class="col-md-10 form-field">
+                @Html.CheckBoxFor(m => m.IsMember, new { @Value = Model.IsMember, @class = "form-control" })
             </div>
         </div>
         <div class="form-group">

@@ -12,11 +12,11 @@
         <hr />
         <dl class="dl-horizontal" style="float:left">
             <dt>
-                @Html.DisplayNameFor(model => model.GuideIdAndName.GuideId)
+                @Html.DisplayNameFor(model => model.GuideIdAndName.Name)
             </dt>
 
             <dd>
-                @Html.DisplayFor(model => model.GuideIdAndName.GuideId)
+                @Html.DisplayFor(model => model.GuideIdAndName.Name)
             </dd>
             <dt>
                 @Html.DisplayNameFor(model => model.Level)
@@ -37,7 +37,7 @@
             </dt>
 
             <dd>
-                @Model.DateOfBirth.ToString("MM/dd/yyyy")
+                @Model.DateOfBirth.ToString("dd/MM/yyyy")
 
             </dd>
 

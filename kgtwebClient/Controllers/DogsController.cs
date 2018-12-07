@@ -166,12 +166,14 @@ namespace kgtwebClient.Controllers
             //client.BaseAddress = new Uri(url);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+            //client.DefaultRequestHeaders.Add("Connection", "Keep-Alive");
+            //client.DefaultRequestHeaders.Add("Keep-Alive", "3600");
+            System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
             // dla put(update) i post(add):
             //httpmethod.put i httpmethod.post
             //message.Content = new StringContent(***object-json-serialized***, 
-              //                                  System.Text.Encoding.UTF8, "application/json");
-             
+            //                                  System.Text.Encoding.UTF8, "application/json");
+
             HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Put, client.BaseAddress + "dogs/" + updatedDog.DogID.ToString());
             /*var dog = new DogModel
             {

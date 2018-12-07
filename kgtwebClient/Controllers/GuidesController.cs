@@ -111,7 +111,7 @@ namespace kgtwebClient.Controllers
             {
                 //display info
                 message.Dispose();
-                return View("Guide", addedGuide);
+                return RedirectToAction("Guide", new { id = Int32.Parse(responseMessage.Content.ReadAsStringAsync().Result) });
                 //return View("Dog", responseMessage.Content);
             }
             else    // msg why not ok
@@ -210,7 +210,7 @@ namespace kgtwebClient.Controllers
             {
                 //wyswietlić informację
                 message.Dispose();
-                return View("Guide", updatedGuide);
+                return RedirectToAction("Guide", new { id = Int32.Parse(responseMessage.Content.ReadAsStringAsync().Result) });
                 //wywolać metodę Dog zamiast zwracać true
 
             }

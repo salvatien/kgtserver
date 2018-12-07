@@ -4,9 +4,9 @@ using System.Text;
 
 namespace Dogs.ViewModels.Data.Models
 {
-    public class GuideIdNameModel
+    public class IdNameModel
     {
-        public int GuideId { get; set; }
-        public string GuideName { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }
