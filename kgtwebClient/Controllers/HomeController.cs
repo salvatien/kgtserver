@@ -32,5 +32,11 @@ namespace kgtwebClient.Controllers
             ViewBag.Message = "zIeminak";
             return View();
         }
+
+        public ActionResult Error(string error)
+        {
+            ViewBag.Message = error;
+            return View("~/Views/Shared/Error.cshtml");
+        }
     }
 }

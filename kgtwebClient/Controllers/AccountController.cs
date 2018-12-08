@@ -92,6 +92,14 @@ namespace kgtwebClient.Controllers
                 System.Web.HttpContext.Current.Session["CurrentUserId"] = userId;
                 System.Web.HttpContext.Current.Session["token"] = token;
             }
+            else if(identityApiResponseMessage.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                return RedirectToAction("Error", "Home", new { error = "Błędny login lub hasło (lub inny błąd ale raczej to :D)."});
+            }
+            else
+            {
+                return RedirectToAction("Error", "Home", new { error = "Błędne żądanie." });
+            }
             if(String.IsNullOrWhiteSpace(returnUrl))
                 return RedirectToAction("Index", "Home");
             return Redirect(returnUrl);
@@ -150,6 +158,14 @@ namespace kgtwebClient.Controllers
                         System.Web.HttpContext.Current.Session["CurrentUserId"] = responseServerData;
                         System.Web.HttpContext.Current.Session["token"] = token;
                     }
+                }
+                else if (identityApiResponseMessage.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                {
+                    return RedirectToAction("Error", "Home", new { error = "Błędne dane - takie konto może już istnieć lub pola formularza zostały nieprawidłowo wypełnione." });
+                }
+                else
+                {
+                    return RedirectToAction("Error", "Home", new { error = "Błędne żądanie." });
                 }
                 return RedirectToAction("UpdateGuide", "Guides", new { id = System.Web.HttpContext.Current.Session["CurrentUserId"] });
             }

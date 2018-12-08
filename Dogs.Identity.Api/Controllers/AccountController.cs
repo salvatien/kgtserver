@@ -53,7 +53,7 @@ namespace Dogs.Identity.Api.Controllers
 
                 if (!loginResult.Succeeded)
                 {
-                    return BadRequest();
+                    return BadRequest("Incorrect login or password");
                 }
 
                 var user = await userManager.FindByNameAsync(loginModel.Username);
