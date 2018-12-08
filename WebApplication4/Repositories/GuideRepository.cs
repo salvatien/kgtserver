@@ -22,19 +22,19 @@ namespace DogsServer.Repositories
 
         public new IQueryable<Guide> SearchFor(Expression<Func<Guide, bool>> predicate)
         {
-            return DbSet.Where(predicate);
+            return DbSet.Include(x => x.Dogs).Where(predicate);
         }
 
         public new IQueryable<Guide> GetAll()
         {
-            return DbSet;
+            return DbSet.Include(x => x.Dogs);
         }
 
         public new Guide GetById(int id)
         {
-            return DbSet.Find(id);
-            //var dog = DbSet.Where(x => x.DogID == id).Include(x => x.Guide).FirstOrDefault();
-            //return dog;
+            //return DbSet.Find(id);
+            var guide = DbSet.Where(x => x.GuideID == id).Include(x => x.Dogs).FirstOrDefault();
+            return guide;
         }
 
         public int GetFreeId()
