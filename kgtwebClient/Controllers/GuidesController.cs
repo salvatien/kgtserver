@@ -48,6 +48,7 @@ namespace kgtwebClient.Controllers
             //    return View(guidesList);
             //}
             //return View();
+            System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
             var guides = GuideHelpers.GetAllGuides().Result;
             if (guides.ListOfGuides.Any())
                 return View(guides);

@@ -16,15 +16,54 @@ namespace DogsServer.Controllers
         private UnitOfWork unitOfWork = new UnitOfWork(new AppDbContext());
 
         [HttpGet]
-        public List<Guide> Get()
+        public List<GuideModel> Get()
         {
-            return unitOfWork.GuideRepository.GetAll().ToList();
+            var guides =  unitOfWork.GuideRepository.GetAll().ToList();
+            var guideModelList = new List<GuideModel>();
+            foreach (var g in guides)
+            {
+                var guideModel = new GuideModel {
+                    GuideID = g.GuideID,
+                    IdentityId = g.IdentityId,
+                    FirstName = g.FirstName,
+                    LastName = g.LastName,
+                    Address = g.Address,
+                    City = g.City,
+                    Phone = g.Phone,
+                    Email = g.Email,
+                    Notes = g.Notes,
+                    IsAdmin = g.IsAdmin,
+                    IsMember = g.IsMember,
+                    Dogs = g.Dogs.Select(d => new IdNameModel { Id = d.DogID, Name = d.Name }).ToList()
+                };
+
+                guideModelList.Add(guideModel);
+            }
+            return guideModelList;
         }
 
         [HttpGet("{id}")]
-        public Guide Get(int id)
+        public GuideModel Get(int id)
         {
-            return unitOfWork.GuideRepository.GetById(id);
+            //return unitOfWork.GuideRepository.GetById(id);
+            var g = unitOfWork.GuideRepository.GetById(id);
+            var guideModel = new GuideModel()
+            { 
+                GuideID = g.GuideID,
+                IdentityId = g.IdentityId,
+                FirstName = g.FirstName,
+                LastName = g.LastName,
+                Address = g.Address,
+                City = g.City,
+                Phone = g.Phone,
+                Email = g.Email,
+                Notes = g.Notes,
+                IsAdmin = g.IsAdmin,
+                IsMember = g.IsMember,
+                Dogs = g.Dogs.Select(d => new IdNameModel { Id = d.DogID, Name = d.Name }).ToList()
+            };
+
+            return guideModel;
         }
 
         [HttpPost]
@@ -52,10 +91,10 @@ namespace DogsServer.Controllers
             guide.IsAdmin = guideModel.IsAdmin;
             guide.IsMember = guideModel.IsMember;
 
-            var allDogs = unitOfWork.DogRepository.GetAll();
-            var dogIds = guideModel.Dogs.Select(x => x.Id).ToList();
-            var dogs = allDogs.Where(d => dogIds.Contains(d.DogID)).ToList();
-            guide.Dogs = dogs;
+            //var allDogs = unitOfWork.DogRepository.GetAll();
+            //var dogIds = guideModel.Dogs.Select(x => x.Id).ToList();
+            //var dogs = allDogs.Where(d => dogIds.Contains(d.DogID)).ToList();
+            //guide.Dogs = dogs;
 
             unitOfWork.Commit();
             return new ObjectResult(guide.GuideID);

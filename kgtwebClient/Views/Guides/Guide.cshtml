@@ -7,22 +7,17 @@
 @model Dogs.ViewModels.Data.Models.GuideModel
 
 
+
 <div style="margin:60px">
+    <p style="margin:60px">
+        @Html.ActionLink("--Update Guide--", "UpdateGuide", "Guides", new { id = Model.GuideID }, null)
+
+        @Html.ActionLink("Back to List", "Index")
+    </p>
     <div class="data">
         <h4>@Html.DisplayFor(model => model.FirstName) @Html.DisplayFor(model => model.LastName)</h4>
         <hr />
         <dl class="dl-horizontal" style="float:left">
-            <dt>
-                @Html.DisplayNameFor(model => model.Dogs)
-            </dt>
-            <dd>
-                @{
-                    foreach (var dog in Model.Dogs) { 
-                        @Html.DisplayFor(m => dog.Name)
-                    }
-                }
-            </dd>
-
             <dt>
                 @Html.DisplayNameFor(model => model.City)
             </dt>
@@ -68,9 +63,27 @@
             <dt>
                 @Html.DisplayNameFor(model => model.Notes)
             </dt>
-
             <dd>
                 @Html.DisplayFor(model => model.Notes)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Dogs)
+            </dt>
+            <dd>
+                <table id="dogsTable">
+                    @{
+                        foreach (var dog in Model.Dogs)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(m => dog.Name)</td>
+                                <td>
+                                    <button class="displayButton" onclick="location.href='@Url.Action("Dog", "Dogs", new { id = @dog.Id })'">wyświetl dane</button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </table>
             </dd>
 
         </dl>
@@ -79,9 +92,4 @@
         <img src="~/Images/januszek.jpg" height="400" width="400">
     </div>
 </div>
-<p style="margin:60px">
-    @Html.ActionLink("--Update Guide--", "UpdateGuide", "Guides", new { id = Model.GuideID }, null)
-
-    @Html.ActionLink("Back to List", "Index")
-</p>
 
