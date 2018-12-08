@@ -13,89 +13,122 @@
                            new DogWorkmodeWrapper { Id = 3, Workmode = DogWorkmode.Rubble}};*/
 }
 
+@{
+    var checkboxAdmin = Model.IsAdmin ?
+        (object)new { @checked = "checked" } :
+        (object)new {  };
+
+    var checkboxMember = Model.IsMember ?
+        (object)new { @checked = "checked" } :
+        (object)new { };
+}
+
 @model Dogs.ViewModels.Data.Models.GuideModel
 
 <div style="margin:60px">
 
-    @using (Html.BeginForm("UpdateGuide", "Guides", FormMethod.Post, new { enctype = "multipart/form-data"}))
-{
-@Html.ValidationSummary(true)
-@Html.HiddenFor(m => m.GuideID)
-@* <fieldset>*@
-    <div style="float:left">
-        <div class="form-group">
-            @Html.LabelFor(m => m.FirstName, new { @class = "col-md-2 control-label form-field" })
-            <div class="col-md-10  form-field">
-                @Html.TextBoxFor(m => m.FirstName, new { @Value = Model.FirstName, @class = "form-control" })
+    @using (Html.BeginForm("UpdateGuide", "Guides", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(m => m.GuideID)
+        @* <fieldset>*@
+        <div style="float:left">
+            <div class="form-group">
+                @Html.LabelFor(m => m.FirstName, new { @class = "col-md-2 control-label form-field" })
+                <div class="col-md-10  form-field">
+                    @Html.TextBoxFor(m => m.FirstName, new { @Value = Model.FirstName, @class = "form-control" })
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.LastName, new { @class = "col-md-2 control-label form-field" })
-            <div class="col-md-10  form-field">
-                @Html.TextBoxFor(m => m.LastName, new { @Value = Model.LastName, @class = "form-control" })
+            <div class="form-group">
+                @Html.LabelFor(m => m.LastName, new { @class = "col-md-2 control-label form-field" })
+                <div class="col-md-10  form-field">
+                    @Html.TextBoxFor(m => m.LastName, new { @Value = Model.LastName, @class = "form-control" })
+                </div>
             </div>
-        </div>
-        @* property not to update?
-        <div class="form-group">
-            @Html.LabelFor(m => m.DogIds, new { @class = "col-md-2 control-label form-field" })
-            <div class="col-md-10 form-field">
-                @Html.TextAreaFor(m => m.DogIds, new { @Value = Model.DogIds, @class = "form-control" })
-            </div>
-        </div>
+            @* property not to update?
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Dogs, new { @class = "col-md-2 control-label form-field" })
+                    <div class="col-md-10 form-field">
+                        @{
+                            if (Model.Dogs != null)
+                            {
+                                foreach (var dog in Model.Dogs)
+                                {
+                                    @Html.TextBoxFor(m => m.Dogs, new { @Value = dog.Name, @class = "form-control" })
+                                }
+                            }
+                            else
+                            {
 
-        *@
-        <div class="form-group">
-            @Html.LabelFor(m => m.DateOfBirth, new { @class = "col-md-2 control-label form-field" })
-            <div class="col-md-10  form-field">
-                @Html.TextBoxFor(m => m.DateOfBirth, new { @Value = Model.DateOfBirth.ToString("yyyy-MM-dd"), type = "date", @class = "form-control" })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.City, new { @class = "col-md-2 control-label  form-field" })
-            <div class="col-md-10 form-field">
-                @Html.TextBoxFor(m => m.City, new { @Value = Model.City, @class = "form-control" })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.Address, new { @class = "col-md-2 control-label form-field" })
-            <div class="col-md-10 form-field">
-                @Html.TextBoxFor(m => m.Address, new { @Value = Model.Address, @class = "form-control" })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.Phone, new { @class = "col-md-2 control-label form-field" })
-            <div class="col-md-10 form-field">
-                @Html.TextBoxFor(m => m.Phone, new { @Value = Model.Phone, @class = "form-control" })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.Fitness, new { @class = "col-md-2 control-label form-field" })
-            <div class="col-md-10 form-field">
-                @Html.TextBoxFor(m => m.Fitness, new { @Value = Model.Fitness, @class = "form-control" })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.Notes, new { @class = "col-md-2 control-label form-field" })
-            <div class="col-md-10 form-field">
-                @Html.TextAreaFor(m => m.Notes, new { @Value = Model.Notes, @class = "form-control" })
-            </div>
-        </div>
+                            }
+                        }
+                    </div>
+                </div>
+            *@
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" class="btn btn-default form-field" value="Prześlij dane" />
+            <div class="form-group">
+                @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label form-field" })
+                <div class="col-md-10  form-field">
+                    @Html.TextBoxFor(m => m.Email, new { @Value = Model.Email, @class = "form-control" })
+                </div>
             </div>
-        </div>
-        @*/////////////////////////////////////////////////////*@
-    </div>
-<div class="picture">
-    <img src="~/Images/januszek.jpg" height="400" width="400">
-    <br />
-    Wybierz nowe zdjęcie: <input type="file" name="file" />
+            <div class="form-group">
+                @Html.LabelFor(m => m.City, new { @class = "col-md-2 control-label  form-field" })
+                <div class="col-md-10 form-field">
+                    @Html.TextBoxFor(m => m.City, new { @Value = Model.City, @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Address, new { @class = "col-md-2 control-label form-field" })
+                <div class="col-md-10 form-field">
+                    @Html.TextBoxFor(m => m.Address, new { @Value = Model.Address, @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Phone, new { @class = "col-md-2 control-label form-field" })
+                <div class="col-md-10 form-field">
+                    @Html.TextBoxFor(m => m.Phone, new { @Value = Model.Phone, @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.CheckBox("IsAdmin", checkboxAdmin)
+                @Html.LabelFor(m => m.IsAdmin, new { @class = "col-md-2 control-label form-field" })
 
-</div>
-@*</fieldset>*@
-}
+                @*<div class="col-md-10 form-field">
+            @Html.CheckBox("IsAdmin", checkboxAdmin)
+        </div>*@
+            </div>
+            <div class="form-group">
+                @Html.CheckBox("IsMember", checkboxMember)
+                @Html.LabelFor(m => m.IsMember, new { @class = "col-md-2 control-label form-field" })
+                @*<div class="col-md-10 form-field">*@
+                @*@Html.CheckBox("IsMember", checkboxMember)*@
+
+                @*@Html.CheckBoxFor(m => m.IsMember, new { @Value = Model.IsMember, @class = "form-control" })*@
+                @*</div>*@
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Notes, new { @class = "col-md-2 control-label form-field" })
+                <div class="col-md-10 form-field">
+                    @Html.TextAreaFor(m => m.Notes, new { @Value = Model.Notes, @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" class="btn btn-default form-field" value="Prześlij dane" />
+                </div>
+            </div>
+            @*/////////////////////////////////////////////////////*@
+        </div>
+        <div class="picture">
+            <img src="~/Images/januszek.jpg" height="400" width="400">
+            <br />
+            Wybierz nowe zdjęcie: <input type="file" name="file" />
+
+        </div>
+        @*</fieldset>*@
+    }
 </div>
 
 @*

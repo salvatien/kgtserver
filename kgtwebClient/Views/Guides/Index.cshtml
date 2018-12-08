@@ -15,7 +15,7 @@
 @*<div class="jumbotron"> *@
 <div class="tables">
     <input type="text" id="dogsSearch" onkeyup="searchByDogOrGuideName()" placeholder="Search for names.." title="Type in a name">
-    <button class="addButton" onclick="location.href='@Url.Action("AddGuide", "Guides")'">dodaj przewodnika</button>
+    @*<button class="addButton" onclick="location.href='@Url.Action("AddGuide", "Guides")'">dodaj przewodnika</button>*@
     @*<button id="button1" onclick="location.href='@Url.Action("DeleteDog","Dogs",new { id=7})'">delete</button> *@
     <div>
         <table id="guidesTable">
@@ -92,7 +92,7 @@
         alert("Delete guide: " + guideId);
         //document.getElementById("disp").innerHTML = "hi";
         $.ajax({
-            url: "@Url.Action("Deleteuide", "Guides")",
+            url: "@Url.Action("DeleteGuide", "Guides")",
             method: "POST", //First change type to method here
 
             data: {

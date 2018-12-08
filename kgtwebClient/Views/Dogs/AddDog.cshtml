@@ -3,9 +3,11 @@
 @using Dogs.ViewModels.Data.Models;
 
 @model Dogs.ViewModels.Data.Models.DogModel
+
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     var EnumCount = Enum.GetValues(typeof(DogWorkmode)).Length;
+    var guides = GuideHelpers.GetAllGuidesIdAndName();
 }
 
 
@@ -70,12 +72,14 @@
         <div class="form-group">
             @Html.LabelFor(m => m.GuideIdAndName, new { @class = "col-md-2 control-label form-field" })
             <div class="col-md-10 form-field">
-                @Html.TextBoxFor(m => m.GuideIdAndName, new { @class = "form-control" })
+                @Html.DropDownListFor(m => m.GuideIdAndName.Id, guides, new { @class = "form-control" })
             </div>
         </div>
+        @*
         <div>
             @Html.HiddenFor(m => m.GuideIdAndName.GuideId)
         </div>
+            *@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" class="btn btn-default form-field" value="Dodaj do bazy" />

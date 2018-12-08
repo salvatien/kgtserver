@@ -167,6 +167,7 @@
     </Compile>
     <Compile Include="Helpers\DogHelpers.cs" />
     <Compile Include="Helpers\EnumHelpers.cs" />
+    <Compile Include="Helpers\GuideHelpers.cs" />
     <Compile Include="Helpers\LoginHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
