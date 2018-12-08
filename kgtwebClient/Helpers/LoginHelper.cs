@@ -8,6 +8,11 @@ namespace kgtwebClient.Helpers
 {
     public class LoginHelper
     {
+        public static bool IsAuthenticated()
+        {
+            return (!String.IsNullOrWhiteSpace((string)System.Web.HttpContext.Current.Session["token"])
+               && !String.IsNullOrWhiteSpace((string)System.Web.HttpContext.Current.Session["CurrentUserId"]));
+        }
         public class TokenResponse
         {
             [JsonProperty(PropertyName = "access_token")]

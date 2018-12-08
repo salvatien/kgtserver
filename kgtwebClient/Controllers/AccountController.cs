@@ -10,6 +10,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using Dogs.ViewModels.Data.Models.Account;
+using kgtwebClient.Helpers;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using static kgtwebClient.Helpers.LoginHelper;
@@ -23,16 +24,19 @@ namespace kgtwebClient.Controllers
 
 
         // GET: Account
+        [HttpGet]
         public ActionResult Index()
         {
-            return View();
+            if(!LoginHelper.IsAuthenticated())
+                return RedirectToAction("Login", "Account");
+            return RedirectToAction("Guide", "Guides", new { id = Int32.Parse((string)System.Web.HttpContext.Current.Session["CurrentUserId"])});
         }
 
         // GET: /Account/Login
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
-            if (Request.IsAuthenticated)
+            if (LoginHelper.IsAuthenticated())
                 return RedirectToAction("Index", "Home");
 
             ViewBag.ReturnUrl = returnUrl;
@@ -42,10 +46,10 @@ namespace kgtwebClient.Controllers
         // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult Login(LoginModel model, string returnUrl)
         {
-            if (Request.IsAuthenticated)
+            if (LoginHelper.IsAuthenticated())
                 return RedirectToAction("Index", "Home");
 
             if (!ModelState.IsValid)
@@ -53,9 +57,43 @@ namespace kgtwebClient.Controllers
                 return View(model);
             }
 
-            // call to identity api to token endpoint
-            // if token isnt empty, add token to the cookie, set session?,  and redirect somewhere
-            System.Web.HttpContext.Current.Session["firstName"] = "a"; //some magic with getting data from token
+            identityApiHttpClient.DefaultRequestHeaders.Accept.Clear();
+            identityApiHttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            HttpRequestMessage identityApiMessage = new HttpRequestMessage(HttpMethod.Post, identityApiHttpClient.BaseAddress + "account/token");
+
+            var modelSerialized = JsonConvert.SerializeObject(model);
+            identityApiMessage.Content = new StringContent(modelSerialized, System.Text.Encoding.UTF8, "application/json");
+            HttpResponseMessage identityApiResponseMessage = identityApiHttpClient.SendAsync(identityApiMessage).Result;
+            if (identityApiResponseMessage.IsSuccessStatusCode)    //200 OK
+            {
+                var responseIdentityApiData = identityApiResponseMessage.Content.ReadAsStringAsync().Result;
+                var token = responseIdentityApiData;
+                token = token.Replace("\"", "");
+
+
+                SecurityToken validatedToken;
+                var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(ConfigurationManager.AppSettings["Tokens:Key"]));
+                var validationParameters = new TokenValidationParameters()
+                {
+                    IssuerSigningKey = signingKey,
+                    ValidateAudience = true,
+                    ValidAudience = ConfigurationManager.AppSettings["Tokens:Audience"],
+                    ValidateIssuer = true,
+                    ValidIssuer = ConfigurationManager.AppSettings["Tokens:Issuer"],
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true
+                };
+
+                var principal = new JwtSecurityTokenHandler().ValidateToken(token, validationParameters, out validatedToken);
+                var claims = principal.Claims;
+                var userId = principal.Claims.Where(c => c.Type == "KgtId").Select(c => c.Value).FirstOrDefault();
+
+                System.Web.HttpContext.Current.Session.Timeout = 30;
+                System.Web.HttpContext.Current.Session["CurrentUserId"] = userId;
+                System.Web.HttpContext.Current.Session["token"] = token;
+            }
+            if(String.IsNullOrWhiteSpace(returnUrl))
+                return RedirectToAction("Index", "Home");
             return Redirect(returnUrl);
             //else return some error
         }
@@ -66,7 +104,7 @@ namespace kgtwebClient.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
-            if (Request.IsAuthenticated)
+            if(LoginHelper.IsAuthenticated())
                 return RedirectToAction("Index", "Home");
 
             return View();
@@ -78,7 +116,7 @@ namespace kgtwebClient.Controllers
         //[ValidateAntiForgeryToken]
         public ActionResult Register(RegisterModel model)
         {
-            if (Request.IsAuthenticated)
+            if (LoginHelper.IsAuthenticated())
                 RedirectToAction("Index", "Home");
 
             if (ModelState.IsValid)
@@ -108,36 +146,26 @@ namespace kgtwebClient.Controllers
                     if (responseServerMessage.IsSuccessStatusCode)    //200 OK
                     {
                         var responseServerData = responseServerMessage.Content.ReadAsStringAsync().Result;
-
+                        System.Web.HttpContext.Current.Session.Timeout = 30;
                         System.Web.HttpContext.Current.Session["CurrentUserId"] = responseServerData;
                         System.Web.HttpContext.Current.Session["token"] = token;
                     }
-
-                    //SecurityToken validatedToken;
-                    //var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(ConfigurationManager.AppSettings["Tokens:Key"]));
-                    //var validationParameters = new TokenValidationParameters()
-                    //{
-                    //    IssuerSigningKey = signingKey,
-                    //    ValidateAudience = true,
-                    //    ValidAudience = ConfigurationManager.AppSettings["Tokens:Audience"],
-                    //    ValidateIssuer = true,
-                    //    ValidIssuer = ConfigurationManager.AppSettings["Tokens:Issuer"],
-                    //    ValidateLifetime = true,
-                    //    ValidateIssuerSigningKey = true
-                    //};
-
-                    //new JwtSecurityTokenHandler().ValidateToken(token, validationParameters, out validatedToken);
-
-                    //var tk = new JwtSecurityTokenHandler().WriteToken(validatedToken);
-
-                    //var id = System.Web.HttpContext.Current.Session["CurrentUserId"];
-                    //var tkn = System.Web.HttpContext.Current.Session["token"];
-                    
                 }
                 return RedirectToAction("UpdateGuide", "Guides", new { id = System.Web.HttpContext.Current.Session["CurrentUserId"] });
             }
             // If we got this far, something failed, redisplay form
             else return View(model);
         }
+
+        // POST: /Account/Logout
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
+        public ActionResult Logout()
+        {
+            System.Web.HttpContext.Current.Session.Clear();
+            System.Web.HttpContext.Current.Session.Abandon();
+            return RedirectToAction("Index", "Home");
+        }
     }
+
 }
