@@ -21,7 +21,7 @@
 </head>
 <body>
 
-@using (Html.BeginForm("AddDog", "Dogs",@*new { id = Model.DogID},*@ FormMethod.Post, new { enctype = "multipart/form-data", onsubmit = "caculateWorkmodeSum()" }))
+@using (Html.BeginForm("AddDog", "Dogs",@*new { id = Model.DogID},*@ FormMethod.Post, new { enctype = "multipart/form-data", onsubmit = "validateAddDog()"}))
 {
 @Html.ValidationSummary(true)
 @Html.HiddenFor(m => m.DogID)
@@ -30,13 +30,13 @@
         <div class="form-group">
             @Html.LabelFor(m => m.Name, new { @class = "col-md-2 control-label form-field" })
             <div class="col-md-10  form-field">
-                @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                @Html.TextBoxFor(m => m.Name, new { @id = "addDogName", @class = "form-control" })
             </div>
         </div>
         <div class="form-group">
             @Html.LabelFor(m => m.DateOfBirth, new { @class = "col-md-2 control-label form-field" })
             <div class="col-md-10  form-field">
-                @Html.TextBoxFor(m => m.DateOfBirth, new { type = "date", @class = "form-control" })
+                @Html.TextBoxFor(m => m.DateOfBirth, new { type = "date", @id = "addDogDateOfBirth", @class = "form-control" })
             </div>
         </div>
         <div class="form-group">
@@ -116,6 +116,12 @@
         console.log(@EnumCount);
         console.log("workmode: " + workmodeSum);
         $('#workmodeSum').val(workmodeSum);
+    }
+    
+    function validateAddDog() {
+        caculateWorkmodeSum();
+        /*if ($('#addDogName').val() = "" //empty?
+        alert("validate")*/
     }
 </script>
 </body>

@@ -46,11 +46,12 @@
         @if (LoginHelper.IsAuthenticated())
         {
             @Html.ActionLink("Moje konto", "Index", "Account", routeValues: null, htmlAttributes: new { id = "myAccountLink" })
-            using (Html.BeginForm("Logout", "Account", FormMethod.Post, new { id = "logoutForm" }))
+            using (Html.BeginForm("Logout", "Account", FormMethod.Post, new { style = "display:inline;", id = "logoutForm" }))
             {
-                <a href="javascript:document.getElementById('logoutForm').submit()">
+                <button type="submit">wyloguj</button>
+                @*<a href="javascript:document.getElementById('logoutForm').submit()">
                     <span>Wyloguj</span>
-                </a>
+                </a>*@
             }
         }
         else
@@ -69,9 +70,9 @@
         <ul>
             Dane
             <li> @Html.ActionLink("Psy", "Index", "Dogs")</li>      @*nazwa widoczna w aplikacji - metoda - kontroler*@
-           @* <li><a href="#">Psy</a></li>*@
+            @* <li><a href="#">Psy</a></li>*@
             <li>@Html.ActionLink("Przewodnicy", "Index", "Guides")</li>
-            <li><a href="#">Treningi</a></li>
+            <li>@Html.ActionLink("Treningi", "Index", "Trainings")</li>
             <li><a href="#">Akcje</a></li>
             <li><a href="#">Wydarzenia</a></li>
             <li><a href="#">Certyfikaty</a></li>

@@ -1,0 +1,110 @@
+﻿
+@{
+    ViewBag.Title = "Training";
+}
+
+
+
+@model List<Dogs.ViewModels.Data.Models.Trkpt>
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Complex Polylines</title>
+    <style>
+         /* Always set the map height explicitly to define the size of the div
+        * element that contains the map. */
+         #map {
+             height: 100%;
+         }
+         /* Optional: Makes the sample page fill the window. */
+         html, body {
+             height: 100%;
+             margin: 0;
+             padding: 0;
+         }
+    </style>
+</head>
+<body>
+    <div id="map" style="width:500px; height:500px; margin:60px"></div>
+    
+    <script>
+
+        // This example creates an interactive map which constructs a polyline based on
+        // user clicks. Note that the polyline only appears once its path property
+        // contains two LatLng coordinates.
+
+        var poly;
+        var map;
+        
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 7,
+                center: { lat: 50.879, lng: 20.624 }  // Center the map on Chicago, USA.
+            });
+
+            var punkty = [];
+            @foreach ( var pt in Model)
+            {
+                @: punkty.push({ lat: @pt.Lat, lng: @pt.Lon });
+                @: console.log(punkty);
+                //@: punkty.push("@pt");
+            }
+
+            
+            var sladTest = [
+
+                @*{@Model.Lat, @Model.Lon},*@
+                { lat: 50.772, lng: 20.214 },
+                { lat: 50.291, lng: 20.821 },
+                { lat: 50.142, lng: 20.431 },
+                { lat: 50.467, lng: 30.027 }
+            ];
+
+            poly = new google.maps.Polyline({
+                path: punkty,
+                strokeColor: '#FF0000',
+                strokeOpacity: 1.0,
+                strokeWeight: 3
+            });
+            poly.setMap(map);
+
+            var marker = new google.maps.Marker({
+                position: { lat: 50.772, lng: 20.214 },
+                icon: {
+                    path: google.maps.SymbolPath.CIRCLE,
+                    scale: 2
+                },
+                title: '#',// + path.getLength(),
+                map: map
+            });
+
+            marker.addListener('click', test);
+            // Add a listener for the click event
+            map.addListener('click', addLatLng);
+        }
+        function test() { alert("klik klik blik"); }
+        // Handles click events on a map, and adds a new point to the Polyline.
+        function addLatLng(event) {
+            var path = poly.getPath();
+
+            // Because path is an MVCArray, we can simply append a new coordinate
+            // and it will automatically appear.
+            path.push(event.latLng);
+
+            // Add a new marker at the new plotted point on the polyline.
+            var marker = new google.maps.Marker({
+                position: event.latLng,
+                title: '#' + path.getLength(),
+                map: map
+            });
+        }
+    </script>
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBUX5AXbVnzM0qYhrWAE7DeOB6qh73avzw&callback=initMap">
+    </script>
+</body>
+</html>

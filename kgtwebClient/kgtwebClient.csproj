@@ -162,6 +162,7 @@
     <Compile Include="Controllers\DogsController.cs" />
     <Compile Include="Controllers\GuidesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\TrainingsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -206,6 +207,7 @@
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
     <None Include="Properties\PublishProfiles\kgtwebclient - Web Deploy.pubxml" />
+    <Content Include="Images\Cobby.gpx" />
     <Content Include="Images\januszek.jpg" />
     <Content Include="Images\kgt.jpg" />
     <Content Include="Images\piesek1.jpg" />
@@ -305,6 +307,8 @@
     <Content Include="Views\Guides\UpdateGuide.cshtml" />
     <Content Include="Views\Guides\Guide.cshtml" />
     <Content Include="Views\Guides\AddGuide.cshtml" />
+    <Content Include="Views\Trainings\Index.cshtml" />
+    <Content Include="Views\Trainings\Training.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
