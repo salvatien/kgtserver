@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Strathweb.AspNetCore.AzureBlobFileProvider;
 
 namespace DogsServer
 {
@@ -61,6 +62,26 @@ namespace DogsServer
             });
             #endregion
 
+            var blobOptionsTracks = new AzureBlobOptions
+            {
+                ConnectionString = Configuration.GetConnectionString("BlobConnectionString"),
+                DocumentContainer = "tracks"
+            };
+
+
+            var azureBlobFileProviderTracks = new AzureBlobFileProvider(blobOptionsTracks);
+            services.AddSingleton(azureBlobFileProviderTracks);
+
+            var blobOptionsImages = new AzureBlobOptions
+            {
+                ConnectionString = Configuration.GetConnectionString("BlobConnectionString"),
+                DocumentContainer = "images"
+            };
+
+
+            var azureBlobFileProviderImages = new AzureBlobFileProvider(blobOptionsImages);
+            services.AddSingleton(azureBlobFileProviderImages);
+
             services.AddMvc()
                 .AddJsonOptions(
                     options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
@@ -76,6 +97,32 @@ namespace DogsServer
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            var azureBlobFileProviderTracks = app.ApplicationServices.GetRequiredService<AzureBlobFileProvider>();
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = azureBlobFileProviderTracks,
+                RequestPath = "/tracks"
+            });
+
+            app.UseDirectoryBrowser(new DirectoryBrowserOptions
+            {
+                FileProvider = azureBlobFileProviderTracks,
+                RequestPath = "/tracks"
+            });
+
+            var azureBlobFileProviderImages = app.ApplicationServices.GetRequiredService<AzureBlobFileProvider>();
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = azureBlobFileProviderImages,
+                RequestPath = "/images"
+            });
+
+            app.UseDirectoryBrowser(new DirectoryBrowserOptions
+            {
+                FileProvider = azureBlobFileProviderImages,
+                RequestPath = "/images"
+            });
 
             app.UseMvc();
             app.UseHttpsRedirection();

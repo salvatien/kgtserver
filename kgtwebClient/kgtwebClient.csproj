@@ -309,6 +309,7 @@
     <Content Include="Views\Guides\AddGuide.cshtml" />
     <Content Include="Views\Trainings\Index.cshtml" />
     <Content Include="Views\Trainings\Training.cshtml" />
+    <Content Include="Views\Trainings\UploadTest.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

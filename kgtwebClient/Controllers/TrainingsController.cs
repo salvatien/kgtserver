@@ -18,11 +18,11 @@ namespace kgtwebClient.Controllers
 
 
         //The URL of the WEB API Service
-        #if DEBUG
+#if DEBUG
         static string url = "http://localhost:12321/api/";
-        #else
+#else
         static string url = "http://kgt.azurewebsites.net/api/";
-        #endif
+#endif
         private static readonly HttpClient client = new HttpClient { BaseAddress = new Uri(url) };
 
 
@@ -48,9 +48,55 @@ namespace kgtwebClient.Controllers
             //{
             //    list.Add( )
             //}
-            
+
 
             return View(t);
+        }
+        [HttpPost]
+        public ActionResult UploadFile(HttpPostedFileBase file)
+        {
+
+            HttpClient httpClient = new HttpClient();
+            MultipartFormDataContent form = new MultipartFormDataContent();
+            var stream = file.InputStream;
+            var streamContent = new StreamContent(stream);
+
+            var imageContent = new ByteArrayContent(streamContent.ReadAsByteArrayAsync().Result);
+            imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
+
+            form.Add(imageContent, "image", Path.GetFileName("your file name"));
+            var response = httpClient.PostAsync("http://localhost:12321/api/trainings/upload", form).Result;
+
+
+            //using (var client = new HttpClient())
+            //{
+            //    using (var content = new MultipartFormDataContent())
+            //    {
+            //        byte[] Bytes = new byte[file.InputStream.Length + 1];
+            //        file.InputStream.Read(Bytes, 0, Bytes.Length);
+            //        var fileContent = new ByteArrayContent(Bytes);
+            //        fileContent.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment") { FileName = file.FileName };
+            //        content.Add(fileContent);
+            //        var requestUri = "http://localhost:12321/api/trainings/upload";
+            //        var result = client.PostAsync(requestUri, content).Result;
+            //        if (result.StatusCode == System.Net.HttpStatusCode.Created)
+            //        {
+            //            Console.WriteLine("Success");
+
+            //        }
+            //        else
+            //        {
+            //            ViewBag.Failed = "Failed !" + result.Content.ToString();
+            //        }
+            //    }
+            //}
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult UploadTest()
+        {
+            return View();
         }
     }
 }
