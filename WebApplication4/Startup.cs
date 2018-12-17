@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -70,7 +71,9 @@ namespace DogsServer
 
 
             var azureBlobFileProviderTracks = new AzureBlobFileProvider(blobOptionsTracks);
-            services.AddSingleton(azureBlobFileProviderTracks);
+
+
+           // services.AddSingleton(azureBlobFileProviderTracks);
 
             var blobOptionsImages = new AzureBlobOptions
             {
@@ -80,7 +83,11 @@ namespace DogsServer
 
 
             var azureBlobFileProviderImages = new AzureBlobFileProvider(blobOptionsImages);
-            services.AddSingleton(azureBlobFileProviderImages);
+            //services.AddSingleton(azureBlobFileProviderImages);
+
+            var composite = new CompositeFileProvider(azureBlobFileProviderTracks, azureBlobFileProviderImages);
+            services.AddSingleton(composite);
+
 
             services.AddMvc()
                 .AddJsonOptions(
@@ -98,31 +105,43 @@ namespace DogsServer
                 app.UseDeveloperExceptionPage();
             }
 
-            var azureBlobFileProviderTracks = app.ApplicationServices.GetRequiredService<AzureBlobFileProvider>();
+            var compositeFileProvider = app.ApplicationServices.GetRequiredService<CompositeFileProvider>();
             app.UseStaticFiles(new StaticFileOptions()
             {
-                FileProvider = azureBlobFileProviderTracks,
-                RequestPath = "/tracks"
+                FileProvider = compositeFileProvider,
+                RequestPath = "",
             });
 
             app.UseDirectoryBrowser(new DirectoryBrowserOptions
             {
-                FileProvider = azureBlobFileProviderTracks,
-                RequestPath = "/tracks"
+                FileProvider = compositeFileProvider,
+                RequestPath = "",
             });
+            //var azureBlobFileProviderTracks = app.ApplicationServices.GetRequiredService<AzureBlobFileProvider>();
+            //app.UseStaticFiles(new StaticFileOptions()
+            //{
+            //    FileProvider = azureBlobFileProviderTracks,
+            //    RequestPath = "/tracks"
+            //});
 
-            var azureBlobFileProviderImages = app.ApplicationServices.GetRequiredService<AzureBlobFileProvider>();
-            app.UseStaticFiles(new StaticFileOptions()
-            {
-                FileProvider = azureBlobFileProviderImages,
-                RequestPath = "/images"
-            });
+            //app.UseDirectoryBrowser(new DirectoryBrowserOptions
+            //{
+            //    FileProvider = azureBlobFileProviderTracks,
+            //    RequestPath = "/tracks"
+            //});
 
-            app.UseDirectoryBrowser(new DirectoryBrowserOptions
-            {
-                FileProvider = azureBlobFileProviderImages,
-                RequestPath = "/images"
-            });
+            //var azureBlobFileProviderImages = app.ApplicationServices.GetRequiredService<AzureBlobFileProvider>();
+            //app.UseStaticFiles(new StaticFileOptions()
+            //{
+            //    FileProvider = azureBlobFileProviderImages,
+            //    RequestPath = "/images"
+            //});
+
+            //app.UseDirectoryBrowser(new DirectoryBrowserOptions
+            //{
+            //    FileProvider = azureBlobFileProviderImages,
+            //    RequestPath = "/images"
+            //});
 
             app.UseMvc();
             app.UseHttpsRedirection();

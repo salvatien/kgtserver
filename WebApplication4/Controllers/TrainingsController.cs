@@ -6,6 +6,8 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Strathweb.AspNetCore.AzureBlobFileProvider;
@@ -19,21 +21,17 @@ namespace DogsServer.Controllers
     public class TrainingsController : ControllerBase
     {
 
-        AzureBlobFileProvider tracksBlobProvider;
-        AzureBlobFileProvider imagesBlobProvider;
-        //const string SessionName = "_Name";
-        //const string SessionAge = "_Age";
+        CompositeFileProvider provider;
 
-        public TrainingsController(AzureBlobFileProvider tracks, AzureBlobFileProvider images)
+        public TrainingsController(CompositeFileProvider fileProvider)
         {
-            tracksBlobProvider = tracks;
-            imagesBlobProvider = images;
+            provider = fileProvider;
         }
         [HttpPost("uploadFile")]
         [DisableRequestSizeLimit]
         public HttpResponseMessage UploadFile()
         {
-            
+
             HttpResponseMessage result = null;
             if (Request.Form.Files.Count > 0)
             {
@@ -141,6 +139,18 @@ namespace DogsServer.Controllers
                 return false;
             }
 
+        }
+
+        [HttpGet("gettrack/{filename}")]
+        [DisableRequestSizeLimit]
+        public FileStreamResult GetTrack(string filename)
+        {
+            var trackContents = provider.FileProviders.ToList()[0].GetDirectoryContents("");
+            //IDirectoryContents contents = provider.GetDirectoryContents("/tracks");
+            var fileList = trackContents.ToList();
+            var requestedFile = fileList.Where(x => x.Name == filename).FirstOrDefault();
+            var stream = requestedFile.CreateReadStream();
+            return File(stream, "image/jpeg");
         }
     }
 }
