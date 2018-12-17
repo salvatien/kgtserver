@@ -63,8 +63,8 @@ namespace kgtwebClient.Controllers
 
             var imageContent = new ByteArrayContent(streamContent.ReadAsByteArrayAsync().Result);
             imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
-
-            form.Add(imageContent, "image", Path.GetFileName("your file name"));
+            var fileName = "file" + Guid.NewGuid().ToString();
+            form.Add(imageContent, fileName, Path.GetFileName(fileName));
             var response = httpClient.PostAsync("http://localhost:12321/api/trainings/upload", form).Result;
 
 
