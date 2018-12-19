@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -142,15 +144,48 @@ namespace DogsServer.Controllers
         }
 
         [HttpGet("gettrack/{filename}")]
-        [DisableRequestSizeLimit]
-        public FileStreamResult GetTrack(string filename)
+        //[DisableRequestSizeLimit]
+        public HttpResponseMessage GetTrack(string filename)
         {
             var trackContents = provider.FileProviders.ToList()[0].GetDirectoryContents("");
             //IDirectoryContents contents = provider.GetDirectoryContents("/tracks");
             var fileList = trackContents.ToList();
             var requestedFile = fileList.Where(x => x.Name == filename).FirstOrDefault();
+            var a = provider.FileProviders.ToList()[0].GetFileInfo("/" + filename);
             var stream = requestedFile.CreateReadStream();
-            return File(stream, "image/jpeg");
+
+            var reader = new StreamReader(stream);
+            var stringStream = reader.ReadToEnd();
+
+
+            return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(stringStream) };
+
+            
+
         }
+
+        //[HttpGet("{id}")]
+        //public TrainingModel Get(int id)
+        //{
+        //    //return unitOfWork.GuideRepository.GetById(id);
+        //    var g = unitOfWork.TrainingRepository.GetById(id);
+        //    var guideModel = new GuideModel()
+        //    {
+        //        GuideID = g.GuideID,
+        //        IdentityId = g.IdentityId,
+        //        FirstName = g.FirstName,
+        //        LastName = g.LastName,
+        //        Address = g.Address,
+        //        City = g.City,
+        //        Phone = g.Phone,
+        //        Email = g.Email,
+        //        Notes = g.Notes,
+        //        IsAdmin = g.IsAdmin,
+        //        IsMember = g.IsMember,
+        //        Dogs = g.Dogs.Select(d => new IdNameModel { Id = d.DogID, Name = d.Name }).ToList()
+        //    };
+
+        //    return guideModel;
+        //}
     }
 }

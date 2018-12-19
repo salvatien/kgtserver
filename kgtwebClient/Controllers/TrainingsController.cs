@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -32,25 +33,34 @@ namespace kgtwebClient.Controllers
             return View();
         }
 
-        public ActionResult Training()
+        public ActionResult Training(int id)
         {
-            TextReader textReader = new StreamReader(Server.MapPath("~/Images/Cobby.gpx"));
 
-            //System.Xml.XmlDocument xmlDoc = new System.Xml.XmlDocument();
-            XDocument gpxDoc = XDocument.Load(textReader);
-            var serializer = new XmlSerializer(typeof(Gpx));
-            var gpx = (Gpx)serializer.Deserialize(gpxDoc.Root.CreateReader());
+            //here there will be a call to server web api to get training's viewmodel, including path hardcoded below
+
+            var webRequest = WebRequest.Create(@"https://kgtstorage.blob.core.windows.net/tracks/file06cd3cb0-33fa-477d-861e-86b23d717ad1");
+
+            try
+            {
+                using (var response = webRequest.GetResponse())
+                using (var content = response.GetResponseStream())
+                using (var reader = new StreamReader(content))
+                {
+                    XDocument gpxDoc = XDocument.Load(reader);
+                    var serializer = new XmlSerializer(typeof(Gpx));
+                    var gpx = (Gpx)serializer.Deserialize(gpxDoc.Root.CreateReader());
 
 
-            var t = gpx.Trk[0].Trkseg.Trkpt;
-            //var list = new List<Trkpt>();
-            //foreach (var pt in t)
-            //{
-            //    list.Add( )
-            //}
+                    var t = gpx.Trk[0].Trkseg.Trkpt;
 
+                    return View(t);
+                }
+            }
+            catch(Exception e)
+            {
+                return View();
+            }
 
-            return View(t);
         }
         [HttpPost]
         public ActionResult UploadFile(HttpPostedFileBase file)
