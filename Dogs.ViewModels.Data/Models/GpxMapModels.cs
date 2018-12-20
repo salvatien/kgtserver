@@ -121,7 +121,7 @@ namespace Dogs.ViewModels.Data.Models
         [XmlElement(ElementName = "metadata", Namespace = "http://www.topografix.com/GPX/1/1")]
         public Metadata Metadata { get; set; }
         [XmlElement(ElementName = "trk", Namespace = "http://www.topografix.com/GPX/1/1")]
-        public List<Trk> Trk { get; set; }
+        public Trk Trk { get; set; }
         [XmlAttribute(AttributeName = "creator")]
         public string Creator { get; set; }
         [XmlAttribute(AttributeName = "version")]
