@@ -206,6 +206,8 @@
     <Content Include="Content\bootstrap-reboot.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
+    <Content Include="Images\Ślad_Cob8-07-22-123810.gpx" />
+    <Content Include="Images\Ślad_Cob8-07-22-124610.gpx" />
     <None Include="Properties\PublishProfiles\kgtwebclient - Web Deploy.pubxml" />
     <Content Include="Images\Cobby.gpx" />
     <Content Include="Images\januszek.jpg" />
@@ -258,7 +260,9 @@
     <Content Include="Scripts\umd\popper.min.js" />
     <Content Include="Scripts\v4-shims.js" />
     <Content Include="Scripts\v4-shims.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>

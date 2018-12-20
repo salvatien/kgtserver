@@ -6,7 +6,7 @@
 
 
 
-@model List<Dogs.ViewModels.Data.Models.Trkpt>
+@model Dogs.ViewModels.Data.Models.DogTrainingModel
 
 
 <!DOCTYPE html>
@@ -43,15 +43,15 @@
 
         function initMap() {
             map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 7,
-                center: { lat: 50.879, lng: 20.624 }  // Center the map on Chicago, USA.
+                zoom: 17,
+                center: { lat: 50.1085352898,lng: 19.7763991356 }  // Center the map on POLSZA
             });
 
             var punkty = [];
-            @foreach ( var pt in Model)
+            @foreach (var pt in Model.PersonTrackpoints)
             {
                 @: punkty.push({ lat: @pt.Lat, lng: @pt.Lon });
-                @: console.log(punkty);
+                //@: console.log(punkty);
                 //@: punkty.push("@pt");
             }
 
@@ -72,22 +72,40 @@
                 strokeWeight: 3
             });
             poly.setMap(map);
+            //var date;
+            //var time;
+            @foreach (var pt in Model.PersonTrackpoints) {
+                var t = pt.Time;
+                @: var date = '@HttpUtility.JavaScriptStringEncode(t)';
+                @: var time = new Date(date).toLocaleTimeString();
 
-            var marker = new google.maps.Marker({
-                position: { lat: 50.772, lng: 20.214 },
-                icon: {
-                    path: google.maps.SymbolPath.CIRCLE,
-                    scale: 2
-                },
-                title: '#',// + path.getLength(),
-                map: map
-            });
+                @:  var marker = new google.maps.Marker({
+                @:        position: { lat: @pt.Lat, lng: @pt.Lon },
+                @:
+                @:        icon: {
+                @:          path: google.maps.SymbolPath.CIRCLE,
+                @:          scale: 2
+                @:        },
+                @:        title: 'czas: ' + '\'@pt.Time\'', 
+                @:        map: map
+                @:  });
 
-            marker.addListener('click', test);
+                @*@:   pointInfo = 'szerokość:' + @pt.Lat;
+                @:  pointInfo += ', długość:' + @pt.Lon;
+                @:  pointInfo += ', czas: ' + '\'@pt.Time\'';*@
+                @*@:  var infowindow = new google.maps.InfoWindow({
+                @:      content: 'szerokość:' + @pt.Lat
+                @:  });*@
+                @:  console.log("time: " + time);
+                @:  marker.addListener('click', function () { new google.maps.InfoWindow({
+                @:                                                           content: 'szerokość:' + @pt.Lat +  ',\n długość:' + @pt.Lon  + ',\n czas:' + date @*'@pt.Time'*@
+                @:                                                              }).open(map, this) }/*showInfoWindow(infowindow, map, marker)*/);
+            }
+
             // Add a listener for the click event
             map.addListener('click', addLatLng);
         }
-        function test() { alert("klik klik blik"); }
+        function showInfoWindow(infowindow, map, marker) { infowindow.open(map, marker) }
         // Handles click events on a map, and adds a new point to the Polyline.
         function addLatLng(event) {
             var path = poly.getPath();
@@ -103,6 +121,12 @@
                 map: map
             });
         }
+
+        function parseISOString(s) {
+            var b = s.split(/\D+/);
+            return new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5], b[6]));
+        }
+
     </script>
     <script async defer
             src="@googleMapsLinkWithApiKey">

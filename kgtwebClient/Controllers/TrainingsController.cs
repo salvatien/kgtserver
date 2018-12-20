@@ -34,23 +34,34 @@ namespace kgtwebClient.Controllers
 
         public ActionResult Training()
         {
-            TextReader textReader = new StreamReader(Server.MapPath("~/Images/Cobby.gpx"));
+            DogTrainingModel trainingTracepoints = new DogTrainingModel();
+
+            DogTraining training = new DogTraining()
+            {
+                DogTrack = "~/Images/Ślad_Cob8-07-22-124610.gpx",
+                PersonTrack = "~/Images/Ślad_Cob8-07-22-123810.gpx"
+            };
+
+            TextReader textReader = new StreamReader(Server.MapPath(training.DogTrack));
 
             //System.Xml.XmlDocument xmlDoc = new System.Xml.XmlDocument();
             XDocument gpxDoc = XDocument.Load(textReader);
             var serializer = new XmlSerializer(typeof(Gpx));
             var gpx = (Gpx)serializer.Deserialize(gpxDoc.Root.CreateReader());
+            var t = gpx.Trk.Trkseg.Trkpt;
+
+            trainingTracepoints.DogTrackpoints = t;
 
 
-            var t = gpx.Trk[0].Trkseg.Trkpt;
-            //var list = new List<Trkpt>();
-            //foreach (var pt in t)
-            //{
-            //    list.Add( )
-            //}
-            
+            TextReader textReader2 = new StreamReader(Server.MapPath(training.PersonTrack));
+            XDocument gpxDoc2 = XDocument.Load(textReader2);
+            var serializer2 = new XmlSerializer(typeof(Gpx));
+            var gpx2 = (Gpx)serializer.Deserialize(gpxDoc.Root.CreateReader());
+            var t2 = gpx2.Trk.Trkseg.Trkpt;
 
-            return View(t);
+            trainingTracepoints.PersonTrackpoints = t2;
+
+            return View(trainingTracepoints);
         }
     }
 }
