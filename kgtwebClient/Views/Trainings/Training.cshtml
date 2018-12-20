@@ -50,20 +50,18 @@
             var punkty = [];
             @foreach (var pt in Model.PersonTrackpoints)
             {
-                @: punkty.push({ lat: @pt.Lat, lng: @pt.Lon });
+                @: punkty.push({ lat: @pt.Lat, lng: @pt.Lon});
                 //@: console.log(punkty);
                 //@: punkty.push("@pt");
             }
 
 
-            var sladTest = [
-
-                @*{@Model.Lat, @Model.Lon},*@
+            @*var sladTest = [
                 { lat: 50.772, lng: 20.214 },
                 { lat: 50.291, lng: 20.821 },
                 { lat: 50.142, lng: 20.431 },
                 { lat: 50.467, lng: 30.027 }
-            ];
+            ];*@
 
             poly = new google.maps.Polyline({
                 path: punkty,
@@ -74,7 +72,7 @@
             poly.setMap(map);
             //var date;
             //var time;
-            @foreach (var pt in Model.PersonTrackpoints) {
+            @foreach (var pt in @Model.PersonTrackpoints) {
                 var t = pt.Time;
                 @: var date = '@HttpUtility.JavaScriptStringEncode(t)';
                 @: var time = new Date(date).toLocaleTimeString();
@@ -86,46 +84,39 @@
                 @:          path: google.maps.SymbolPath.CIRCLE,
                 @:          scale: 2
                 @:        },
-                @:        title: 'czas: ' + '\'@pt.Time\'', 
+                @:        title: 'czas: ' + time@*'\'   @pt.Time\''*@, 
                 @:        map: map
                 @:  });
 
-                @*@:   pointInfo = 'szerokość:' + @pt.Lat;
-                @:  pointInfo += ', długość:' + @pt.Lon;
-                @:  pointInfo += ', czas: ' + '\'@pt.Time\'';*@
-                @*@:  var infowindow = new google.maps.InfoWindow({
-                @:      content: 'szerokość:' + @pt.Lat
-                @:  });*@
                 @:  console.log("time: " + time);
-                @:  marker.addListener('click', function () { new google.maps.InfoWindow({
-                @:                                                           content: 'szerokość:' + @pt.Lat +  ',\n długość:' + @pt.Lon  + ',\n czas:' + date @*'@pt.Time'*@
-                @:                                                              }).open(map, this) }/*showInfoWindow(infowindow, map, marker)*/);
+                @:  marker.addListener('click', function (event) {
+                @:  new google.maps.InfoWindow({
+                @:                  content: 'szerokość:' + @pt.Lat +  ',\n długość:' + @pt.Lon  
+                @:                    + ',\n czas:' @*+  '\'@pt.Time\''*@
+                @:                    + new Date('@HttpUtility.JavaScriptStringEncode(pt.Time)').toLocaleTimeString()
+                @:     }).open(map, this) }/*showInfoWindow(infowindow, map, marker)*/);
             }
 
             // Add a listener for the click event
-            map.addListener('click', addLatLng);
+           // map.addListener('click', addLatLng);
         }
-        function showInfoWindow(infowindow, map, marker) { infowindow.open(map, marker) }
+        //function showInfoWindow(infowindow, map, marker) { infowindow.open(map, marker) }
         // Handles click events on a map, and adds a new point to the Polyline.
-        function addLatLng(event) {
-            var path = poly.getPath();
+        //function addLatLng(event) {
+        //    var path = poly.getPath();
 
-            // Because path is an MVCArray, we can simply append a new coordinate
-            // and it will automatically appear.
-            path.push(event.latLng);
+        //    // Because path is an MVCArray, we can simply append a new coordinate
+        //    // and it will automatically appear.
+        //    path.push(event.latLng);
 
-            // Add a new marker at the new plotted point on the polyline.
-            var marker = new google.maps.Marker({
-                position: event.latLng,
-                title: '#' + path.getLength(),
-                map: map
-            });
-        }
+        //    // Add a new marker at the new plotted point on the polyline.
+        //    //var marker = new google.maps.Marker({
+        //    //    position: event.latLng,
+        //    //    title: '#' + path.getLength(),
+        //    //    map: map
+        //    //});
+        //}
 
-        function parseISOString(s) {
-            var b = s.split(/\D+/);
-            return new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5], b[6]));
-        }
 
     </script>
     <script async defer
