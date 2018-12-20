@@ -13,7 +13,7 @@ namespace DogsServer.Models
         [DatabaseGenerated(DatabaseGeneratedOption
            .Identity)]
         [Required]
-        public int GuideID { get; set; }
+        public int GuideId { get; set; }
         public string IdentityId { get; set; }
         [Required]
         public string FirstName { get; set; }

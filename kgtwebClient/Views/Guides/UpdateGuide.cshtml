@@ -30,7 +30,7 @@
     @using (Html.BeginForm("UpdateGuide", "Guides", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         @Html.ValidationSummary(true)
-        @Html.HiddenFor(m => m.GuideID)
+        @Html.HiddenFor(m => m.GuideId)
         @* <fieldset>*@
         <div style="float:left">
             <div class="form-group">

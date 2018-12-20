@@ -47,76 +47,84 @@
 *@
 <div style="margin:60px">
 
-    @using (Html.BeginForm("UpdateDog", "Dogs",@*new { id = Model.DogID},*@ /**/  FormMethod.Post, new { enctype = "multipart/form-data", onsubmit = "caculateWorkmodeSum()" }))
+    @using (Html.BeginForm("UpdateDog", "Dogs",@*new { id = Model.DogId},*@ /**/  FormMethod.Post, new { enctype = "multipart/form-data", onsubmit = "caculateWorkmodeSum()" }))
 {
 @Html.ValidationSummary(true)
-@Html.HiddenFor(m => m.DogID)
+@Html.HiddenFor(m => m.DogId)
 @* <fieldset>*@
-<div style="float:left">
-    <div class="form-group">
-        @Html.LabelFor(m => m.Name, new { @class = "col-md-2 control-label form-field" })
-        <div class="col-md-10  form-field">
-            @Html.TextBoxFor(m => m.Name, new { @Value = Model.Name, @class = "form-control" })
+    <div style="float:left">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Name, new { @class = "col-md-2 control-label form-field" })
+            <div class="col-md-10  form-field">
+                @Html.TextBoxFor(m => m.Name, new { @Value = Model.Name, @class = "form-control" })
+            </div>
         </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.DateOfBirth, new { @class = "col-md-2 control-label form-field" })
-        <div class="col-md-10  form-field">
-            @Html.TextBoxFor(m => m.DateOfBirth, new { @Value = Model.DateOfBirth.ToString("yyyy-MM-dd"), type = "date", @class = "form-control" })
+        <div class="form-group">
+            @Html.LabelFor(m => m.Breed, new { @class = "col-md-2 control-label form-field" })
+            <div class="col-md-10  form-field">
+                @Html.TextBoxFor(m => m.Breed, new { @Value = Model.Breed, @class = "form-control" })
+            </div>
         </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.Level, new { @class = "col-md-2 control-label  form-field" })
-        <div class="col-md-10 form-field">
-            @Html.EnumDropDownListFor(m => m.Level, new { @class = "form-control" })
+        <div class="form-group">
+            @Html.LabelFor(m => m.DateOfBirth, new { @class = "col-md-2 control-label form-field" })
+            <div class="col-md-10  form-field">
+                @Html.TextBoxFor(m => m.DateOfBirth, new { @Value = Model.DateOfBirth.ToString("yyyy-MM-dd"), type = "date", @class = "form-control" })
+            </div>
         </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.Workmodes, new { @class = "col-md-2 control-label form-field" })
-        <div class="col-md-10 form-field">
-            @foreach (int workmode in Enum.GetValues(typeof(DogWorkmode)))
-            {
-                var workmodeName = Enum.GetName(typeof(DogWorkmode), workmode);
-                if (currentWorkmodes.Contains(Enum.Parse(typeof(DogWorkmode), workmodeName)))
+        <div class="form-group">
+            @Html.LabelFor(m => m.Level, new { @class = "col-md-2 control-label  form-field" })
+            <div class="col-md-10 form-field">
+                @Html.EnumDropDownListFor(m => m.Level, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Workmodes, new { @class = "col-md-2 control-label form-field" })
+            <div class="col-md-10 form-field">
+                @foreach (int workmode in Enum.GetValues(typeof(DogWorkmode)))
                 {
-                    @Html.CheckBox(workmodeName, true, new { @*@class = "form-control",*@ @id = "dogWorkmode" + workmode })
-                    @Html.DisplayName(workmodeName)
-                    <br />
+                    var workmodeName = Enum.GetName(typeof(DogWorkmode), workmode);
+                    if (currentWorkmodes.Contains(Enum.Parse(typeof(DogWorkmode), workmodeName)))
+                    {
+                        @Html.CheckBox(workmodeName, true, new { @*@class = "form-control",*@@id = "dogWorkmode" + workmode
+                    })
+                        @Html.DisplayName(workmodeName)
+                        <br />
+                    }
+                    else
+                    {
+                        @Html.CheckBox(workmodeName, false, new { @*@class = "form-control",*@@id = "dogWorkmode" + workmode
+                    })
+                        @Html.DisplayName(workmodeName)
+                        <br />
+                    }
                 }
-                else
-                {
-                    @Html.CheckBox(workmodeName, false, new { @*@class = "form-control",*@ @id = "dogWorkmode" + workmode })
-                    @Html.DisplayName(workmodeName)
-                    <br />
-                }
-            }
+            </div>
         </div>
-    </div>
-    <div>
-        @Html.HiddenFor(m => m.Workmodes, new { @id = "workmodeSum" })
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.Notes, new { @class = "col-md-2 control-label form-field" })
-        <div class="col-md-10 form-field">
-            @Html.TextAreaFor(m => m.Notes, new { @Value = Model.Notes, @class = "form-control" })
+        <div>
+            @Html.HiddenFor(m => m.Workmodes, new { @id = "workmodeSum" })
         </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.GuideIdAndName, new { @class = "col-md-2 control-label form-field" })
-        <div class="col-md-10 form-field">
-            @Html.DropDownListFor(m => m.GuideIdAndName.Id, guides, new { @class = "form-control" })
+        <div class="form-group">
+            @Html.LabelFor(m => m.Notes, new { @class = "col-md-2 control-label form-field" })
+            <div class="col-md-10 form-field">
+                @Html.TextAreaFor(m => m.Notes, new { @Value = Model.Notes, @class = "form-control" })
+            </div>
         </div>
-    </div>
-    @*<div>
-        @Html.HiddenFor(m => m.GuideIdAndName.GuideId, new { @Value = })
-    </div>*@
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" class="btn btn-default form-field" value="Prześlij dane" />
+        <div class="form-group">
+            @Html.LabelFor(m => m.GuideIdAndName, new { @class = "col-md-2 control-label form-field" })
+            <div class="col-md-10 form-field">
+                @Html.DropDownListFor(m => m.GuideIdAndName.Id, guides, new { @class = "form-control" })
+            </div>
         </div>
+        @*<div>
+            @Html.HiddenFor(m => m.GuideIdAndName.GuideId, new { @Value = })
+        </div>*@
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" class="btn btn-default form-field" value="Prześlij dane" />
+            </div>
+        </div>
+        @*/////////////////////////////////////////////////////*@
     </div>
-    @*/////////////////////////////////////////////////////*@
-</div>
 <div class="picture">
     <img src="~/Images/januszek.jpg" height="400" width="400">
     <br />

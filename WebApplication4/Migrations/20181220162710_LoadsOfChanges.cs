@@ -2,7 +2,7 @@
 
 namespace DogsServer.Migrations
 {
-    public partial class ChangedEnumsInDogToOnesFromClassLib : Migration
+    public partial class LoadsOfChanges : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

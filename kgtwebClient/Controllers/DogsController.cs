@@ -174,11 +174,12 @@ namespace kgtwebClient.Controllers
             //message.Content = new StringContent(***object-json-serialized***, 
             //                                  System.Text.Encoding.UTF8, "application/json");
 
-            HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Put, client.BaseAddress + "dogs/" + updatedDog.DogID.ToString());
+            HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Put, client.BaseAddress + "dogs/" + updatedDog.DogId.ToString());
             /*var dog = new DogModel
             {
-                DogID = updatedDog.DogID,
+                DogId = updatedDog.DogId,
                 Name = updatedDog.Name,
+                Breed = updatedDog.Breed,
                 DateOfBirth = updatedDog.DateOfBirth,
                 Level = updatedDog.Level,
                 Workmodes = updatedDog.Workmodes,

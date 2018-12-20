@@ -34,7 +34,7 @@
             @foreach (var item in Model.ListOfGuides)
 
             {
-            <tr @*onclick="document.location = 'http://kgtwebclient.azurewebsites.net/Dogs/Dog/' + @item.DogID;"  *@>
+            <tr @*onclick="document.location = 'http://kgtwebclient.azurewebsites.net/Dogs/Dog/' + @item.DogId;"  *@>
                 <td class="tdOnclick">
                     @item.FirstName
                 </td>
@@ -48,14 +48,14 @@
 
 
                 <td style="background-color:white">
-                    @*location.href='@Url.Action("DeleteDog", "Dogs", new { id = @item.DogID })'*@
-                    <button class="deleteButton" onclick="deleteGuide(@item.GuideID)" id="@("deleteGuideButton" + item.GuideID)">usuń</button>
+                    @*location.href='@Url.Action("DeleteDog", "Dogs", new { id = @item.DogId })'*@
+                    <button class="deleteButton" onclick="deleteGuide(@item.GuideId)" id="@("deleteGuideButton" + item.GuideId)">usuń</button>
                 </td>
                 <td style="background-color:white">
-                    <button class="updateButton" onclick="location.href='@Url.Action("UpdateGuide", "Guides", new { id = @item.GuideID })'">zmień</button>
+                    <button class="updateButton" onclick="location.href='@Url.Action("UpdateGuide", "Guides", new { id = @item.GuideId })'">zmień</button>
                 </td>
                 <td style="background-color:white">
-                    <button class="displayButton" onclick="location.href='@Url.Action("Guide", "Guides", new { id = @item.GuideID })'">wyświetl</button>
+                    <button class="displayButton" onclick="location.href='@Url.Action("Guide", "Guides", new { id = @item.GuideId })'">wyświetl</button>
                 </td>
             </tr>
 
@@ -85,7 +85,7 @@
             }
         }
     }
-    @* location.href='@Url.Action("DeleteDog", "Dogs", new { id = @item.DogID })' *@
+    @* location.href='@Url.Action("DeleteDog", "Dogs", new { id = @item.DogId })' *@
 
     function deleteGuide(guideId) {
        // var id = dogId;

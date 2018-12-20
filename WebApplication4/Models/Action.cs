@@ -10,8 +10,8 @@ namespace DogsServer.Models
     [Table("Actions")]
     public class Action
     {
-        [DatabaseGenerated(DatabaseGeneratedOption
-           .Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Column("ActionId")]
         [Required]
         public int ActionID { get; set; }
         [Required]
@@ -30,5 +30,6 @@ namespace DogsServer.Models
         public bool WasSuccess { get; set; }
         public string Notes { get; set; }
         public virtual IList<GuideAction> GuideActions { get; set; }
+        public virtual IList<DogAction> DogActions { get; set; }
     }
 }

@@ -11,7 +11,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "api/employee",
+      "launchUrl": "api/guides",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
@@ -19,7 +19,7 @@
     "DogsServer": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "api/employee",
+      "launchUrl": "api/guides",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

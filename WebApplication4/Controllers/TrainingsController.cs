@@ -29,27 +29,27 @@ namespace DogsServer.Controllers
         {
             provider = fileProvider;
         }
-        [HttpPost("uploadFile")]
-        [DisableRequestSizeLimit]
-        public HttpResponseMessage UploadFile()
-        {
+        //[HttpPost("uploadFile")]
+        //[DisableRequestSizeLimit]
+        //public HttpResponseMessage UploadFile()
+        //{
 
-            HttpResponseMessage result = null;
-            if (Request.Form.Files.Count > 0)
-            {
-                var docfiles = new List<string>();
-                foreach (var postedFile in Request.Form.Files)
-                {
-                    Console.WriteLine(postedFile.FileName);
-                }
-                //result = Request.CreateResponse(HttpStatusCode.Created, docfiles);
-            }
-            else
-            {
-                //result = Request.CreateResponse(HttpStatusCode.BadRequest);
-            }
-            return result;
-        }
+        //    HttpResponseMessage result = null;
+        //    if (Request.Form.Files.Count > 0)
+        //    {
+        //        var docfiles = new List<string>();
+        //        foreach (var postedFile in Request.Form.Files)
+        //        {
+        //            Console.WriteLine(postedFile.FileName);
+        //        }
+        //        //result = Request.CreateResponse(HttpStatusCode.Created, docfiles);
+        //    }
+        //    else
+        //    {
+        //        //result = Request.CreateResponse(HttpStatusCode.BadRequest);
+        //    }
+        //    return result;
+        //}
 
         [HttpPost("Upload")]
         [DisableRequestSizeLimit]

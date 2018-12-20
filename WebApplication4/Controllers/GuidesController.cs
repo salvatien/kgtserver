@@ -27,7 +27,7 @@ namespace DogsServer.Controllers
             foreach (var g in guides)
             {
                 var guideModel = new GuideModel {
-                    GuideID = g.GuideID,
+                    GuideId = g.GuideId,
                     IdentityId = g.IdentityId,
                     FirstName = g.FirstName,
                     LastName = g.LastName,
@@ -38,7 +38,7 @@ namespace DogsServer.Controllers
                     Notes = g.Notes,
                     IsAdmin = g.IsAdmin,
                     IsMember = g.IsMember,
-                    Dogs = g.Dogs.Select(d => new IdNameModel { Id = d.DogID, Name = d.Name }).ToList()
+                    Dogs = g.Dogs.Select(d => new IdNameModel { Id = d.DogId, Name = d.Name }).ToList()
                 };
 
                 guideModelList.Add(guideModel);
@@ -53,7 +53,7 @@ namespace DogsServer.Controllers
             var g = unitOfWork.GuideRepository.GetById(id);
             var guideModel = new GuideModel()
             { 
-                GuideID = g.GuideID,
+                GuideId = g.GuideId,
                 IdentityId = g.IdentityId,
                 FirstName = g.FirstName,
                 LastName = g.LastName,
@@ -64,7 +64,7 @@ namespace DogsServer.Controllers
                 Notes = g.Notes,
                 IsAdmin = g.IsAdmin,
                 IsMember = g.IsMember,
-                Dogs = g.Dogs.Select(d => new IdNameModel { Id = d.DogID, Name = d.Name }).ToList()
+                Dogs = g.Dogs.Select(d => new IdNameModel { Id = d.DogId, Name = d.Name }).ToList()
             };
 
             return guideModel;
@@ -92,7 +92,7 @@ namespace DogsServer.Controllers
             //guide.Dogs = dogs;
 
             unitOfWork.Commit();
-            return new ObjectResult(guide.GuideID);
+            return new ObjectResult(guide.GuideId);
         }
 
         [HttpDelete("{id}")]
@@ -130,7 +130,7 @@ namespace DogsServer.Controllers
             unitOfWork.Commit();
             //var accessToken = HttpContext.GetTokenAsync("access_token").Result;
 
-            return new ObjectResult(guide.GuideID);
+            return new ObjectResult(guide.GuideId);
         }
     }
 }

@@ -93,7 +93,7 @@ namespace kgtwebClient.Controllers
             /*
             var dog = new DogModel
             {
-                //DogID = 1,
+                //DogId = 1,
                 Name = addedDog.Name,
                 DateOfBirth = addedDog.DateOfBirth,
                 Level = addedDog.Level,
@@ -189,7 +189,7 @@ namespace kgtwebClient.Controllers
             //message.Content = new StringContent(***object-json-serialized***, 
             //                                  System.Text.Encoding.UTF8, "application/json");
 
-            HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Put, client.BaseAddress + "guides/" + updatedGuide.GuideID.ToString());
+            HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Put, client.BaseAddress + "guides/" + updatedGuide.GuideId.ToString());
             /*var dog = new DogModel
             {
                 DogID = updatedDog.DogID,

@@ -7,7 +7,7 @@ namespace Dogs.ViewModels.Data.Models
 {
     public class EventModel
     {
-        public int EventID { get; set; }
+        public int EventId { get; set; }
         public string Title { get; set; }
         public DateTime Date { get; set; }
         public string City { get; set; }

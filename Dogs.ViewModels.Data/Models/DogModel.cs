@@ -8,8 +8,9 @@ namespace Dogs.ViewModels.Data.Models
 {
     public class DogModel
     {
-        public int DogID { get; set; }
+        public int DogId { get; set; }
         public string Name { get; set; }
+        public string Breed { get; set; }
         public DateTime DateOfBirth { get; set; }
         public DogLevel Level { get; set; }
         public DogWorkmode? Workmodes { get; set; }

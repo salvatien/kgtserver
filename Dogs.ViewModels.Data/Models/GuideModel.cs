@@ -7,7 +7,7 @@ namespace Dogs.ViewModels.Data.Models
 {
     public class GuideModel
     {
-        public int GuideID { get; set; }
+        public int GuideId { get; set; }
         public string IdentityId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

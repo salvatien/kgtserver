@@ -5,7 +5,7 @@ namespace Dogs.ViewModels.Data.Models
 {
     public class ActionModel
     {
-        public int ActionID { get; set; }
+        public int ActionId { get; set; }
         public DateTime Date { get; set; }
         public string City { get; set; }
         public string StreetOrLocation { get; set; }

@@ -25,7 +25,7 @@ namespace kgtwebClient.Helpers
         {
             var guides = GetAllGuides().Result;
             return guides.ListOfGuides
-                         .Select(x => new SelectListItem { Value = x.GuideID.ToString(), Text = $"{x.FirstName} {x.LastName}" }).ToList();
+                         .Select(x => new SelectListItem { Value = x.GuideId.ToString(), Text = $"{x.FirstName} {x.LastName}" }).ToList();
         }
 
         public static async Task<GuideListModel> GetAllGuides()

@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Data.Entity;
+using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
@@ -37,10 +37,10 @@ namespace DogsServer.Repositories
             return DbSet;
         }
 
-        public T GetById(int id)
-        {
-            return DbSet.Find(id);
-        }
+        //public T GetById(int id)
+        //{
+        //    return DbSet.Find(id);
+        //}
 
         #endregion
     }

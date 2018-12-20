@@ -15,9 +15,10 @@ namespace DogsServer.Models
         [DatabaseGenerated(DatabaseGeneratedOption
            .Identity)]
         [Required]
-        public int DogID { get; set; }
+        public int DogId { get; set; }
         [Required]
         public string Name { get; set; }
+        public string Breed { get; set; }
         [Required]
         public DateTime DateOfBirth { get; set; }
         [Required]
@@ -26,7 +27,7 @@ namespace DogsServer.Models
         public string Notes { get; set; }
         [Required]
         public virtual Guide Guide { get; set; }
-
+        public virtual IList<DogAction> DogActions { get; set; }
 
     }
 }

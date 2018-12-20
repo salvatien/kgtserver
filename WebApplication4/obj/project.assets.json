@@ -2,17 +2,6 @@
   "version": 3,
   "targets": {
     ".NETCoreApp,Version=v2.1": {
-      "EntityFramework/6.2.0": {
-        "type": "package",
-        "compile": {
-          "lib/net45/EntityFramework.SqlServer.dll": {},
-          "lib/net45/EntityFramework.dll": {}
-        },
-        "runtime": {
-          "lib/net45/EntityFramework.SqlServer.dll": {},
-          "lib/net45/EntityFramework.dll": {}
-        }
-      },
       "Google.Apis/1.36.1": {
         "type": "package",
         "dependencies": {
@@ -24,30 +13,6 @@
         },
         "runtime": {
           "lib/netstandard2.0/Google.Apis.dll": {}
-        }
-      },
-      "Google.Apis.Auth/1.36.1": {
-        "type": "package",
-        "dependencies": {
-          "Google.Apis": "1.36.1",
-          "Google.Apis.Core": "1.36.1"
-        },
-        "compile": {
-          "lib/netstandard2.0/Google.Apis.Auth.PlatformServices.dll": {},
-          "lib/netstandard2.0/Google.Apis.Auth.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/Google.Apis.Auth.PlatformServices.dll": {},
-          "lib/netstandard2.0/Google.Apis.Auth.dll": {}
-        }
-      },
-      "Google.Apis.Auth.Mvc/1.36.1": {
-        "type": "package",
-        "compile": {
-          "lib/net45/Google.Apis.Auth.Mvc.dll": {}
-        },
-        "runtime": {
-          "lib/net45/Google.Apis.Auth.Mvc.dll": {}
         }
       },
       "Google.Apis.Core/1.36.1": {
@@ -5902,33 +5867,6 @@
     }
   },
   "libraries": {
-    "EntityFramework/6.2.0": {
-      "sha512": "ptGyXOf26qLrtn+2doAmylIlCxOnBJANwlyyLrXDmqIk9O18IzLWHyxDwwAyhgXkxmbiaA0WNpRy67WRReInBw==",
-      "type": "package",
-      "path": "entityframework/6.2.0",
-      "files": [
-        "content/net40/App.config.transform",
-        "content/net40/Web.config.transform",
-        "entityframework.6.2.0.nupkg.sha512",
-        "entityframework.nuspec",
-        "lib/net40/EntityFramework.SqlServer.dll",
-        "lib/net40/EntityFramework.SqlServer.xml",
-        "lib/net40/EntityFramework.dll",
-        "lib/net40/EntityFramework.xml",
-        "lib/net45/EntityFramework.SqlServer.dll",
-        "lib/net45/EntityFramework.SqlServer.xml",
-        "lib/net45/EntityFramework.dll",
-        "lib/net45/EntityFramework.xml",
-        "tools/EntityFramework.PowerShell.Utility.dll",
-        "tools/EntityFramework.PowerShell.dll",
-        "tools/EntityFramework.psd1",
-        "tools/EntityFramework.psm1",
-        "tools/about_EntityFramework.help.txt",
-        "tools/init.ps1",
-        "tools/install.ps1",
-        "tools/migrate.exe"
-      ]
-    },
     "Google.Apis/1.36.1": {
       "sha512": "t4wJDCilDNqvB1AlLf27+g9vyMib5aoowaoBOVpVjnQp+C2EDfdv07Eo9bSyqq1yzXhpGWiQUOzHfBWbTPQ6vw==",
       "type": "package",
@@ -5948,43 +5886,6 @@
         "lib/netstandard2.0/Google.Apis.dll",
         "lib/netstandard2.0/Google.Apis.pdb",
         "lib/netstandard2.0/Google.Apis.xml"
-      ]
-    },
-    "Google.Apis.Auth/1.36.1": {
-      "sha512": "oZU/4PdyFAVf1eVfOy4U+K3M0TIHl5HiOlj3bCIwgaXE2vZv/DbaPoxViVpDqbP+hfQuk8nb8hg08Wllar6oSw==",
-      "type": "package",
-      "path": "google.apis.auth/1.36.1",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "google.apis.auth.1.36.1.nupkg.sha512",
-        "google.apis.auth.nuspec",
-        "lib/net45/Google.Apis.Auth.PlatformServices.dll",
-        "lib/net45/Google.Apis.Auth.dll",
-        "lib/net45/Google.Apis.Auth.pdb",
-        "lib/net45/Google.Apis.Auth.xml",
-        "lib/netstandard1.3/Google.Apis.Auth.PlatformServices.dll",
-        "lib/netstandard1.3/Google.Apis.Auth.dll",
-        "lib/netstandard1.3/Google.Apis.Auth.pdb",
-        "lib/netstandard1.3/Google.Apis.Auth.xml",
-        "lib/netstandard2.0/Google.Apis.Auth.PlatformServices.dll",
-        "lib/netstandard2.0/Google.Apis.Auth.dll",
-        "lib/netstandard2.0/Google.Apis.Auth.pdb",
-        "lib/netstandard2.0/Google.Apis.Auth.xml"
-      ]
-    },
-    "Google.Apis.Auth.Mvc/1.36.1": {
-      "sha512": "GOit3cJHVh13vekglFzXsk2kbbbarvwlmu97ly/RoD7Nr2zfuG/KbpvAtIWCzFGiWLDX2Xu6ZYX4l54eFHLvAw==",
-      "type": "package",
-      "path": "google.apis.auth.mvc/1.36.1",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "google.apis.auth.mvc.1.36.1.nupkg.sha512",
-        "google.apis.auth.mvc.nuspec",
-        "lib/net45/Google.Apis.Auth.Mvc.dll",
-        "lib/net45/Google.Apis.Auth.Mvc.pdb",
-        "lib/net45/Google.Apis.Auth.Mvc.xml"
       ]
     },
     "Google.Apis.Core/1.36.1": {
@@ -15491,10 +15392,7 @@
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v2.1": [
       "Dogs.ViewModels.Data >= 1.0.0",
-      "EntityFramework >= 6.2.0",
       "Google.Apis >= 1.36.1",
-      "Google.Apis.Auth >= 1.36.1",
-      "Google.Apis.Auth.Mvc >= 1.36.1",
       "Microsoft.ApplicationInsights.AspNetCore >= 2.5.1",
       "Microsoft.AspNetCore.All >= 2.0.3",
       "Microsoft.AspNetCore.App >= 2.1.1",
@@ -15555,19 +15453,7 @@
     "frameworks": {
       "netcoreapp2.1": {
         "dependencies": {
-          "EntityFramework": {
-            "target": "Package",
-            "version": "[6.2.0, )"
-          },
           "Google.Apis": {
-            "target": "Package",
-            "version": "[1.36.1, )"
-          },
-          "Google.Apis.Auth": {
-            "target": "Package",
-            "version": "[1.36.1, )"
-          },
-          "Google.Apis.Auth.Mvc": {
             "target": "Package",
             "version": "[1.36.1, )"
           },
@@ -15632,27 +15518,5 @@
         "warn": true
       }
     }
-  },
-  "logs": [
-    {
-      "code": "NU1701",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Pakiet „EntityFramework 6.2.0” został przywrócony przy użyciu elementu „.NETFramework,Version=v4.6.1” zamiast platformy docelowej projektu „.NETCoreApp,Version=v2.1”. Ten pakiet może nie być w pełni kompatybilny z Twoim projektem.",
-      "libraryId": "EntityFramework",
-      "targetGraphs": [
-        ".NETCoreApp,Version=v2.1"
-      ]
-    },
-    {
-      "code": "NU1701",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Pakiet „Google.Apis.Auth.Mvc 1.36.1” został przywrócony przy użyciu elementu „.NETFramework,Version=v4.6.1” zamiast platformy docelowej projektu „.NETCoreApp,Version=v2.1”. Ten pakiet może nie być w pełni kompatybilny z Twoim projektem.",
-      "libraryId": "Google.Apis.Auth.Mvc",
-      "targetGraphs": [
-        ".NETCoreApp,Version=v2.1"
-      ]
-    }
-  ]
+  }
 }

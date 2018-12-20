@@ -11,10 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="EntityFramework" Version="6.2.0" />
     <PackageReference Include="Google.Apis" Version="1.36.1" />
-    <PackageReference Include="Google.Apis.Auth" Version="1.36.1" />
-    <PackageReference Include="Google.Apis.Auth.Mvc" Version="1.36.1" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.5.1" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.1" />

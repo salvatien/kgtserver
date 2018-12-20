@@ -28,10 +28,11 @@ namespace DogsServer.Controllers
                 var dogModel = new DogModel
                 {
                     DateOfBirth = dog.DateOfBirth,
-                    DogID = dog.DogID,
+                    DogId = dog.DogId,
+                    Breed = dog.Breed,
                     GuideIdAndName = new IdNameModel
                     {
-                        Id = dog.Guide != null ? dog.Guide.GuideID : 0,
+                        Id = dog.Guide != null ? dog.Guide.GuideId : 0,
                         Name = dog.Guide != null ? dog.Guide.FirstName + " " + dog.Guide.LastName : "Pies nie ma jeszcze przewodnika"
                     },
                     Level = dog.Level,
@@ -51,10 +52,11 @@ namespace DogsServer.Controllers
             var dogModel = new DogModel
             {
                 DateOfBirth = dog.DateOfBirth,
-                DogID = dog.DogID,
+                DogId = dog.DogId,
+                Breed = dog.Breed,
                 GuideIdAndName = new IdNameModel
                 {
-                    Id = dog.Guide != null ? dog.Guide.GuideID : 0,
+                    Id = dog.Guide != null ? dog.Guide.GuideId : 0,
                     Name = dog.Guide != null ? dog.Guide.FirstName + " " + dog.Guide.LastName : "Pies nie ma jeszcze przewodnika"
                 },
                 Level = dog.Level,
@@ -78,12 +80,13 @@ namespace DogsServer.Controllers
                 Level = dogModel.Level,
                 Name = dogModel.Name,
                 Notes = dogModel.Notes,
-                Workmodes = dogModel.Workmodes
+                Workmodes = dogModel.Workmodes,
+                Breed = dogModel.Breed
             };
             
             unitOfWork.DogRepository.Insert(dog);
             unitOfWork.Commit();
-            var x = dog.DogID;
+            var x = dog.DogId;
             return new ObjectResult(x);
         }
 
@@ -95,20 +98,21 @@ namespace DogsServer.Controllers
                 var dog = unitOfWork.DogRepository.GetById(id);
                 var updatedDog = obj.ToObject<DogModel>();
                 dog.Name = updatedDog.Name;
+                dog.Breed = updatedDog.Breed;
                 dog.DateOfBirth = updatedDog.DateOfBirth;
                 dog.Level = updatedDog.Level;
                 dog.Notes = updatedDog.Notes;
                 dog.Workmodes = updatedDog.Workmodes;
                 if (updatedDog.GuideIdAndName != null)
                 {
-                    if (dog.Guide == null || dog.Guide.GuideID != updatedDog.GuideIdAndName.Id)
+                    if (dog.Guide == null || dog.Guide.GuideId != updatedDog.GuideIdAndName.Id)
                     {
                         var guide = unitOfWork.GuideRepository.GetById(updatedDog.GuideIdAndName.Id);
                         dog.Guide = guide;
                     }
                 }
                 unitOfWork.Commit();
-                return new ObjectResult(dog.DogID);
+                return new ObjectResult(dog.DogId);
             }
             catch (Exception e)
             {

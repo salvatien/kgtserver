@@ -31,10 +31,10 @@ namespace DogsServer.Repositories
             return DbSet.Include(x => x.Guide);
         }
 
-        public new Dog GetById(int id)
+        public Dog GetById(int id)
         {
             //var dog = DbSet.Find(id);
-            var dog = DbSet.Where(x => x.DogID == id).Include(x => x.Guide).FirstOrDefault();
+            var dog = DbSet.Where(x => x.DogId == id).Include(x => x.Guide).FirstOrDefault();
             return dog;
         }
 

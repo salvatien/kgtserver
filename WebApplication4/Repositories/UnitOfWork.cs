@@ -11,16 +11,22 @@ namespace DogsServer.Repositories
     {
         private readonly DbContext _dbContext;
         #region Repositories
-        public IRepository<Employee> EmployeeRepository =>
-           new Repository<Employee>(_dbContext);
         public GuideRepository GuideRepository =>
            new GuideRepository(_dbContext);
         public DogRepository DogRepository =>
            new DogRepository(_dbContext);
-        public IRepository<Models.Action> ActionRepository =>
-           new Repository<Models.Action>(_dbContext);
-        public IRepository<Event> EventRepository =>
-           new Repository<Event>(_dbContext);
+        public ActionRepository ActionRepository =>
+           new ActionRepository(_dbContext);
+        public EventRepository EventRepository =>
+           new EventRepository(_dbContext);
+        public DogTrainingCommentRepository DogTrainingCommentRepository => 
+            new DogTrainingCommentRepository(_dbContext);
+        public DogTrainingRepository DogTrainingRepository => 
+            new DogTrainingRepository(_dbContext);
+        public TrainingCommentRepository TrainingCommentRepository => 
+            new TrainingCommentRepository(_dbContext);
+        public TrainingRepository TrainingRepository =>
+            new TrainingRepository(_dbContext);
 
         #endregion
         public UnitOfWork(AppDbContext dbContext)

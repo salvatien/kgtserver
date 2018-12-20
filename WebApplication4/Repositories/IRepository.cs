@@ -12,6 +12,6 @@ namespace DogsServer.Repositories
         void Delete(T entity);
         IQueryable<T> SearchFor(Expression<Func<T, bool>> predicate);
         IQueryable<T> GetAll();
-        T GetById(int id);
+        //T GetById(int id);
     }
 }

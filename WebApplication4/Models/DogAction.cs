@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace DogsServer.Models
 {
-    public class GuideAction
+    public class DogAction
     {
-        [ForeignKey("Guide")]
-        public int GuideId { get; set; }
-        public Guide Guide { get; set; }
+        [ForeignKey("Dog")]
+        public int DogId { get; set; }
+        public Dog Dog { get; set; }
         [ForeignKey("Action")]
         public int ActionId { get; set; }
         public Action Action { get; set; }

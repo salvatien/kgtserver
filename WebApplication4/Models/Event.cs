@@ -10,10 +10,10 @@ namespace DogsServer.Models
     [Table("Events")]
     public class Event
     {
-        [DatabaseGenerated(DatabaseGeneratedOption
-           .Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Required]
-        public int EventID { get; set; }
+        [Column("EventId")]
+        public int EventId { get; set; }
         [Required]
         public string Title { get; set; }
         [Required]
