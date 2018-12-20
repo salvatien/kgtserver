@@ -33,7 +33,7 @@ namespace kgtwebClient.Controllers
             return View();
         }
 
-        public ActionResult Training(int id)
+        public ActionResult Training(int dogId, int trainingId)
         {
 
             //here there will be a call to server web api to get training's viewmodel, including path hardcoded below
@@ -49,11 +49,14 @@ namespace kgtwebClient.Controllers
                     XDocument gpxDoc = XDocument.Load(reader);
                     var serializer = new XmlSerializer(typeof(Gpx));
                     var gpx = (Gpx)serializer.Deserialize(gpxDoc.Root.CreateReader());
-
-
                     var t = gpx.Trk.Trkseg.Trkpt;
 
-                    return View(t);
+                    var model = new DogTrainingViewModel
+                    {
+                        DogTrackPoints = t,
+                        LostPersonTrackPoints = t
+                    };
+                    return View(model);
                 }
             }
             catch(Exception e)
