@@ -38,8 +38,8 @@ namespace kgtwebClient.Controllers
 
             DogTraining training = new DogTraining()
             {
-                DogTrack = "~/Images/Ślad_Cob8-07-22-124610.gpx",
-                PersonTrack = "~/Images/Ślad_Cob8-07-22-123810.gpx"
+                DogTrack = "~/Images/Ślad_Pok8-12-08-090130.gpx",
+                PersonTrack = "~/Images/Ślad_Pok8-12-08-084457.gpx"
             };
 
             TextReader textReader = new StreamReader(Server.MapPath(training.DogTrack));
@@ -56,7 +56,7 @@ namespace kgtwebClient.Controllers
             TextReader textReader2 = new StreamReader(Server.MapPath(training.PersonTrack));
             XDocument gpxDoc2 = XDocument.Load(textReader2);
             var serializer2 = new XmlSerializer(typeof(Gpx));
-            var gpx2 = (Gpx)serializer.Deserialize(gpxDoc.Root.CreateReader());
+            var gpx2 = (Gpx)serializer2.Deserialize(gpxDoc2.Root.CreateReader());
             var t2 = gpx2.Trk.Trkseg.Trkpt;
 
             trainingTracepoints.PersonTrackpoints = t2;
