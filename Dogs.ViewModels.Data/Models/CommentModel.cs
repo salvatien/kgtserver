@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Dogs.ViewModels.Data.Models
 {
-    class CommentModel
+    public class CommentModel
     {
         public int AuthorId { get; set; }
         public DateTime Date { get; set; }

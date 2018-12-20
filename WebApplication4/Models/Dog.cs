@@ -24,6 +24,7 @@ namespace DogsServer.Models
         [Required]
         public DogLevel Level { get; set; }
         public DogWorkmode? Workmodes { get; set; } // should it nullable?
+        public string PhotoBlobUrl { get; set; }
         public string Notes { get; set; }
         [Required]
         public virtual Guide Guide { get; set; }

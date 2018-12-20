@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DogsServer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20181220162710_LoadsOfChanges")]
-    partial class LoadsOfChanges
+    [Migration("20181220173301_ResetMigrations")]
+    partial class ResetMigrations
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,7 +23,7 @@ namespace DogsServer.Migrations
 
             modelBuilder.Entity("DogsServer.Models.Action", b =>
                 {
-                    b.Property<int>("ActionID")
+                    b.Property<int>("ActionId")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("ActionId")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -49,7 +49,7 @@ namespace DogsServer.Migrations
 
                     b.Property<bool>("WasSuccess");
 
-                    b.HasKey("ActionID");
+                    b.HasKey("ActionId");
 
                     b.ToTable("Actions");
                 });
@@ -74,6 +74,8 @@ namespace DogsServer.Migrations
                         .IsRequired();
 
                     b.Property<string>("Notes");
+
+                    b.Property<string>("PhotoBlobUrl");
 
                     b.Property<int?>("Workmodes");
 

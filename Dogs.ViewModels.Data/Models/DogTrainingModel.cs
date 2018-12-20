@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Dogs.ViewModels.Data.Models
 {
-    class DogTrainingModel
+    public class DogTrainingModel
     {
         public int TrainingId { get; set; }
         public TrainingModel Training { get; set; }

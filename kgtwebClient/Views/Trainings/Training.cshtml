@@ -6,7 +6,7 @@
 
 
 
-@model Dogs.ViewModels.Data.Models.DogTrainingModel
+@model Dogs.ViewModels.Data.Models.DogTrainingViewModel
 
 
 <!DOCTYPE html>
@@ -48,7 +48,7 @@
             });
 
             var punkty = [];
-            @foreach (var pt in Model.PersonTrackpoints)
+            @foreach (var pt in Model.LostPersonTrackPoints)
             {
                 @: punkty.push({ lat: @pt.Lat, lng: @pt.Lon });
                 //@: console.log(punkty);
@@ -74,7 +74,7 @@
             poly.setMap(map);
             //var date;
             //var time;
-            @foreach (var pt in Model.PersonTrackpoints) {
+            @foreach (var pt in Model.LostPersonTrackPoints) {
                 var t = pt.Time;
                 @: var date = '@HttpUtility.JavaScriptStringEncode(t)';
                 @: var time = new Date(date).toLocaleTimeString();

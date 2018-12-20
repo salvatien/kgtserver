@@ -51,7 +51,7 @@ namespace kgtwebClient.Controllers
                     var gpx = (Gpx)serializer.Deserialize(gpxDoc.Root.CreateReader());
 
 
-                    var t = gpx.Trk[0].Trkseg.Trkpt;
+                    var t = gpx.Trk.Trkseg.Trkpt;
 
                     return View(t);
                 }

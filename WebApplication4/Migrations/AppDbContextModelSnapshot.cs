@@ -21,7 +21,7 @@ namespace DogsServer.Migrations
 
             modelBuilder.Entity("DogsServer.Models.Action", b =>
                 {
-                    b.Property<int>("ActionID")
+                    b.Property<int>("ActionId")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("ActionId")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -47,7 +47,7 @@ namespace DogsServer.Migrations
 
                     b.Property<bool>("WasSuccess");
 
-                    b.HasKey("ActionID");
+                    b.HasKey("ActionId");
 
                     b.ToTable("Actions");
                 });
@@ -72,6 +72,8 @@ namespace DogsServer.Migrations
                         .IsRequired();
 
                     b.Property<string>("Notes");
+
+                    b.Property<string>("PhotoBlobUrl");
 
                     b.Property<int?>("Workmodes");
 

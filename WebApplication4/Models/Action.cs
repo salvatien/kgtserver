@@ -13,7 +13,7 @@ namespace DogsServer.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("ActionId")]
         [Required]
-        public int ActionID { get; set; }
+        public int ActionId { get; set; }
         [Required]
         public DateTime Date { get; set; }
         [Required]

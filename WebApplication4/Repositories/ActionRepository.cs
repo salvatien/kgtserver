@@ -34,7 +34,7 @@ namespace DogsServer.Repositories
             //return DbSet.Find(id);
             //var dog = DbSet.Where(x => x.DogID == id).Include(x => x.Guide).FirstOrDefault();
             //return dog;
-            var action = DbSet.Where(x => x.ActionID == id).Include(x => x.GuideActions).Include(x => x.DogActions).FirstOrDefault();
+            var action = DbSet.Where(x => x.ActionId == id).Include(x => x.GuideActions).Include(x => x.DogActions).FirstOrDefault();
             return action;
         }
     }
