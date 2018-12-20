@@ -19,6 +19,7 @@ namespace DogsServer.Models
         public string LostPerson { get; set; }
         public string DogTrackBlobUrl { get; set; }
         public string LostPersonTrackBlobUrl { get; set; }
+        public string Notes { get; set; }
         public virtual IList<DogTrainingComment> Comments { get; set; }
         public string Weather { get; set; }
     }

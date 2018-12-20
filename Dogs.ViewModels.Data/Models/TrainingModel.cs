@@ -12,5 +12,6 @@ namespace Dogs.ViewModels.Data.Models
         public string GeneralLocation { get; set; }
         public string LocationDetails { get; set; }
         public string Notes { get; set; }
+        public List<CommentModel> Comments { get; set; }
     }
 }

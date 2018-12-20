@@ -37,9 +37,6 @@
                 <td class="tdOnclick">
                     @item.Name
                 </td>
-                <td class="tdOnclick">
-                    @item.Breed
-                </td>
                 @*<td class="tdOnclick">
             @item.DateOfBirth
         </td>
@@ -55,8 +52,13 @@
                 *@
 
 
-                <td class="tdOnclick">@item.GuideIdAndName.Name</td>
+                <td class="tdOnclick">
+                    @item.GuideIdAndName.Name
+                </td>
 
+                <td class="tdOnclick">
+                    @item.Breed
+                </td>
 
                 <td style="background-color:white">
                     @*location.href='@Url.Action("DeleteDog", "Dogs", new { id = @item.DogId })'*@

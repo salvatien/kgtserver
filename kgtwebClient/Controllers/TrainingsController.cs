@@ -74,7 +74,7 @@ namespace kgtwebClient.Controllers
             imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
             var fileName = file.FileName + Guid.NewGuid().ToString();
             form.Add(imageContent, fileName, Path.GetFileName(fileName));
-            var response = httpClient.PostAsync("trainings/upload", form).Result;
+            var response = httpClient.PostAsync("dogtrainings/upload", form).Result;
 
 
             //using (var client = new HttpClient())

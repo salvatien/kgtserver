@@ -13,6 +13,7 @@ namespace Dogs.ViewModels.Data.Models
         public string LostPerson { get; set; }
         public string DogTrackBlobUrl { get; set; }
         public string LostPersonTrackBlobUrl { get; set; }
+        public string Notes { get; set; }
         public List<CommentModel> Comments { get; set; }
         public string Weather { get; set; }
     }
