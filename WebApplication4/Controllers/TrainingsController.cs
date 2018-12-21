@@ -63,15 +63,19 @@ namespace DogsServer.Controllers
                     GeneralLocation = t.GeneralLocation,
                     LocationDetails = t.LocationDetails,
                     Notes = t.Notes,
-                    Comments = t.Comments.Select(c => new CommentModel
-                    {
-                        AuthorId = c.AuthorId,
-                        AuthorName = c.Author.FirstName + " " + c.Author.LastName,
-                        CommentId = c.TrainingCommentId,
-                        Content = c.Content,
-                        Date = c.Date
-                    }).ToList(),
-                    DogTrainings = t.DogTrainings.Select(dt => new DogTrainingModel
+                    Comments = (t.Comments == null || !t.Comments.Any()) 
+                        ? new List <CommentModel> () 
+                        : t.Comments.Select(c => new CommentModel
+                        {
+                            AuthorId = c.AuthorId,
+                            AuthorName = c.Author.FirstName + " " + c.Author.LastName,
+                            CommentId = c.TrainingCommentId,
+                            Content = c.Content,
+                            Date = c.Date
+                        }).ToList(),
+                    DogTrainings = (t.DogTrainings== null || !t.DogTrainings.Any())
+                        ? new List<DogTrainingModel>()
+                        : t.DogTrainings.Select(dt => new DogTrainingModel
                     {
                         DogId = dt.DogId,
                         TrainingId = dt.TrainingId,
@@ -105,7 +109,9 @@ namespace DogsServer.Controllers
                 GeneralLocation = t.GeneralLocation,
                 LocationDetails = t.LocationDetails,
                 Notes = t.Notes,
-                Comments = t.Comments.Select(c => new CommentModel
+                Comments = (t.Comments == null || !t.Comments.Any())
+                        ? new List<CommentModel>()
+                        : t.Comments.Select(c => new CommentModel
                 {
                     AuthorId = c.AuthorId,
                     AuthorName = c.Author.FirstName + " " + c.Author.LastName,
@@ -113,7 +119,9 @@ namespace DogsServer.Controllers
                     Content = c.Content,
                     Date = c.Date
                 }).ToList(),
-                DogTrainings = t.DogTrainings.Select(dt => new DogTrainingModel
+                DogTrainings = (t.DogTrainings == null || !t.DogTrainings.Any())
+                        ? new List<DogTrainingModel>()
+                        : t.DogTrainings.Select(dt => new DogTrainingModel
                 {
                     DogId = dt.DogId,
                     TrainingId = dt.TrainingId,

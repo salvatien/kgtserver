@@ -160,9 +160,9 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\DogsController.cs" />
+    <Compile Include="Controllers\DogTrainingsController.cs" />
     <Compile Include="Controllers\GuidesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\DogTrainingsController.cs" />
     <Compile Include="Controllers\TrainingsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

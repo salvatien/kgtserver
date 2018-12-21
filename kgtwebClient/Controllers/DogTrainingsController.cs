@@ -1,4 +1,5 @@
 ﻿using Dogs.ViewModels.Data.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -62,82 +63,136 @@ namespace kgtwebClient.Controllers
             return View(trainingTracepoints);
         }
 
-        public ActionResult TrainingTest(int dogId, int trainingId)
+        public async Task<ActionResult> TrainingTest(int dogId, int trainingId)
         {
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            //here there will be a call to server web api to get training's viewmodel, including path hardcoded below
-
-            var webRequest = WebRequest.Create(@"https://kgtstorage.blob.core.windows.net/tracks/file06cd3cb0-33fa-477d-861e-86b23d717ad1");
-
-            try
+            HttpResponseMessage responseMessage = 
+                await client.GetAsync($"dogtrainings/training?trainingId={trainingId}&dogId={dogId}");
+            if (responseMessage.IsSuccessStatusCode)
             {
-                using (var response = webRequest.GetResponse())
-                using (var content = response.GetResponseStream())
-                using (var reader = new StreamReader(content))
+                var responseData = responseMessage.Content.ReadAsStringAsync().Result;
+                var dogTraining = JsonConvert.DeserializeObject<DogTrainingModel>(responseData);
+                var dogTrainingViewModel = new DogTrainingViewModel();
+
+                var webRequestDogTrack = WebRequest.Create(dogTraining.DogTrackBlobUrl);
+                try
                 {
-                    XDocument gpxDoc = XDocument.Load(reader);
-                    var serializer = new XmlSerializer(typeof(Gpx));
-                    var gpx = (Gpx)serializer.Deserialize(gpxDoc.Root.CreateReader());
-                    var t = gpx.Trk.Trkseg.Trkpt;
-
-                    var model = new DogTrainingViewModel
+                    using (var response = webRequestDogTrack.GetResponse())
+                    using (var content = response.GetResponseStream())
+                    using (var reader = new StreamReader(content))
                     {
-                        DogTrackPoints = t,
-                        LostPersonTrackPoints = t
-                    };
-                    return View(model);
-                }
-            }
-            catch(Exception e)
-            {
-                return View();
-            }
+                        XDocument gpxDoc = XDocument.Load(reader);
+                        var serializer = new XmlSerializer(typeof(Gpx));
+                        var gpx = (Gpx)serializer.Deserialize(gpxDoc.Root.CreateReader());
+                        var t = gpx.Trk.Trkseg.Trkpt;
 
+                        dogTrainingViewModel.DogTrackPoints = t;
+                    }
+                }
+                catch (Exception e)
+                {
+                    ViewBag.Message = e.Message;
+                    return View("Error");
+                }
+
+                var webRequestLostPersonTrack = WebRequest.Create(dogTraining.LostPersonTrackBlobUrl);
+                try
+                {
+                    using (var response = webRequestLostPersonTrack.GetResponse())
+                    using (var content = response.GetResponseStream())
+                    using (var reader = new StreamReader(content))
+                    {
+                        XDocument gpxDoc = XDocument.Load(reader);
+                        var serializer = new XmlSerializer(typeof(Gpx));
+                        var gpx = (Gpx)serializer.Deserialize(gpxDoc.Root.CreateReader());
+                        var t = gpx.Trk.Trkseg.Trkpt;
+
+                        dogTrainingViewModel.LostPersonTrackPoints = t;
+                    }
+                }
+                catch (Exception e)
+                {
+                    ViewBag.Message = e.Message;
+                    return View("Error");
+                }
+
+                return View(dogTrainingViewModel);
+            }
+            else
+            {
+                ViewBag.Message = "code: " + responseMessage.StatusCode;
+                return View("Error");
+            }
         }
+
         [HttpPost]
-        public ActionResult UploadFile(HttpPostedFileBase file)
+        public ActionResult UploadFile(DogTrainingModel model, HttpPostedFileBase file1, HttpPostedFileBase file2)
         {
 
-            HttpClient httpClient = new HttpClient();
             MultipartFormDataContent form = new MultipartFormDataContent();
-            var stream = file.InputStream;
-            var streamContent = new StreamContent(stream);
-            var imageContent = new ByteArrayContent(streamContent.ReadAsByteArrayAsync().Result);
-            imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
-            var fileName = file.FileName + Guid.NewGuid().ToString();
-            form.Add(imageContent, fileName, Path.GetFileName(fileName));
-            var response = httpClient.PostAsync("dogtrainings/upload", form).Result;
+            var stream1 = file1.InputStream;
+            var streamContent1 = new StreamContent(stream1);
+            var imageContent1 = new ByteArrayContent(streamContent1.ReadAsByteArrayAsync().Result);
+            imageContent1.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
+            var fileName1 = file1.FileName + Guid.NewGuid().ToString();
+            form.Add(imageContent1, fileName1, Path.GetFileName(fileName1));
+            var stream2 = file2.InputStream;
+            var streamContent2 = new StreamContent(stream2);
+            var imageContent2 = new ByteArrayContent(streamContent2.ReadAsByteArrayAsync().Result);
+            imageContent2.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
+            var fileName2 = file2.FileName + Guid.NewGuid().ToString();
+            form.Add(imageContent2, fileName2, Path.GetFileName(fileName2));
+            var response = client.PostAsync("DogTrainings/Upload", form).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                //get blob urls - is it that simple or it has to be returned?
+
+                var track1 = @"https://kgtstorage.blob.core.windows.net/tracks/" + fileName1;
+                var track2 = @"https://kgtstorage.blob.core.windows.net/tracks/" + fileName2;
+
+                //add blob urls to model 
+                model.LostPersonTrackBlobUrl = track1;
+                model.DogTrackBlobUrl = track2;
+                //add dogtraining
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, client.BaseAddress + "dogtrainings/");
+
+                var dogTrainingSerialized = JsonConvert.SerializeObject(model);
+
+                message.Content = new StringContent(dogTrainingSerialized, System.Text.Encoding.UTF8, "application/json");
+
+                HttpResponseMessage responseMessage = client.SendAsync(message).Result; // await client.SendAsync(message)
+                if (responseMessage.IsSuccessStatusCode)    //200 OK
+                {
+                    //display info
+                    message.Dispose();
+                    var responseData = responseMessage.Content.ReadAsStringAsync().Result;
+                    var definition = new { DogId = "", TrainingId = "" };
+                    var ids = JsonConvert.DeserializeAnonymousType(responseData, definition);
+                    return RedirectToAction("TrainingTest", new { dogId = ids.DogId, trainingId = ids.TrainingId });
+                    //return View("Dog", responseMessage.Content);
+                }
+                else    // msg why not ok
+                {
+                    message.Dispose();
+                    return View(/*error*/);
+                }
+
+            }
 
 
-            //using (var client = new HttpClient())
-            //{
-            //    using (var content = new MultipartFormDataContent())
-            //    {
-            //        byte[] Bytes = new byte[file.InputStream.Length + 1];
-            //        file.InputStream.Read(Bytes, 0, Bytes.Length);
-            //        var fileContent = new ByteArrayContent(Bytes);
-            //        fileContent.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment") { FileName = file.FileName };
-            //        content.Add(fileContent);
-            //        var requestUri = "http://localhost:12321/api/trainings/upload";
-            //        var result = client.PostAsync(requestUri, content).Result;
-            //        if (result.StatusCode == System.Net.HttpStatusCode.Created)
-            //        {
-            //            Console.WriteLine("Success");
 
-            //        }
-            //        else
-            //        {
-            //            ViewBag.Failed = "Failed !" + result.Content.ToString();
-            //        }
-            //    }
-            //}
             return View();
         }
 
         [HttpGet]
-        public ActionResult UploadTest()
+        public ActionResult UploadTest(int trainingId)
         {
-            return View();
+            return View(new DogTrainingModel { TrainingId = trainingId});
         }
     }
 }

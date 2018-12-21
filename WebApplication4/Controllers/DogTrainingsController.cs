@@ -22,7 +22,7 @@ namespace DogsServer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DogTrainingsController : ControllerBase
+    public class DogTrainingsController : BaseController
     {
         private UnitOfWork unitOfWork = new UnitOfWork(new AppDbContext());
         CompositeFileProvider provider;

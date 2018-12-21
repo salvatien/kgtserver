@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace DogsServer.Models
 {
-    //TODO add dog breed!!!
     [Table("Dogs")]
     public class Dog
     {
@@ -29,6 +28,8 @@ namespace DogsServer.Models
         [Required]
         public virtual Guide Guide { get; set; }
         public virtual IList<DogAction> DogActions { get; set; }
+        public virtual IList<DogTraining> DogTrainings { get; set; }
+
 
     }
 }

@@ -51,7 +51,13 @@ namespace DogsServer.Models
                 .WithMany(m => m.GuideEvents)
                 .HasForeignKey(m => m.EventId);
 
+            modelBuilder.Entity<Training>().HasMany(t => t.DogTrainings)
+                .WithOne(dt => dt.Training)
+                .HasForeignKey(dt => dt.TrainingId);
 
+            modelBuilder.Entity<Dog>().HasMany(d => d.DogTrainings)
+                .WithOne(dt => dt.Dog)
+                .HasForeignKey(dt => dt.DogId);
         }
     }
 }

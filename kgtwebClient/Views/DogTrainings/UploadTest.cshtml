@@ -1,20 +1,64 @@
-﻿@{  
-    ViewBag.Title = "UploadFile";  
-}  
-   
-<h2>UploadFile</h2>  
-   
-@using(Html.BeginForm("UploadFile", "Trainings", FormMethod.Post, new { enctype="multipart/form-data"}))
-{
-
-    <div>  
-        @Html.TextBox("file", "", new {  type= "file"}) <br />  
-   
-        <input type="submit" value="Upload" />  
-   
-        @ViewBag.Message  
-   
-    </div>  
-      
-      
+﻿@{
+    ViewBag.Title = "AddDogTraining";
 }
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model Dogs.ViewModels.Data.Models.DogTrainingModel
+
+
+<div style="margin:60px">
+
+    @using (Html.BeginForm("UploadFile", "DogTrainings", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(m=> m.TrainingId)
+    <div style="float:left">
+        <div class="form-group">
+            @Html.LabelFor(m => m.DogId, new { @class = "col-md-2 control-label form-field" })
+            <div class="col-md-10  form-field">
+                @Html.TextBoxFor(m => m.DogId, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.LostPerson, new { @class = "col-md-2 control-label form-field" })
+            <div class="col-md-10  form-field">
+                @Html.TextBoxFor(m => m.LostPerson, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Weather, new { @class = "col-md-2 control-label form-field" })
+            <div class="col-md-10 form-field">
+                @Html.TextBoxFor(m => m.Weather, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Notes, new { @class = "col-md-2 control-label form-field" })
+            <div class="col-md-10 form-field">
+                @Html.TextAreaFor(m => m.Notes, new { @class = "form-control" })
+            </div>
+        </div>
+        <div>
+            @Html.TextBox("file1", "", new { type = "file" }) <br />
+            @Html.TextBox("file2", "", new { type = "file" }) <br />
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" class="btn btn-default form-field" value="Prześlij dane" />
+            </div>
+        </div>
+
+        Godziny trwania będą wywnioskowane z pliku ze śladem psa.
+
+    </div>
+    }
+</div>
+
+@*
+    </body>
+    </html>
+*@
+
