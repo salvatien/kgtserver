@@ -19,7 +19,7 @@ namespace DogsServer.Models
         public string GeneralLocation { get; set; }
         public string LocationDetails { get; set; }
         public string Notes { get; set; }
-        public virtual IList<DogTraining> Dogs { get; set; }
+        public virtual IList<DogTraining> DogTrainings { get; set; }
         public virtual IList<TrainingComment> Comments { get; set; }
 
     }

@@ -1,4 +1,5 @@
 ﻿using Dogs.ViewModels.Data.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -27,88 +28,158 @@ namespace kgtwebClient.Controllers
         private static readonly HttpClient client = new HttpClient { BaseAddress = new Uri(url) };
 
 
-        // GET: Trainings
-        public ActionResult Index()
+        // get all dogs from db
+        public async Task<ActionResult> Index()
+        {
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+
+
+            HttpResponseMessage responseMessage = await client.GetAsync("Trainings/");
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                var responseData = responseMessage.Content.ReadAsStringAsync().Result;
+                var trainings = JsonConvert.DeserializeObject<List<TrainingModel>>(responseData);
+
+                if (trainings.Any())
+                    return View(trainings);
+                else
+                    return View();
+            }
+            ViewBag.Message = "code:" + responseMessage.StatusCode;
+            return View("Error");
+        }
+
+        public async Task<ActionResult> Training(int id)
+        {
+            //client.BaseAddress = new Uri(url);
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            HttpResponseMessage responseMessage = await client.GetAsync("trainings/" + id.ToString());
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                var responseData = responseMessage.Content.ReadAsStringAsync().Result;
+                var training = JsonConvert.DeserializeObject<TrainingModel>(responseData);
+
+                return View(training);
+            }
+            return View();
+        }
+        [HttpGet]
+        public async Task<ActionResult> AddTraining()
         {
             return View();
         }
 
-        public ActionResult Training(int dogId, int trainingId)
-        {
-
-            //here there will be a call to server web api to get training's viewmodel, including path hardcoded below
-
-            var webRequest = WebRequest.Create(@"https://kgtstorage.blob.core.windows.net/tracks/file06cd3cb0-33fa-477d-861e-86b23d717ad1");
-
-            try
-            {
-                using (var response = webRequest.GetResponse())
-                using (var content = response.GetResponseStream())
-                using (var reader = new StreamReader(content))
-                {
-                    XDocument gpxDoc = XDocument.Load(reader);
-                    var serializer = new XmlSerializer(typeof(Gpx));
-                    var gpx = (Gpx)serializer.Deserialize(gpxDoc.Root.CreateReader());
-                    var t = gpx.Trk.Trkseg.Trkpt;
-
-                    var model = new DogTrainingViewModel
-                    {
-                        DogTrackPoints = t,
-                        LostPersonTrackPoints = t
-                    };
-                    return View(model);
-                }
-            }
-            catch(Exception e)
-            {
-                return View();
-            }
-
-        }
         [HttpPost]
-        public ActionResult UploadFile(HttpPostedFileBase file)
+        public async Task<ActionResult> AddTraining(TrainingModel addedTraining)
         {
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            HttpClient httpClient = new HttpClient();
-            MultipartFormDataContent form = new MultipartFormDataContent();
-            var stream = file.InputStream;
-            var streamContent = new StreamContent(stream);
-            var imageContent = new ByteArrayContent(streamContent.ReadAsByteArrayAsync().Result);
-            imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
-            var fileName = file.FileName + Guid.NewGuid().ToString();
-            form.Add(imageContent, fileName, Path.GetFileName(fileName));
-            var response = httpClient.PostAsync("dogtrainings/upload", form).Result;
+            
+            HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, client.BaseAddress + "trainings/");
+            
 
+            var trainingSerialized = JsonConvert.SerializeObject(addedTraining);
 
-            //using (var client = new HttpClient())
-            //{
-            //    using (var content = new MultipartFormDataContent())
-            //    {
-            //        byte[] Bytes = new byte[file.InputStream.Length + 1];
-            //        file.InputStream.Read(Bytes, 0, Bytes.Length);
-            //        var fileContent = new ByteArrayContent(Bytes);
-            //        fileContent.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment") { FileName = file.FileName };
-            //        content.Add(fileContent);
-            //        var requestUri = "http://localhost:12321/api/trainings/upload";
-            //        var result = client.PostAsync(requestUri, content).Result;
-            //        if (result.StatusCode == System.Net.HttpStatusCode.Created)
-            //        {
-            //            Console.WriteLine("Success");
+            message.Content = new StringContent(trainingSerialized, System.Text.Encoding.UTF8, "application/json");
 
-            //        }
-            //        else
-            //        {
-            //            ViewBag.Failed = "Failed !" + result.Content.ToString();
-            //        }
-            //    }
-            //}
-            return View();
+            HttpResponseMessage responseMessage = await client.SendAsync(message);
+            if (responseMessage.IsSuccessStatusCode)    //200 OK
+            {
+                //display info
+                message.Dispose();
+                return RedirectToAction("Training", new { id = Int32.Parse(responseMessage.Content.ReadAsStringAsync().Result) });
+            }
+            else    // msg why not ok
+            {
+                message.Dispose();
+                ViewBag.Message = "code:" + responseMessage.StatusCode;
+                return View("Error");
+            }
+
+        }
+
+        public JsonResult DeleteTraining(int? id)
+        {
+            //client.BaseAddress = new Uri(url);
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Delete, client.BaseAddress + "trainings/" + id.ToString());
+            message.Content = new StringContent(id.ToString(), System.Text.Encoding.UTF8, "application/json");
+
+            HttpResponseMessage responseMessage = client.SendAsync(message).Result;
+            if (responseMessage.IsSuccessStatusCode)    //200 OK
+            {
+                //wyswietlić informację
+                message.Dispose();
+                return Json(new { success = true, id = id.ToString() });
+            }
+            else    // wiadomosc czego się nie udałos
+            {
+                message.Dispose();
+                return Json(false);
+            }
+
         }
 
         [HttpGet]
-        public ActionResult UploadTest()
+        public async Task<ActionResult> UpdateTraining(int id)
         {
-            return View();
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            HttpResponseMessage responseMessage = await client.GetAsync("trainings/" + id.ToString());
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                var responseData = responseMessage.Content.ReadAsStringAsync().Result;
+
+                var training = JsonConvert.DeserializeObject<TrainingModel>(responseData);
+
+
+                return View(training);
+            }
+            ViewBag.Message = "code:" + responseMessage.StatusCode;
+            return View("Error");
         }
+
+        [HttpPost]
+        public async Task<ActionResult> UpdateTraining(TrainingModel updatedTraining)    //? -> może być null
+        {
+            
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            
+            HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Put, client.BaseAddress + "trainings/" + updatedTraining.TrainingId.ToString());
+            
+
+            var trainingSerialized = JsonConvert.SerializeObject(updatedTraining);
+
+
+            message.Content = new StringContent(trainingSerialized, System.Text.Encoding.UTF8, "application/json"); //dog serialized id.ToString()
+            HttpResponseMessage responseMessage = client.SendAsync(message).Result;
+            if (responseMessage.IsSuccessStatusCode)    //200 OK
+            {
+                //wyswietlić informację
+                message.Dispose();
+                var resp = responseMessage.Content.ReadAsStringAsync().Result;
+                var id = Int32.Parse(resp);
+                return RedirectToAction("Training", new { id });
+                //wywolać metodę Dog zamiast zwracać true
+
+            }
+            else    // wiadomosc czego się nie udało
+            {
+                message.Dispose();
+                ViewBag.Message = "code:" + responseMessage.StatusCode;
+                return View("Error");
+            }
+
+        }
+
     }
 }

@@ -1,9 +1,149 @@
-﻿
+﻿ 
 @{
     ViewBag.Title = "Index";
 }
 
-<div style="margin:60px">
-    <button onclick="location.href='@Url.Action("Training", "Trainings", new { dogId = 1, trainingId = 1 /*@item.TrainingId */})'">test mapy</button>
-    <h2>Index</h2>
+@using Dogs.ViewModels.Data.Models;
+@model List<Dogs.ViewModels.Data.Models.TrainingModel>
+
+
+@{
+    ViewBag.Title = "Trainings";
+}
+
+
+<div class="tables">
+    <input type="text" id="trainingsSearch" onkeyup="searchByLocationOrDate()" placeholder="Search for location/date" title="Type in location or date">
+    <button class="addButton" onclick="location.href='@Url.Action("AddTraining", "Trainings")'">Dodaj Trening</button>
+    @*<button id="button1" onclick="location.href='@Url.Action("DeleteDog","Dogs",new { id=7})'">delete</button> *@
+    <div>
+        @if (Model == null || !Model.Any())
+        {
+            <h4> Nie dodano jeszcze żadnego treningu </h4>
+        }
+        else
+        {
+            <table id="trainingsTable">
+                <tr>
+                    <th>ID</th>
+                    <th>Lokacja</th>
+                    <th>Adres</th>
+                    <th>Data</th>
+
+
+                </tr>
+                @foreach (var item in Model)
+
+                {
+                <tr @*onclick="document.location = 'http://kgtwebclient.azurewebsites.net/Dogs/Dog/' + @item.DogId;"  *@>
+                    <td class="tdOnclick">
+                        @item.TrainingId
+                    </td>
+                    <td class="tdOnclick">
+                        @item.GeneralLocation
+                    </td>
+
+                    <td class="tdOnclick">
+                        @item.LocationDetails
+                    </td>
+
+                    <td class="tdOnclick">
+                        @item.Date.ToString()
+                    </td>
+
+
+
+
+
+                    <td style="background-color:white">
+                        @*location.href='@Url.Action("DeleteDog", "Dogs", new { id = @item.DogId })'*@
+                        <button class="deleteButton" onclick="deleteTraining(@item.TrainingId)" id="@("deleteTrainingButton" + item.TrainingId)">usuń</button>
+                    </td>
+                    <td style="background-color:white">
+                        <button class="updateButton" onclick="location.href='@Url.Action("UpdateTraining", "Trainings", new { id = @item.TrainingId })'">zmień</button>
+                    </td>
+                    <td style="background-color:white">
+                        <button class="displayButton" onclick="location.href='@Url.Action("Training", "Trainings", new { id = @item.TrainingId })'">wyświetl</button>
+                    </td>
+                </tr>
+
+                }
+
+            </table>
+        }
+    </div>
 </div>
+<script>
+    function searchByLocationOrDate() {
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("trainingsSearch");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("trainingsTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+             /* search by general location*/
+            tdTrainingGeneralLocation = tr[i].getElementsByTagName("td")[1];
+            /* search by location's details*/
+            tdTrainingLocationDetails = tr[i].getElementsByTagName("td")[2];
+            /* search by date*/
+            tdTrainingDate = tr[i].getElementsByTagName("td")[3];
+            if (tdTrainingGeneralLocation || tdTrainingLocationDetails || tdTrainingDate) {
+                if (tdTrainingGeneralLocation.innerHTML.toUpperCase().indexOf(filter) > -1
+                    || tdTrainingLocationDetails.innerHTML.toUpperCase().indexOf(filter) > -1
+                    || tdTrainingDate.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+    @* location.href='@Url.Action("DeleteDog", "Dogs", new { id = @item.DogId })' *@
+
+    function deleteTraining(trainingId) {
+       // var id = dogId;
+        alert("Delete training: " + trainingId);
+        //document.getElementById("disp").innerHTML = "hi";
+        $.ajax({
+            url: "@Url.Action("DeleteTraining", "Trainings")",
+            method: "POST", //First change type to method here
+
+            data: {
+                id: trainingId, // Second add quotes on the value.
+            },
+            success: function (response) {
+                if (response) {
+                    //var resp = jQuery.parseJSON(response);
+                    var resp = response;
+                    //console.log(resp);
+                    if (resp.success) {
+                        alert("udało się usunac przewodnika o id: " + resp.id);
+                        //usunięcie z tabeli tr ktory zawiera button o id deleteDogButton<id>
+                        //var buttonId = "deleteDogButton" + dogId;
+                    var button = $("#deleteTrainingButton" + resp.id );
+
+                    var tableRow = button.closest("tr");
+                        //alert(button.text());
+                        tableRow.remove();
+                    }
+                }
+            },
+            error: function () {
+                alert("error");
+            }
+
+        });
+    }
+
+    //$(document).ready(function () {
+    //    $('#dogsTable').on("click", "td.tdOnclick", function () {
+    //        alert('ho ho ho');
+    //    });
+    //});
+</script>
+
+@*
+    </div>
+
+*@
+

@@ -1,0 +1,134 @@
+﻿@using System.Configuration;
+@{
+    ViewBag.Title = "Training";
+    var googleMapsLinkWithApiKey = "https://maps.googleapis.com/maps/api/js?key=" + @ConfigurationManager.AppSettings["GoogleApiKey"] + "&callback=initMap";
+}
+
+
+
+@model Dogs.ViewModels.Data.Models.DogTrainingViewModel
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Complex Polylines</title>
+    <style>
+        /* Always set the map height explicitly to define the size of the div
+        * element that contains the map. */
+        #map {
+            height: 100%;
+        }
+        /* Optional: Makes the sample page fill the window. */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="map" style="width:900px; height:500px; margin:60px"></div>
+
+    <script>
+
+        // This example creates an interactive map which constructs a polyline based on
+        // user clicks. Note that the polyline only appears once its path property
+        // contains two LatLng coordinates.
+        var polyPerson;
+        var poly;
+        var map;
+
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 17,
+                center: { lat:50.0300860405, lng:19.8871636391 }  // Center the map on POLSZA
+            });
+            // dog trace
+            var dogPoints = [];
+            @foreach (var pt in Model.DogTrackPoints)
+            {
+                @: dogPoints.push({ lat: @pt.Lat, lng: @pt.Lon});
+
+            }
+            console.log("dog: " + dogPoints[5].lat + " " + dogPoints[5].lng);
+
+            poly = new google.maps.Polyline({
+                path: dogPoints,
+                strokeColor: '#FF0000',
+                strokeOpacity: 1.0,
+                strokeWeight: 3
+            });
+            poly.setMap(map);
+            // person trace
+            var personPoints = [];
+            @foreach (var pt in Model.LostPersonTrackPoints)
+            {
+                @: personPoints.push({ lat: @pt.Lat, lng: @pt.Lon});
+            }
+            console.log("person: " + personPoints[5].lat + " " + personPoints[5].lng);
+
+            polyPerson = new google.maps.Polyline({
+                path: personPoints,
+                strokeColor: '#0000FF',
+                strokeOpacity: 1.0,
+                strokeWeight: 3
+            });
+            polyPerson.setMap(map);
+            //var date;
+            //var time;
+            @foreach (var pt in Model.LostPersonTrackPoints) {
+                var t = pt.Time;
+                @: var date = '@HttpUtility.JavaScriptStringEncode(t)';
+                @: var time = new Date(date).toLocaleTimeString();
+
+                @:  var marker = new google.maps.Marker({
+                @:        position: { lat: @pt.Lat, lng: @pt.Lon },
+                @:
+                @:        icon: {
+                @:          path: google.maps.SymbolPath.CIRCLE,
+                @:          strokeColor: "blue",
+                @:          scale: 1.5
+                @:        },
+                @:        title: 'czas: ' + time    @*'\'   @pt.Time\''*@, 
+                @:        map: map
+                @:  });
+
+                @:  console.log("time: " + time);
+                @:  marker.addListener('click', function (event) {
+                @:  new google.maps.InfoWindow({
+                @:                  content: 'szerokość:' + @pt.Lat +  ',\n długość:' + @pt.Lon  
+                @:                    + ',\n czas:' @*+  '\'@pt.Time\''*@
+                @:                    + new Date('@HttpUtility.JavaScriptStringEncode(pt.Time)').toLocaleTimeString()
+                @:     }).open(map, this) }/*showInfoWindow(infowindow, map, marker)*/);
+             }
+
+            // Add a listener for the click event
+           // map.addListener('click', addLatLng);
+        }
+        //function showInfoWindow(infowindow, map, marker) { infowindow.open(map, marker) }
+        // Handles click events on a map, and adds a new point to the Polyline.
+        //function addLatLng(event) {
+        //    var path = poly.getPath();
+
+        //    // Because path is an MVCArray, we can simply append a new coordinate
+        //    // and it will automatically appear.
+        //    path.push(event.latLng);
+
+        //    // Add a new marker at the new plotted point on the polyline.
+        //    //var marker = new google.maps.Marker({
+        //    //    position: event.latLng,
+        //    //    title: '#' + path.getLength(),
+        //    //    map: map
+        //    //});
+        //}
+
+
+    </script>
+    <script async defer
+            src="@googleMapsLinkWithApiKey">
+    </script>
+</body>
+</html>

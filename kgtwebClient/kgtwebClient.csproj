@@ -162,6 +162,7 @@
     <Compile Include="Controllers\DogsController.cs" />
     <Compile Include="Controllers\GuidesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\DogTrainingsController.cs" />
     <Compile Include="Controllers\TrainingsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -315,9 +316,14 @@
     <Content Include="Views\Guides\UpdateGuide.cshtml" />
     <Content Include="Views\Guides\Guide.cshtml" />
     <Content Include="Views\Guides\AddGuide.cshtml" />
-    <Content Include="Views\Trainings\Index.cshtml" />
+    <Content Include="Views\DogTrainings\Index.cshtml" />
+    <Content Include="Views\DogTrainings\Training.cshtml" />
+    <Content Include="Views\DogTrainings\UploadTest.cshtml" />
+    <Content Include="Views\DogTrainings\TrainingTest.cshtml" />
+    <Content Include="Views\Trainings\AddTraining.cshtml" />
     <Content Include="Views\Trainings\Training.cshtml" />
-    <Content Include="Views\Trainings\UploadTest.cshtml" />
+    <Content Include="Views\Trainings\Index.cshtml" />
+    <Content Include="Views\Trainings\UpdateTraining.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

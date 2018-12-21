@@ -1,0 +1,68 @@
+﻿
+@{
+    ViewBag.Title = "UpdateTraining";
+}
+
+@using kgtwebClient.Helpers;
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    /*var workmodes = new List<DogWorkmodeWrapper> { new DogWorkmodeWrapper { Id = 1, Workmode = DogWorkmode.Terrain},
+                           new DogWorkmodeWrapper { Id = 2, Workmode = DogWorkmode.Rescue},
+                           new DogWorkmodeWrapper { Id = 3, Workmode = DogWorkmode.Rubble}};*/
+}
+
+
+@model Dogs.ViewModels.Data.Models.TrainingModel
+
+<div style="margin:60px">
+
+    @using (Html.BeginForm("UpdateTraining", "Trainings", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(m => m.TrainingId)
+        @* <fieldset>*@
+    <div style="float:left">
+        <div class="form-group">
+            @Html.LabelFor(m => m.GeneralLocation, new { @class = "col-md-2 control-label form-field" })
+            <div class="col-md-10  form-field">
+                @Html.TextBoxFor(m => m.GeneralLocation, new { @Value = Model.GeneralLocation, @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.LocationDetails, new { @class = "col-md-2 control-label form-field" })
+            <div class="col-md-10  form-field">
+                @Html.TextBoxFor(m => m.LocationDetails, new { @Value = Model.LocationDetails, @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Date, new { @class = "col-md-2 control-label form-field" })
+            <div class="col-md-10  form-field">
+                @Html.TextBoxFor(m => m.Date, new { @Value = Model.Date, type = "datetime-local", @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Notes, new { @class = "col-md-2 control-label form-field" })
+            <div class="col-md-10 form-field">
+                @Html.TextAreaFor(m => m.Notes, new { @Value = Model.Notes, @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" class="btn btn-default form-field" value="Prześlij dane" />
+            </div>
+        </div>
+        @*/////////////////////////////////////////////////////*@
+    </div>
+        
+    }
+</div>
+
+@*
+    </body>
+    </html>
+*@

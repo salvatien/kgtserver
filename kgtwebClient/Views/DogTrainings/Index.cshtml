@@ -1,0 +1,10 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<div style="margin:60px">
+    <button onclick="location.href='@Url.Action("TrainingTest", "Trainings", new { dogId = 1, trainingId = 1 /*@item.TrainingId */})'">test mapy T</button>
+    <button onclick="location.href='@Url.Action("Training", "Trainings")'">test mapy K</button>
+    <h2>Index</h2>
+</div>

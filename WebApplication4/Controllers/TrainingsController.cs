@@ -33,11 +33,12 @@ namespace DogsServer.Controllers
             //dogs will be added to the training later
             var training = new Training
             {
-                Comments = null,
+                Comments = new List<TrainingComment>(),
                 Date = obj.Date,
                 GeneralLocation = obj.GeneralLocation,
                 LocationDetails = obj.LocationDetails,
                 Notes = obj.Notes,
+                DogTrainings = new List<DogTraining>()
 
             };
             
@@ -48,6 +49,50 @@ namespace DogsServer.Controllers
             return new ObjectResult(training.TrainingId);
         }
 
+        [HttpGet]
+        public List<TrainingModel> Get()
+        {
+            var trainings = unitOfWork.TrainingRepository.GetAll().ToList();
+            var trainingModelList = new List<TrainingModel>();
+            foreach (var t in trainings)
+            {
+                var trainingModel = new TrainingModel()
+                {
+                    TrainingId = t.TrainingId,
+                    Date = t.Date,
+                    GeneralLocation = t.GeneralLocation,
+                    LocationDetails = t.LocationDetails,
+                    Notes = t.Notes,
+                    Comments = t.Comments.Select(c => new CommentModel
+                    {
+                        AuthorId = c.AuthorId,
+                        AuthorName = c.Author.FirstName + " " + c.Author.LastName,
+                        CommentId = c.TrainingCommentId,
+                        Content = c.Content,
+                        Date = c.Date
+                    }).ToList(),
+                    DogTrainings = t.DogTrainings.Select(dt => new DogTrainingModel
+                    {
+                        DogId = dt.DogId,
+                        TrainingId = dt.TrainingId,
+                        Dog = new DogModel
+                        {
+                            Name = dt.Dog.Name,
+                            GuideIdAndName = new IdNameModel
+                            {
+                                Id = dt.Dog.Guide.GuideId,
+                                Name = dt.Dog.Guide.FirstName + " " + dt.Dog.Guide.LastName
+                            }
+                        },
+                        LostPerson = dt.LostPerson
+                    }).ToList()
+                };
+
+                trainingModelList.Add(trainingModel);
+            }
+            return trainingModelList;
+        }
+
         [HttpGet("{id}")]
         public TrainingModel Get(int id)
         {
@@ -55,18 +100,34 @@ namespace DogsServer.Controllers
             var t = unitOfWork.TrainingRepository.GetById(id);
             var trainingModel = new TrainingModel()
             {
+                TrainingId = t.TrainingId,
                 Date = t.Date,
                 GeneralLocation = t.GeneralLocation,
                 LocationDetails = t.LocationDetails,
                 Notes = t.Notes,
                 Comments = t.Comments.Select(c => new CommentModel
+                {
+                    AuthorId = c.AuthorId,
+                    AuthorName = c.Author.FirstName + " " + c.Author.LastName,
+                    CommentId = c.TrainingCommentId,
+                    Content = c.Content,
+                    Date = c.Date
+                }).ToList(),
+                DogTrainings = t.DogTrainings.Select(dt => new DogTrainingModel
+                {
+                    DogId = dt.DogId,
+                    TrainingId = dt.TrainingId,
+                    Dog = new DogModel
                     {
-                        AuthorId = c.AuthorId,
-                        AuthorName = c.Author.FirstName + " " + c.Author.LastName,
-                        CommentId = c.TrainingCommentId,
-                        Content = c.Content,
-                        Date = c.Date
-                    }).ToList()
+                        Name = dt.Dog.Name,
+                        GuideIdAndName = new IdNameModel
+                        {
+                            Id = dt.Dog.Guide.GuideId,
+                            Name = dt.Dog.Guide.FirstName + " " + dt.Dog.Guide.LastName
+                        }
+                    },
+                    LostPerson = dt.LostPerson
+                }).ToList()
             };
             return trainingModel;
         }
@@ -82,14 +143,7 @@ namespace DogsServer.Controllers
                 training.GeneralLocation = updatedTraining.GeneralLocation;
                 training.LocationDetails = updatedTraining.LocationDetails;
                 training.Notes = updatedTraining.Notes;
-                training.Comments = updatedTraining.Comments.Select(c => new TrainingComment
-                {
-                    AuthorId = c.AuthorId,
-                    Author = unitOfWork.GuideRepository.GetById(c.AuthorId),
-                    TrainingCommentId = c.CommentId,
-                    Content = c.Content,
-                    Date = c.Date
-                }).ToList();
+                //updating comments and dog trainings is not possible through update training
                 unitOfWork.Commit();
                 return new ObjectResult(training.TrainingId);
             }
