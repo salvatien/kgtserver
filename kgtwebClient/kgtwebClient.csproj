@@ -206,8 +206,12 @@
     <Content Include="Content\bootstrap-reboot.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
-    <Content Include="Images\Ślad_Cob8-07-22-123810.gpx" />
-    <Content Include="Images\Ślad_Cob8-07-22-124610.gpx" />
+    <Content Include="Images\Ślad_Pok8-12-08-084457.gpx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Ślad_Pok8-12-08-090130.gpx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Properties\PublishProfiles\kgtwebclient - Web Deploy.pubxml" />
     <Content Include="Images\Cobby.gpx" />
     <Content Include="Images\januszek.jpg" />
