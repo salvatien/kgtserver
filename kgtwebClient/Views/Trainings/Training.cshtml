@@ -40,6 +40,8 @@
         var polyPerson;
         var poly;
         var map;
+        var personMarkers = [];
+
 
         function initMap() {
             map = new google.maps.Map(document.getElementById('map'), {
@@ -79,14 +81,20 @@
             polyPerson.setMap(map);
             //var date;
             //var time;
+            //var personMarkers = [];
+            @{ int counter = 0; }
             @foreach (var pt in @Model.PersonTrackpoints) {
+                counter++;
                 var t = pt.Time;
                 @: var date = '@HttpUtility.JavaScriptStringEncode(t)';
                 @: var time = new Date(date).toLocaleTimeString();
 
                 @:  var marker = new google.maps.Marker({
                 @:        position: { lat: @pt.Lat, lng: @pt.Lon },
-                @:
+                @:        label: {
+                @:          text: "@counter",
+                @:          fontSize: "0px"
+                @:        },
                 @:        icon: {
                 @:          path: google.maps.SymbolPath.CIRCLE,
                 @:          strokeColor: "blue",
@@ -96,17 +104,53 @@
                 @:        map: map
                 @:  });
 
-                @:  console.log("time: " + time);
-                @:  marker.addListener('click', function (event) {
-                @:  new google.maps.InfoWindow({
-                @:                  content: 'szerokość:' + @pt.Lat +  ',\n długość:' + @pt.Lon  
-                @:                    + ',\n czas:' @*+  '\'@pt.Time\''*@
-                @:                    + new Date('@HttpUtility.JavaScriptStringEncode(pt.Time)').toLocaleTimeString()
-                @:     }).open(map, this) }/*showInfoWindow(infowindow, map, marker)*/);
-             }
+                @:  personMarkers.push(marker);
+                @:  console.log(personMarkers);
 
+
+                @*@: var infowindow = new google.maps.InfoWindow({ content: "aaaaaaa" });
+                @: google.maps.event.addListener(infowindow, 'domready', test);*@
+
+                @*@: infowindow.open(map, marker);*@
+
+                @:  console.log("time: " + time);
+                @:  google.maps.event.addListener(marker, 'click', function (event) {
+                @:      var infowindow = new google.maps.InfoWindow({
+                @:                      content: 'szerokość:' + @pt.Lat +  ',\n długość:' + @pt.Lon  
+                @:                      + ',\n czas:'
+                @:                      + new Date('@HttpUtility.JavaScriptStringEncode(pt.Time)').toLocaleTimeString()
+                @:                      + "<br><input type='button' id='personMarkerStart' value='start' onclick='setStartPoint(" + new google.maps.Marker(this).label + ")'>"
+                @:                  });
+
+                @:      infowindow.open(map, this);
+//                @:      google.maps.event.addDomListener(infowindow, 'domready', test('a1234a') );
+
+
+                @: });
+
+
+                }
+            console.log("personMarkers:" + personMarkers.length);
             // Add a listener for the click event
            // map.addListener('click', addLatLng);
+        }
+        function test2() { alert('łełełełeło')}
+        function test(aa) { alert(aa)}
+
+        function setStartPoint(startMarker) {
+            console.log("setSartPoint");
+            console.log("marker " + startMarker);
+            for (var i = 0; i < personMarkers.length; i++) {
+                console.log("i: " +i);
+                if (personMarkers[i].label === startMarker) {
+                    console.log("for");
+                    personMarkers[i].setMap(null);
+                    personMarkers.splice(i, 1);
+
+                    polyPerson.getPath().removeAt(i);
+                }
+            }
+            
         }
         //function showInfoWindow(infowindow, map, marker) { infowindow.open(map, marker) }
         // Handles click events on a map, and adds a new point to the Polyline.
