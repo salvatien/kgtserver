@@ -50,7 +50,7 @@
                                 <tr>
                                     <td>@Html.DisplayFor(m => dogTraining.Dog.Name)</td>
                                     <td>
-                                        <button class="displayButton" onclick="location.href='@Url.Action("TrainingTest", "DogTrainings", new { dogId = @dogTraining.DogId, trainingId=dogTraining.TrainingId  })'">wyświetl trening psa</button>
+                                        <button class="displayButton" onclick="location.href='@Url.Action("Training", "DogTrainings", new { dogId = @dogTraining.DogId, trainingId=dogTraining.TrainingId  })'">wyświetl trening psa</button>
                                     </td>
                                 </tr>
                             }
