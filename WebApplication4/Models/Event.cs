@@ -26,6 +26,6 @@ namespace DogsServer.Models
         public string Description { get; set; }
         public string Notes { get; set; }
         public virtual IList<GuideEvent> GuideEvents { get; set; }
-        public virtual List<Dog> Dogs { get; set; }
+        public virtual IList<DogEvent> DogEvents { get; set; }
     }
 }
