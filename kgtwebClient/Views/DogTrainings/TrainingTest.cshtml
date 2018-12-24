@@ -40,6 +40,8 @@
         var polyPerson;
         var poly;
         var map;
+        var personMarkers = [];
+        var dogMarkers = [];
 
         function initMap() {
             map = new google.maps.Map(document.getElementById('map'), {
@@ -62,7 +64,7 @@
                 strokeWeight: 3
             });
             poly.setMap(map);
-            // person trace
+            // person trace - draw lines
             var personPoints = [];
             @foreach (var pt in Model.LostPersonTrackPoints)
             {
@@ -79,14 +81,21 @@
             polyPerson.setMap(map);
             //var date;
             //var time;
-            @foreach (var pt in Model.LostPersonTrackPoints) {
+            //var personMarkers = [];
+
+            //person trace - draw markers
+            @{ int counter = 0; }
+            @foreach (var pt in @Model.LostPersonTrackPoints) {
                 var t = pt.Time;
                 @: var date = '@HttpUtility.JavaScriptStringEncode(t)';
                 @: var time = new Date(date).toLocaleTimeString();
 
                 @:  var marker = new google.maps.Marker({
                 @:        position: { lat: @pt.Lat, lng: @pt.Lon },
-                @:
+                @:        label: {
+                @:          text: "@counter",
+                @:          fontSize: "0px"
+                @:        },
                 @:        icon: {
                 @:          path: google.maps.SymbolPath.CIRCLE,
                 @:          strokeColor: "blue",
@@ -96,17 +105,189 @@
                 @:        map: map
                 @:  });
 
-                @:  console.log("time: " + time);
-                @:  marker.addListener('click', function (event) {
-                @:  new google.maps.InfoWindow({
-                @:                  content: 'szerokość:' + @pt.Lat +  ',\n długość:' + @pt.Lon
-                @:                    + ',\n czas:' @*+  '\'@pt.Time\''*@
-                @:                    + new Date('@HttpUtility.JavaScriptStringEncode(pt.Time)').toLocaleTimeString()
-                @:     }).open(map, this) }/*showInfoWindow(infowindow, map, marker)*/);
-             }
+                @:  personMarkers.push(marker);
+                @:  console.log(personMarkers);
+                counter++;
 
+
+                @*@: var infowindow = new google.maps.InfoWindow({ content: "aaaaaaa" });
+                @: google.maps.event.addListener(infowindow, 'domready', test);*@
+
+                @*@: infowindow.open(map, marker);*@
+
+                @:  console.log("time: " + time);
+                @:  google.maps.event.addListener(marker, 'click', function (event) {
+                @:      var infowindow = new google.maps.InfoWindow({
+                @:                      content: "<div class='personInfoWindow'>"
+                @:                      + 'szerokość:' + @pt.Lat +  ',\n długość:' + @pt.Lon
+                @:                      + ',\n czas:'
+                @:                      + new Date('@HttpUtility.JavaScriptStringEncode(pt.Time)').toLocaleTimeString()
+                @:                      + "<br><input type='button' class='markerStart' value='Oznacz jako punkt początkowy' onclick='setStartPoint(" + new google.maps.Marker(this).label.text + ")'>"
+                @:                      + "<input type='button' class='markerEnd' value='Oznacz jako punkt końcowy' onclick='setEndPoint(" + new google.maps.Marker(this).label.text + ")'>"
+                @:                      + "</div>"
+
+                @:                  });
+
+                @:      infowindow.open(map, this);
+//                @:      google.maps.event.addDomListener(infowindow, 'domready', test('a1234a') );
+
+
+                @: });
+
+
+                }
+
+
+                //dog trace - draw markers
+            @{counter = 0; }
+            @foreach (var pt in @Model.DogTrackPoints) {
+                var t = pt.Time;
+                @: var date = '@HttpUtility.JavaScriptStringEncode(t)';
+                @: var time = new Date(date).toLocaleTimeString();
+
+                @:  var marker = new google.maps.Marker({
+                @:        position: { lat: @pt.Lat, lng: @pt.Lon },
+                @:        label: {
+                @:          text: "@counter",
+                @:          fontSize: "0px"
+                @:        },
+                @:        icon: {
+                @:          path: google.maps.SymbolPath.CIRCLE,
+                @:          strokeColor: "red",
+                @:          scale: 1.5
+                @:        },
+                @:        title: 'czas: ' + time    @*'\'   @pt.Time\''*@,
+                @:        map: map
+                @:  });
+
+                @:  dogMarkers.push(marker);
+                @*@:  console.log(personMarkers);*@
+                counter++;
+
+
+                @*@: var infowindow = new google.maps.InfoWindow({ content: "aaaaaaa" });
+                @: google.maps.event.addListener(infowindow, 'domready', test);*@
+
+                @*@: infowindow.open(map, marker);*@
+
+                @:  console.log("time: " + time);
+                @:  google.maps.event.addListener(marker, 'click', function (event) {
+                @:      var infowindow = new google.maps.InfoWindow({
+                @:                      content: "<div class = 'dogInfoWindow'>"
+                @:                      + 'szerokość:' + @pt.Lat +  ',\n długość:' + @pt.Lon
+                @:                      + ',\n czas:'
+                @:                      + new Date('@HttpUtility.JavaScriptStringEncode(pt.Time)').toLocaleTimeString()
+                @:                      + "<br><input type='button' class='markerStart' value='Oznacz jako punkt początkowy' onclick='setStartPointForDog(" + new google.maps.Marker(this).label.text + ")'>"
+                @:                      + "<input type='button' class='markerEnd' value='Oznacz jako punkt końcowy' onclick='setEndPointForDog(" + new google.maps.Marker(this).label.text + ")'>"
+                @:                      + "</div>"
+                @:                  });
+
+                @:      infowindow.open(map, this);
+//                @:      google.maps.event.addDomListener(infowindow, 'domready', test('a1234a') );
+
+
+                @: });
+
+
+                }
+
+            console.log("dogMarkers:" + dogMarkers.length + " personMarkers: " + personMarkers.length);
             // Add a listener for the click event
            // map.addListener('click', addLatLng);
+        }
+
+        function setStartPoint(startMarker) {
+            console.log("setSartPoint");
+            console.log("marker " + startMarker);
+            for (let i = 0; i < personMarkers.length; i++) {
+                console.log("i: " + i);
+                console.log(personMarkers[i].label.text);
+
+                if (personMarkers[i].label.text == startMarker) {
+                    console.log("if");
+
+                    personMarkers.splice(0, i);
+
+
+                    break;
+                }
+
+                personMarkers[i].setMap(null);
+                polyPerson.getPath().removeAt(personMarkers[i]);    //this works - don't change it to i (like in function setEndPoint)  don't know why xd
+            }
+
+        }
+
+        function setStartPointForDog(startMarker) {
+            console.log("setSartPoint");
+            console.log("marker " + startMarker);
+            for (let i = 0; i < dogMarkers.length; i++) {
+                console.log("i: " + i);
+                console.log(dogMarkers[i].label.text);
+
+                if (dogMarkers[i].label.text == startMarker) {
+                    console.log("if");
+
+                    dogMarkers.splice(0, i);
+
+
+                    break;
+                }
+
+                dogMarkers[i].setMap(null);
+                poly.getPath().removeAt(dogMarkers[i]);    //this works - don't change it to i (like in function setEndPoint)  don't know why xd
+            }
+
+        }
+
+        function setEndPoint(startMarker) {
+            console.log("setSartPoint");
+            console.log("marker " + startMarker);
+            for (let i = personMarkers.length - 1; i >= 0; i--) {
+                console.log("i: " + i);
+                console.log(personMarkers[i].label.text);
+
+
+                if (personMarkers[i].label.text == startMarker) {
+                    console.log("if");
+
+                    personMarkers.splice(i+1, personMarkers.length-i);
+
+                    console.log("length " + personMarkers.length);
+                    break;
+                }
+
+
+                personMarkers[i].setMap(null);
+                polyPerson.getPath().removeAt(i);
+                
+            }
+
+        }
+
+        function setEndPointForDog(startMarker) {
+            console.log("setSartPoint");
+            console.log("marker " + startMarker);
+            for (let i = dogMarkers.length - 1; i >= 0; i--) {
+                console.log("i: " + i);
+                console.log(dogMarkers[i].label.text);
+
+
+                if (dogMarkers[i].label.text == startMarker) {
+                    console.log("if");
+
+                    dogMarkers.splice(i + 1, dogMarkers.length - i);
+
+                    console.log("length " + dogMarkers.length);
+                    break;
+                }
+
+
+                dogMarkers[i].setMap(null);
+                poly.getPath().removeAt(i);
+
+            }
+
         }
         //function showInfoWindow(infowindow, map, marker) { infowindow.open(map, marker) }
         // Handles click events on a map, and adds a new point to the Polyline.

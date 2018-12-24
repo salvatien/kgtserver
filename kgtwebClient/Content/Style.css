@@ -171,3 +171,21 @@ img {
 .form-field {
     position:static
 }
+
+.dogInfoWindow {
+    color:red;
+    font-weight: bold;
+}
+
+.personInfoWindow {
+    color: blue;
+    font-weight: bold;
+}
+
+.markerStart {
+    background-color: aqua
+}
+
+.markerEnd {
+    background-color: lightcoral
+}
