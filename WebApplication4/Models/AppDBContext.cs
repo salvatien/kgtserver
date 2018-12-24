@@ -30,6 +30,7 @@ namespace DogsServer.Models
             modelBuilder.Entity<DogAction>().HasKey(da => new { da.DogId, da.ActionId });
             modelBuilder.Entity<GuideEvent>().HasKey(ge => new { ge.GuideId, ge.EventId });
             modelBuilder.Entity<DogTraining>().HasKey(dt => new { dt.DogId, dt.TrainingId });
+            modelBuilder.Entity<DogEvent>().HasKey(de => new { de.DogId, de.EventId });
 
             modelBuilder.Entity<TrainingComment>().HasKey(m => m.TrainingCommentId);
             modelBuilder.Entity<TrainingComment>().HasOne(m => m.Training)
@@ -43,14 +44,16 @@ namespace DogsServer.Models
                 .HasForeignKey(m => new { m.DogId, m.TrainingId })
                 .OnDelete(DeleteBehavior.Restrict); // added OnDelete to avoid sercular reference
 
-            modelBuilder.Entity<GuideAction>().HasOne(m => m.Action)
-                .WithMany(m => m.GuideActions)
-                .HasForeignKey(m => m.ActionId);
+            //modelBuilder.Entity<GuideAction>().HasOne(m => m.Action)
+            //    .WithMany(m => m.GuideActions)
+            //    .HasForeignKey(m => m.ActionId);
 
-            modelBuilder.Entity<GuideEvent>().HasOne(m => m.Event)
-                .WithMany(m => m.GuideEvents)
-                .HasForeignKey(m => m.EventId);
+            //modelBuilder.Entity<GuideEvent>().HasOne(m => m.Event)
+            //    .WithMany(m => m.GuideEvents)
+            //    .HasForeignKey(m => m.EventId);
 
+
+            //dog trainings
             modelBuilder.Entity<Training>().HasMany(t => t.DogTrainings)
                 .WithOne(dt => dt.Training)
                 .HasForeignKey(dt => dt.TrainingId);
@@ -58,6 +61,42 @@ namespace DogsServer.Models
             modelBuilder.Entity<Dog>().HasMany(d => d.DogTrainings)
                 .WithOne(dt => dt.Dog)
                 .HasForeignKey(dt => dt.DogId);
+            //dog events
+            modelBuilder.Entity<Event>().HasMany(t => t.DogEvents)
+                .WithOne(de => de.Event)
+                .HasForeignKey(de => de.EventId);
+
+            modelBuilder.Entity<Dog>().HasMany(d => d.DogEvents)
+                .WithOne(de => de.Dog)
+                .HasForeignKey(de => de.DogId);
+
+            //dog actions
+            modelBuilder.Entity<Dog>().HasMany(d => d.DogActions)
+                .WithOne(da => da.Dog)
+                .HasForeignKey(da => da.DogId);
+
+            modelBuilder.Entity<Action>().HasMany(a => a.GuideActions)
+                .WithOne(ga => ga.Action)
+                .HasForeignKey(ga => ga.ActionId);
+
+            //guide events
+            modelBuilder.Entity<Guide>().HasMany(g => g.GuideEvents)
+                .WithOne(ge => ge.Guide)
+                .HasForeignKey(ge => ge.GuideId);
+
+            modelBuilder.Entity<Event>().HasMany(e => e.GuideEvents)
+                .WithOne(ge => ge.Event)
+                .HasForeignKey(ge => ge.EventId);
+
+            //guide actions
+            modelBuilder.Entity<Guide>().HasMany(g => g.GuideActions)
+                .WithOne(ga => ga.Guide)
+                .HasForeignKey(ga => ga.GuideId);
+
+            modelBuilder.Entity<Action>().HasMany(a => a.GuideActions)
+                .WithOne(ga => ga.Action)
+                .HasForeignKey(ga => ga.ActionId);
+
         }
     }
 }
