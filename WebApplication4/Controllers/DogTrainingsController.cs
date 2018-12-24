@@ -55,7 +55,7 @@ namespace DogsServer.Controllers
 
             return new ObjectResult(new { trainingId = training.TrainingId, dogId = training.DogId });
         }
-        //api/dogtrainings/get?dogId=5&trainingId=1
+        //api/dogtrainings/training?dogId=5&trainingId=1
         [HttpGet("Training")]
         public DogTrainingModel Get(int dogId, int trainingId)
         {
@@ -88,14 +88,14 @@ namespace DogsServer.Controllers
             {
                 var dogTraining = unitOfWork.DogTrainingRepository.GetByIds(dogId, trainingId);
                 var updatedTraining = obj.ToObject<DogTrainingModel>();
-                dogTraining.DogId = updatedTraining.DogId;
-                dogTraining.DogTrackBlobUrl = updatedTraining.DogTrackBlobUrl;
+                //these never change - only the file behind that URL may change, but not the URL itself
+                //dogTraining.DogTrackBlobUrl = updatedTraining.DogTrackBlobUrl;
+                //dogTraining.LostPersonTrackBlobUrl = updatedTraining.LostPersonTrackBlobUrl;
+
                 dogTraining.LostPerson = updatedTraining.LostPerson;
-                dogTraining.LostPersonTrackBlobUrl = updatedTraining.LostPersonTrackBlobUrl;
-                dogTraining.TrainingId = updatedTraining.TrainingId;
                 dogTraining.Weather = updatedTraining.Weather;
                 dogTraining.Notes = updatedTraining.Notes;
-                
+                //TODO not sure if it should be updated here or not
                 dogTraining.Comments = updatedTraining.Comments.Select(c => new DogTrainingComment
                 {
                     AuthorId = c.AuthorId,

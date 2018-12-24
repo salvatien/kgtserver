@@ -17,7 +17,7 @@
 @model Dogs.ViewModels.Data.Models.TrainingModel
 
 <div style="margin:60px">
-    <button type="button" class="displayButton" onclick="location.href='@Url.Action("UploadTest", "DogTrainings", new { trainingId= Model.TrainingId  })'">Dodaj trening psa do tego treningu</button>
+    <button type="button" class="displayButton" onclick="location.href='@Url.Action("Add", "DogTrainings", new { trainingId= Model.TrainingId  })'">Dodaj trening psa do tego treningu</button>
 
     @using (Html.BeginForm("UpdateTraining", "Trainings", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
@@ -65,7 +65,7 @@
                                 <tr>
                                     <td>@Html.DisplayFor(m => dogTraining.Dog.Name)</td>
                                     <td>
-                                        <button type="button" class="displayButton" onclick="location.href='@Url.Action("TrainingTest", "DogTrainings", new { dogId = @dogTraining.DogId, trainingId=dogTraining.TrainingId  })'">wyświetl trening psa</button>
+                                        <button type="button" class="displayButton" onclick="location.href='@Url.Action("Training", "DogTrainings", new { dogId = @dogTraining.DogId, trainingId=dogTraining.TrainingId  })'">wyświetl trening psa</button>
                                     </td>
                                 </tr>
                             }
