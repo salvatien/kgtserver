@@ -92,14 +92,14 @@
                 @:          strokeColor: "blue",
                 @:          scale: 1.5
                 @:        },
-                @:        title: 'czas: ' + time    @*'\'   @pt.Time\''*@, 
+                @:        title: 'czas: ' + time    @*'\'   @pt.Time\''*@,
                 @:        map: map
                 @:  });
 
                 @:  console.log("time: " + time);
                 @:  marker.addListener('click', function (event) {
                 @:  new google.maps.InfoWindow({
-                @:                  content: 'szerokość:' + @pt.Lat +  ',\n długość:' + @pt.Lon  
+                @:                  content: 'szerokość:' + @pt.Lat +  ',\n długość:' + @pt.Lon
                 @:                    + ',\n czas:' @*+  '\'@pt.Time\''*@
                 @:                    + new Date('@HttpUtility.JavaScriptStringEncode(pt.Time)').toLocaleTimeString()
                 @:     }).open(map, this) }/*showInfoWindow(infowindow, map, marker)*/);

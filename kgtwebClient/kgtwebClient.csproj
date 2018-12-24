@@ -317,9 +317,8 @@
     <Content Include="Views\Guides\Guide.cshtml" />
     <Content Include="Views\Guides\AddGuide.cshtml" />
     <Content Include="Views\DogTrainings\Index.cshtml" />
+    <Content Include="Views\DogTrainings\Add.cshtml" />
     <Content Include="Views\DogTrainings\Training.cshtml" />
-    <Content Include="Views\DogTrainings\UploadTest.cshtml" />
-    <Content Include="Views\DogTrainings\TrainingTest.cshtml" />
     <Content Include="Views\Trainings\AddTraining.cshtml" />
     <Content Include="Views\Trainings\Training.cshtml" />
     <Content Include="Views\Trainings\Index.cshtml" />
