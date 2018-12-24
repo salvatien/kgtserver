@@ -89,6 +89,7 @@ namespace kgtwebClient.Controllers
                         var t = trkseg.Trkpt;
 
                         dogTrainingViewModel.DogTrackPoints = t;
+                        //TODO: fill other fields DogTrainingViewModel class (dog part)
                     }
                 }
                 catch (Exception e)
@@ -110,6 +111,8 @@ namespace kgtwebClient.Controllers
                         var t = trkseg.Trkpt;
 
                         dogTrainingViewModel.LostPersonTrackPoints = t;
+                        //TODO: fill other fields DogTrainingViewModel class (person part)
+
                     }
                 }
                 catch (Exception e)

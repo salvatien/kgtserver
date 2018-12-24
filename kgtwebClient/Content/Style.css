@@ -182,10 +182,12 @@ img {
     font-weight: bold;
 }
 
-.markerStart {
-    background-color: aqua
+.markerStartButton {
+    background-color: aqua;
+    width: 50%
 }
 
-.markerEnd {
-    background-color: lightcoral
+.markerEndButton {
+    background-color: lightcoral;
+    width: 50%
 }
