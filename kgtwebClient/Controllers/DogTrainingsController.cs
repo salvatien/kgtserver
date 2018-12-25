@@ -74,7 +74,11 @@ namespace kgtwebClient.Controllers
             {
                 var responseData = responseMessage.Content.ReadAsStringAsync().Result;
                 var dogTraining = JsonConvert.DeserializeObject<DogTrainingModel>(responseData);
-                var dogTrainingViewModel = new DogTrainingViewModel();
+                var dogTrainingViewModel = new DogTrainingViewModel() {
+                    DogTrackFilename = "dogfilename",
+                    LostPersonTrackFilename = "personFilename"
+
+                };
 
                 var webRequestDogTrack = WebRequest.Create(dogTraining.DogTrackBlobUrl);
                 try

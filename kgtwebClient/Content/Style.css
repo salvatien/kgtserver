@@ -191,3 +191,9 @@ img {
     background-color: lightcoral;
     width: 50%
 }
+
+.formValidation {
+    display: none;
+    color: red;
+    font-weight:bold
+}
