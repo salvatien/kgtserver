@@ -46,6 +46,7 @@ namespace DogsServer.Controllers
                 DogTrackBlobUrl = obj.DogTrackBlobUrl,
                 LostPerson = obj.LostPerson,
                 LostPersonTrackBlobUrl = obj.LostPersonTrackBlobUrl,
+                Notes = obj.Notes,
                 Weather = obj.Weather
             };
 
@@ -68,6 +69,7 @@ namespace DogsServer.Controllers
                 DogTrackBlobUrl = t.DogTrackBlobUrl,
                 LostPerson = t.LostPerson,
                 LostPersonTrackBlobUrl = t.LostPersonTrackBlobUrl,
+                Notes = t.Notes,
                 Weather = t.Weather,
                 Comments = t.Comments.Select(c => new CommentModel
                 {
@@ -96,16 +98,16 @@ namespace DogsServer.Controllers
                 dogTraining.Weather = updatedTraining.Weather;
                 dogTraining.Notes = updatedTraining.Notes;
                 //TODO not sure if it should be updated here or not
-                dogTraining.Comments = updatedTraining.Comments.Select(c => new DogTrainingComment
-                {
-                    AuthorId = c.AuthorId,
-                    Author = unitOfWork.GuideRepository.GetById(c.AuthorId),
-                    DogTrainingCommentId = c.CommentId,
-                    Content = c.Content,
-                    Date = c.Date
-                }).ToList();
+                //dogTraining.Comments = updatedTraining.Comments.Select(c => new DogTrainingComment
+                //{
+                //    AuthorId = c.AuthorId,
+                //    Author = unitOfWork.GuideRepository.GetById(c.AuthorId),
+                //    DogTrainingCommentId = c.CommentId,
+                //    Content = c.Content,
+                //    Date = c.Date
+                //}).ToList();
                 unitOfWork.Commit();
-                return new ObjectResult(dogTraining.TrainingId);
+                return new ObjectResult(new { trainingId = dogTraining.TrainingId, dogId = dogTraining.DogId });
             }
             catch (Exception e)
             {

@@ -335,8 +335,26 @@
         @Html.HiddenFor(m => m.DogTrackFilename)
         @Html.HiddenFor(m => m.LostPersonTrackFilename)
         @Html.HiddenFor(m => m.DogTrackFilename)
-        @Html.HiddenFor(m => m.DogTrackPoints)
-        @Html.HiddenFor(m => m.LostPersonTrackPoints)
+        @*@Html.HiddenFor(m => m.DogTrackPoints)*@
+        for (int i = 0; i < Model.DogTrackPoints.Count; i++)
+        {
+            @Html.HiddenFor(model => Model.DogTrackPoints[i].Ele)
+            @Html.HiddenFor(model => Model.DogTrackPoints[i].Lat)
+            @Html.HiddenFor(model => Model.DogTrackPoints[i].Lon)
+            @Html.HiddenFor(model => Model.DogTrackPoints[i].Time)
+            @Html.HiddenFor(model => Model.DogTrackPoints[i].Extensions)
+
+        }
+        @*@Html.HiddenFor(m => m.LostPersonTrackPoints)*@
+        for (int i = 0; i < Model.LostPersonTrackPoints.Count; i++)
+        {
+            @Html.HiddenFor(model => Model.LostPersonTrackPoints[i].Ele)
+            @Html.HiddenFor(model => Model.LostPersonTrackPoints[i].Lat)
+            @Html.HiddenFor(model => Model.LostPersonTrackPoints[i].Lon)
+            @Html.HiddenFor(model => Model.LostPersonTrackPoints[i].Time)
+            @Html.HiddenFor(model => Model.LostPersonTrackPoints[i].Extensions)
+
+        }
         @Html.HiddenFor(m => m.TimeOfDogStart)
         @Html.HiddenFor(m => m.TimeOfLostPersonStart)
         @Html.HiddenFor(m => m.Duration)
@@ -344,37 +362,37 @@
         @Html.HiddenFor(m => m.DogTrackLength)
         @Html.HiddenFor(m => m.Goal)
 
-    <div style="float:left">
-        <div class="form-group">
-            @Html.LabelFor(m => m.LostPerson, new { @class = "col-md-2 control-label form-field" })
-            <div class="col-md-10  form-field">
-                @Html.TextBoxFor(m => m.LostPerson, new { @class = "form-control" })
+        <div style="float:left">
+            <div class="form-group">
+                @Html.LabelFor(m => m.LostPerson, new { @class = "col-md-2 control-label form-field" })
+                <div class="col-md-10  form-field">
+                    @Html.TextBoxFor(m => m.LostPerson, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Comments, new { @class = "col-md-2 control-label form-field" })
+                <div class="col-md-10  form-field">
+                    @Html.TextBoxFor(m => m.Comments, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Notes, new { @class = "col-md-2 control-label form-field" })
+                <div class="col-md-10  form-field">
+                    @Html.TextBoxFor(m => m.Notes, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Weather, new { @class = "col-md-2 control-label form-field" })
+                <div class="col-md-10  form-field">
+                    @Html.TextBoxFor(m => m.Weather, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" class="btn btn-default form-field" value="Prześlij dane" />
+                </div>
             </div>
         </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.Comments, new { @class = "col-md-2 control-label form-field" })
-            <div class="col-md-10  form-field">
-                @Html.TextBoxFor(m => m.Comments, new { @class = "form-control" })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.Notes, new { @class = "col-md-2 control-label form-field" })
-            <div class="col-md-10  form-field">
-                @Html.TextBoxFor(m => m.Notes, new { @class = "form-control" })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.Weather, new { @class = "col-md-2 control-label form-field" })
-            <div class="col-md-10  form-field">
-                @Html.TextBoxFor(m => m.Weather, new { @class = "form-control" })
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" class="btn btn-default form-field" value="Prześlij dane" />
-            </div>
-        </div>
-    </div>
 
     }
 
