@@ -4,8 +4,6 @@
     var googleMapsLinkWithApiKey = "https://maps.googleapis.com/maps/api/js?key=" + @ConfigurationManager.AppSettings["GoogleApiKey"] + "&callback=initMap";
 }
 
-
-
 @model Dogs.ViewModels.Data.Models.DogTrainingViewModel
 
 
@@ -51,7 +49,9 @@
             {
                 var t = pt.Time;
                 @: var date = '@HttpUtility.JavaScriptStringEncode(t)';
-                @: var time = new Date(date).toLocaleTimeString();
+                @*@: var time = new Date(date).toLocaleTimeString();*@
+                @: var time = new Date(date).toISOString();
+
                 @: personTraceData.push({latitude: @pt.Lat, longitude: @pt.Lon, time: time });
             }
         }
@@ -61,7 +61,8 @@
             {
                 var t = pt.Time;
                 @: var date = '@HttpUtility.JavaScriptStringEncode(t)';
-                @: var time = new Date(date).toLocaleTimeString();
+                @*@: var time = new Date(date).toLocaleTimeString();*@
+                @: var time = new Date(date).toISOString();
                 @: dogTraceData.push({ latitude: @pt.Lat, longitude: @pt.Lon, time: time });
                 @: console.log( "init dog trace data" + @pt.Lat +  @pt.Lon + "time: " +  time);
             }
@@ -320,6 +321,47 @@
             }
 
         }
+        function setUpdatedDogTracepoints(i, lat, lon, tim) {
+            $('#dogLatitude' + i).val(lat);
+            $('#dogLongitude' + i).val(lon);
+            $('#dogTime' + i).val(tim);
+        }
+
+        function setUpdatedPersonTracepoints(i, lat, lon, tim) {
+            $('#personLatitude' + i).val(lat);
+            $('#personLongitude' + i).val(lon);
+            $('#personTime' + i).val(tim);
+        }
+
+        function removeElement(elementId) {
+            // Removes an element from the document
+            var element = document.getElementById(elementId);
+            element.parentNode.removeChild(element);
+        }
+
+        function validateUpdateTraining() {
+            //here: add validation for form
+            for (var i = 0; i < dogTraceData.length; i++)
+                setUpdatedDogTracepoints(i, dogTraceData[i].latitude, dogTraceData[i].longitude, dogTraceData[i].time);
+
+            for (var i = dogTraceData.length; i < @Model.DogTrackPoints.Count; i++) {
+                removeElement("dogLatitude" + i);
+                removeElement("dogLongitude" + i);
+                removeElement("dogTime" + i);
+            }
+
+            for (var i = 0; i < personTraceData.length; i++)
+                setUpdatedPersonTracepoints(i, personTraceData[i].latitude, personTraceData[i].longitude, personTraceData[i].time);
+
+            for (var i = personTraceData.length; i < @Model.LostPersonTrackPoints.Count; i++) {
+                removeElement("personLatitude" + i);
+                removeElement("personLongitude" + i);
+                removeElement("personTime" + i);
+            }
+
+            //return false;
+        }
+
     </script>
     <script async defer
             src="@googleMapsLinkWithApiKey">
@@ -336,23 +378,39 @@
         @Html.HiddenFor(m => m.LostPersonTrackFilename)
         @Html.HiddenFor(m => m.DogTrackFilename)
         @*@Html.HiddenFor(m => m.DogTrackPoints)*@
+
+        @*for (int i = 0; i < Model.DogTrackPoints.Count; i++)
+        {
+            @Html.Hidden("dogLatitude" + i, 0);
+            @Html.Hidden("dogLongitude" + i, 0);
+            @Html.Hidden("dogTime" + i, 0);
+        }*@
+
         for (int i = 0; i < Model.DogTrackPoints.Count; i++)
         {
-            @Html.HiddenFor(model => Model.DogTrackPoints[i].Ele)
-            @Html.HiddenFor(model => Model.DogTrackPoints[i].Lat)
-            @Html.HiddenFor(model => Model.DogTrackPoints[i].Lon)
-            @Html.HiddenFor(model => Model.DogTrackPoints[i].Time)
-            @Html.HiddenFor(model => Model.DogTrackPoints[i].Extensions)
+            @*@Html.HiddenFor(model => Model.DogTrackPoints[i].Ele)*@
+            @Html.HiddenFor(model => Model.DogTrackPoints[i].Lat, new { @id = "dogLatitude" + i })
+            @Html.HiddenFor(model => Model.DogTrackPoints[i].Lon, new { @id = "dogLongitude" + i })
+            @Html.HiddenFor(model => Model.DogTrackPoints[i].Time, new { @id = "dogTime" + i })
+            @*@Html.HiddenFor(model => Model.DogTrackPoints[i].Extensions)*@
 
         }
         @*@Html.HiddenFor(m => m.LostPersonTrackPoints)*@
+
+        @*for (int i = 0; i < Model.LostPersonTrackPoints.Count; i++)
+        {
+            @Html.Hidden("personLatitude" + i, 0);
+            @Html.Hidden("personLongitude" + i, 0);
+            @Html.Hidden("personTime" + i, 0);
+        }*@
+
         for (int i = 0; i < Model.LostPersonTrackPoints.Count; i++)
         {
-            @Html.HiddenFor(model => Model.LostPersonTrackPoints[i].Ele)
-            @Html.HiddenFor(model => Model.LostPersonTrackPoints[i].Lat)
-            @Html.HiddenFor(model => Model.LostPersonTrackPoints[i].Lon)
-            @Html.HiddenFor(model => Model.LostPersonTrackPoints[i].Time)
-            @Html.HiddenFor(model => Model.LostPersonTrackPoints[i].Extensions)
+            @*@Html.HiddenFor(model => Model.LostPersonTrackPoints[i].Ele)*@
+            @Html.HiddenFor(model => Model.LostPersonTrackPoints[i].Lat, new { @id = "personLatitude" + i })
+            @Html.HiddenFor(model => Model.LostPersonTrackPoints[i].Lon, new { @id = "personLongitude" + i })
+            @Html.HiddenFor(model => Model.LostPersonTrackPoints[i].Time, new { @id = "personTime" + i })
+            @*@Html.HiddenFor(model => Model.LostPersonTrackPoints[i].Extensions)*@
 
         }
         @Html.HiddenFor(m => m.TimeOfDogStart)
@@ -370,12 +428,6 @@
                 </div>
             </div>
             <div class="form-group">
-                @Html.LabelFor(m => m.Comments, new { @class = "col-md-2 control-label form-field" })
-                <div class="col-md-10  form-field">
-                    @Html.TextBoxFor(m => m.Comments, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
                 @Html.LabelFor(m => m.Notes, new { @class = "col-md-2 control-label form-field" })
                 <div class="col-md-10  form-field">
                     @Html.TextBoxFor(m => m.Notes, new { @class = "form-control" })
@@ -389,7 +441,7 @@
             </div>
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" class="btn btn-default form-field" value="Prześlij dane" />
+                    <input type="submit" class="btn btn-default form-field" value="Prześlij dane" onclick="return validateUpdateTraining()"/>
                 </div>
             </div>
         </div>
