@@ -17,42 +17,60 @@
         <div class="form-group">
             @Html.LabelFor(m => m.FirstName, new { @class = "col-md-2 control-label" })
             <div class="col-md-10">
-                @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
+                @Html.TextBoxFor(m => m.FirstName, new { @id = "newUserFirstName", @class = "form-control" })
+            </div>
+            <div class="formValidation" id="newUserFirstNameValidationInfo">
+                To pole musi być uzupełnione.
             </div>
         </div>
         <div class="form-group">
             @Html.LabelFor(m => m.LastName, new { @class = "col-md-2 control-label" })
             <div class="col-md-10">
-                @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
+                @Html.TextBoxFor(m => m.LastName, new { @id = "newUserLastName", @class = "form-control" })
+            </div>
+            <div class="formValidation" id="newUserLastNameValidationInfo">
+                To pole musi być uzupełnione.
             </div>
         </div>
         <div class="form-group">
             @Html.LabelFor(m => m.Username, new { @class = "col-md-2 control-label" })
             <div class="col-md-10">
-                @Html.TextBoxFor(m => m.Username, new { @class = "form-control" })
+                @Html.TextBoxFor(m => m.Username, new { @id = "newUserUsername", @class = "form-control" })
+            </div>
+            <div class="formValidation" id="newUserUsernameValidationInfo">
+                To pole musi być uzupełnione.
             </div>
         </div>
         <div class="form-group">
             @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
             <div class="col-md-10">
-                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                @Html.TextBoxFor(m => m.Email, new { @id = "newUserEmail", @class = "form-control" })
+            </div>
+            <div class="formValidation" id="newUserEmailValidationInfo">
+                To pole musi być uzupełnione.
             </div>
         </div>
         <div class="form-group">
             @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
             <div class="col-md-10">
-                @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                @Html.PasswordFor(m => m.Password, new { @id = "newUserPassword", @class = "form-control" })
+            </div>
+            <div class="formValidation" id="newUserPasswordValidationInfo">
+                To pole musi być uzupełnione.
             </div>
         </div>
         <div class="form-group">
             @Html.LabelFor(m => m.PasswordConfirmation, new { @class = "col-md-2 control-label" })
             <div class="col-md-10">
-                @Html.PasswordFor(m => m.PasswordConfirmation, new { @class = "form-control" })
+                @Html.PasswordFor(m => m.PasswordConfirmation, new { @id = "newUserPasswordConfirmation", @class = "form-control" })
+            </div>
+            <div class="formValidation" id="newUserPasswordConfirmationValidationInfo">
+                To pole musi być uzupełnione.
             </div>
         </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" class="btn btn-default" value="Zarejestruj" />
+                <input type="submit" class="btn btn-default" value="Zarejestruj" onclick="return validateRegistration()" />
             </div>
         </div>
     }
@@ -60,5 +78,48 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
+<script>
+    function validateRegistration() {
+        alert("walidacja start");
+        //alert(typeof $('#addDogDateOfBirth').val());
+        if ($('#newUserFirstName').val() == "" || $('#newUserLastName').val() == "" || $('#newUserUsername').val() == ""
+            || $('#newUserEmail').val() == "" || $('#newUserPassword').val() == "" || $('#newUserPasswordConfirmation').val() == "") {
+            if ($('#newUserFirstName').val() == "")
+                document.getElementById("newUserFirstNameValidationInfo").style.display = "block";
+            else
+                document.getElementById("newUserFirstNameValidationInfo").style.display = "none";
+
+            if ($('#newUserLastName').val() == "")
+                document.getElementById("newUserLastNameValidationInfo").style.display = "block";
+            else
+                document.getElementById("newUserLastNameValidationInfo").style.display = "none";
+
+            alert(typeof $('#newUserUsername').val());
+
+            if ($('#newUserUsername').val() == "")
+                document.getElementById("newUserUsernameValidationInfo").style.display = "block";
+            else
+                document.getElementById("newUserUsernameValidationInfo").style.display = "none";
+
+            if ($('#newUserEmail').val() == "")
+                document.getElementById("newUserEmailValidationInfo").style.display = "block";
+            else
+                document.getElementById("newUserEmailValidationInfo").style.display = "none";
+
+            if ($('#newUserPassword').val() == "")
+                document.getElementById("newUserPasswordValidationInfo").style.display = "block";
+            else
+                document.getElementById("newUserPasswordValidationInfo").style.display = "none";
+
+            if ($('#newUserPasswordConfirmation').val() == "")
+                document.getElementById("newUserPasswordConfirmationValidationInfo").style.display = "block";
+            else
+                document.getElementById("newUserPasswordConfirmationValidationInfo").style.display = "none";
+
+
+            return false;
+        }
+    }
+</script>
 
 
