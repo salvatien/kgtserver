@@ -11,7 +11,7 @@
 
 <div style="margin:60px">
 
-    @using (Html.BeginForm("UploadFile", "DogTrainings", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    @using (Html.BeginForm("Add", "DogTrainings", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         @Html.ValidationSummary(true)
         @Html.HiddenFor(m=> m.TrainingId)

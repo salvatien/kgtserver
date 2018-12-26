@@ -21,7 +21,7 @@
 </head>
 <body>
 
-@using (Html.BeginForm("AddDog", "Dogs",@*new { id = Model.DogId},*@ FormMethod.Post, new { enctype = "multipart/form-data", onsubmit = "validateAddDog()"}))
+@using (Html.BeginForm("AddDog", "Dogs",@*new { id = Model.DogId},*@ FormMethod.Post, new { enctype = "multipart/form-data"@*, onsubmit = "validateAddDog()"*@}))
 {
 @Html.ValidationSummary(true)
 @Html.HiddenFor(m => m.DogId)
@@ -31,6 +31,9 @@
             @Html.LabelFor(m => m.Name, new { @class = "col-md-2 control-label form-field" })
             <div class="col-md-10  form-field">
                 @Html.TextBoxFor(m => m.Name, new { @id = "addDogName", @class = "form-control" })
+            </div>
+            <div id="addDogNameValidationInfo" class="formValidation">
+                To pole musi być uzupełnione.
             </div>
         </div>
         <div class="form-group">
@@ -43,6 +46,9 @@
             @Html.LabelFor(m => m.DateOfBirth, new { @class = "col-md-2 control-label form-field" })
             <div class="col-md-10  form-field">
                 @Html.TextBoxFor(m => m.DateOfBirth, new { type = "date", @id = "addDogDateOfBirth", @class = "form-control" })
+            </div>
+            <div id="addDogDateOfBirthValidationInfo" class="formValidation">
+                To pole musi być uzupełnione.
             </div>
         </div>
         <div class="form-group">
@@ -88,7 +94,7 @@
             *@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" class="btn btn-default form-field" value="Dodaj do bazy" />
+                <input type="submit" class="btn btn-default form-field" value="Dodaj do bazy" onclick="return validateAddDog()"/>
             </div>
         </div>
 
@@ -125,9 +131,44 @@
     }
     
     function validateAddDog() {
+        alert("walidacja start");
         caculateWorkmodeSum();
-        /*if ($('#addDogName').val() = "" //empty?
-        alert("validate")*/
+        var dogName = document.getElementById("addDogName").value;
+        //alert(typeof $('#addDogDateOfBirth').val());
+        if ($('#addDogName').val() == "" || $('#addDogDateOfBirth').val() == "") {
+            if ($('#addDogName').val() == "")
+                document.getElementById("addDogNameValidationInfo").style.display = "block";
+            else
+                document.getElementById("addDogNameValidationInfo").style.display = "none";
+
+            if ($('#addDogDateOfBirth').val() == "")
+                document.getElementById("addDogDateOfBirthValidationInfo").style.display = "block";
+            else
+                document.getElementById("addDogDateOfBirthValidationInfo").style.display = "none";
+
+
+            return false;
+        }
+        
+
+        //if (dogName == "") {
+        //    alert("imie nie jest wypelnione");
+        //    document.getElementById("addDogNameValidationInfo").style.display = "block";
+        //    return false;
+        //}
+
+
+        //var dogDate = document.getElementById("addDogDateOfBirth").value;
+        //if (document.getElementById("addDogDateOfBirth").value == "") {
+        //    alert("data urodzenia nie jest wypelnionea");
+        //    document.getElementById("addDogDateOfBirthValidationInfo").style.display = "block";
+        //    return false;
+        //}
+        //else
+        //    document.getElementById("addDogDateOfBirthValidationInfo").style.display = "none";
+        ////if ($('#addDogName').val(). = "") { //empty?
+        ////    alert("walidacja!");
+        ////}
     }
 </script>
 </body>

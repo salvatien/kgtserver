@@ -171,3 +171,29 @@ img {
 .form-field {
     position:static
 }
+
+.dogInfoWindow {
+    color:red;
+    font-weight: bold;
+}
+
+.personInfoWindow {
+    color: blue;
+    font-weight: bold;
+}
+
+.markerStartButton {
+    background-color: aqua;
+    width: 50%
+}
+
+.markerEndButton {
+    background-color: lightcoral;
+    width: 50%
+}
+
+.formValidation {
+    display: none;
+    color: red;
+    font-weight:bold
+}

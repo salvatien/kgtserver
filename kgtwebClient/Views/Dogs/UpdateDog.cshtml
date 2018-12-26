@@ -47,7 +47,7 @@
 *@
 <div style="margin:60px">
 
-    @using (Html.BeginForm("UpdateDog", "Dogs",@*new { id = Model.DogId},*@ /**/  FormMethod.Post, new { enctype = "multipart/form-data", onsubmit = "caculateWorkmodeSum()" }))
+    @using (Html.BeginForm("UpdateDog", "Dogs",@*new { id = Model.DogId},*@ /**/  FormMethod.Post, new { enctype = "multipart/form-data"@*, onsubmit = "caculateWorkmodeSum()"*@ }))
 {
 @Html.ValidationSummary(true)
 @Html.HiddenFor(m => m.DogId)
@@ -56,7 +56,10 @@
         <div class="form-group">
             @Html.LabelFor(m => m.Name, new { @class = "col-md-2 control-label form-field" })
             <div class="col-md-10  form-field">
-                @Html.TextBoxFor(m => m.Name, new { @Value = Model.Name, @class = "form-control" })
+                @Html.TextBoxFor(m => m.Name, new { @Value = Model.Name, @id = "updateDogName", @class = "form-control" })
+            </div>
+            <div id="updateDogNameValidationInfo" class="formValidation">
+                To pole nie może być puste.
             </div>
         </div>
         <div class="form-group">
@@ -68,7 +71,10 @@
         <div class="form-group">
             @Html.LabelFor(m => m.DateOfBirth, new { @class = "col-md-2 control-label form-field" })
             <div class="col-md-10  form-field">
-                @Html.TextBoxFor(m => m.DateOfBirth, new { @Value = Model.DateOfBirth.ToString("yyyy-MM-dd"), type = "date", @class = "form-control" })
+                @Html.TextBoxFor(m => m.DateOfBirth, new { @Value = Model.DateOfBirth.ToString("yyyy-MM-dd"), type = "date", @id = "updateDogDateOfBirth", @class = "form-control" })
+            </div>
+            <div id="updateDogDateOfBirthValidationInfo" class="formValidation">
+                To pole nie może być puste.
             </div>
         </div>
         <div class="form-group">
@@ -120,7 +126,7 @@
         </div>*@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" class="btn btn-default form-field" value="Prześlij dane" />
+                <input type="submit" class="btn btn-default form-field" value="Prześlij dane" onclick="return validateUpdateDog()" />
             </div>
         </div>
         @*/////////////////////////////////////////////////////*@
@@ -152,6 +158,27 @@
         console.log(@EnumCount);
         console.log("workmode: " + workmodeSum);
         $('#workmodeSum').val(workmodeSum);
+    }
+
+    function validateUpdateDog() {
+        alert("walidacja start");
+        caculateWorkmodeSum();
+        var dogName = document.getElementById("updateDogName").value;
+        //alert(typeof $('#addDogDateOfBirth').val());
+        if ($('#updateDogName').val() == "" || $('#updateDogDateOfBirth').val() == "") {
+            if ($('#updateDogName').val() == "")
+                document.getElementById("updateDogNameValidationInfo").style.display = "block";
+            else
+                document.getElementById("updateDogNameValidationInfo").style.display = "none";
+
+            if ($('#updateDogDateOfBirth').val() == "")
+                document.getElementById("updateDogDateOfBirthValidationInfo").style.display = "block";
+            else
+                document.getElementById("updateDogDateOfBirthValidationInfo").style.display = "none";
+
+
+            return false;
+        }
     }
 </script>
 @*

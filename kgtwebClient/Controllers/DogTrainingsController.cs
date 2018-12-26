@@ -67,15 +67,27 @@ namespace kgtwebClient.Controllers
         {
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+            var blobTrackLinkBase = @"https://kgtstorage.blob.core.windows.net/tracks/";
             HttpResponseMessage responseMessage =
                 await client.GetAsync($"dogtrainings/training?trainingId={trainingId}&dogId={dogId}");
             if (responseMessage.IsSuccessStatusCode)
             {
                 var responseData = responseMessage.Content.ReadAsStringAsync().Result;
                 var dogTraining = JsonConvert.DeserializeObject<DogTrainingModel>(responseData);
-                var dogTrainingViewModel = new DogTrainingViewModel();
-
+                var dogTrainingViewModel = new DogTrainingViewModel() {
+                    Comments = dogTraining.Comments,
+                    Dog = dogTraining.Dog,
+                    DogId = dogTraining.DogId,
+                    DogTrackFilename = dogTraining.DogTrackBlobUrl
+                        .Remove(dogTraining.DogTrackBlobUrl.IndexOf(blobTrackLinkBase), blobTrackLinkBase.Length),
+                    LostPerson = dogTraining.LostPerson,
+                    LostPersonTrackFilename = dogTraining.LostPersonTrackBlobUrl
+                        .Remove(dogTraining.LostPersonTrackBlobUrl.IndexOf(blobTrackLinkBase), blobTrackLinkBase.Length),
+                    Notes = dogTraining.Notes,
+                    Training = dogTraining.Training,
+                    TrainingId = dogTraining.TrainingId,
+                    Weather = dogTraining.Weather
+                };
                 var webRequestDogTrack = WebRequest.Create(dogTraining.DogTrackBlobUrl);
                 try
                 {
@@ -89,6 +101,7 @@ namespace kgtwebClient.Controllers
                         var t = trkseg.Trkpt;
 
                         dogTrainingViewModel.DogTrackPoints = t;
+                        //TODO: fill other fields DogTrainingViewModel class (dog part)
                     }
                 }
                 catch (Exception e)
@@ -110,6 +123,8 @@ namespace kgtwebClient.Controllers
                         var t = trkseg.Trkpt;
 
                         dogTrainingViewModel.LostPersonTrackPoints = t;
+                        //TODO: fill other fields DogTrainingViewModel class (person part)
+
                     }
                 }
                 catch (Exception e)
@@ -128,7 +143,7 @@ namespace kgtwebClient.Controllers
         }
 
         [HttpPost]
-        public ActionResult UpdateTracks(string lostPersonTrackFileName, string dogTrackFileName, Trkseg lostPersonTrackPoints, Trkseg dogTrackPoints)
+        public ActionResult UpdateTracks(int dogId, int trainingId, string lostPersonTrackFileName, string dogTrackFileName, Trkseg lostPersonTrackPoints, Trkseg dogTrackPoints)
         {
             var updatedLostPersonTrackStream = new MemoryStream();
             var lostPersonFileSerializer = new XmlSerializer(typeof(Trkseg));
@@ -156,11 +171,7 @@ namespace kgtwebClient.Controllers
 
             if (responseMessage.IsSuccessStatusCode)    //200 OK
             {
-                //display info
-                var responseData = responseMessage.Content.ReadAsStringAsync().Result;
-                var definition = new { DogId = "", TrainingId = "" };
-                var ids = JsonConvert.DeserializeAnonymousType(responseData, definition);
-                return RedirectToAction("Training", new { dogId = ids.DogId, trainingId = ids.TrainingId });
+                return RedirectToAction("Training", new { dogId, trainingId });
                 //return View("Dog", responseMessage.Content);
             }
             else    // msg why not ok
@@ -175,20 +186,23 @@ namespace kgtwebClient.Controllers
         {
             var lostPersonTrackPoints = new Trkseg { Trkpt = model.LostPersonTrackPoints };
             var dogTrackPoints = new Trkseg { Trkpt = model.DogTrackPoints };
-            UpdateTracks(model.LostPersonTrackFilename, model.DogTrackFilename, lostPersonTrackPoints, dogTrackPoints);
+            UpdateTracks(model.DogId, model.TrainingId, model.LostPersonTrackFilename, model.DogTrackFilename, lostPersonTrackPoints, dogTrackPoints);
 
             var dogTrainingModel = new DogTrainingModel
             {
                 LostPerson = model.LostPerson,
                 Notes = model.Notes,
-                Weather = model.Weather
+                Weather = model.Weather,
+                Comments = model.Comments,
+                DogId = model.DogId,
+                TrainingId = model.TrainingId
             };
             
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
             
-            HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Put, client.BaseAddress + $"dogtrainings?dogId={model.DogId}&trainingId={model.TrainingId}");
+            HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Put, client.BaseAddress + $"dogtrainings/training?dogId={model.DogId}&trainingId={model.TrainingId}");
             
             var dogTrainingSerialized = JsonConvert.SerializeObject(dogTrainingModel);
 
