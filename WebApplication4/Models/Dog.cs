@@ -30,6 +30,7 @@ namespace DogsServer.Models
         public virtual IList<DogAction> DogActions { get; set; }
         public virtual IList<DogTraining> DogTrainings { get; set; }
         public virtual IList<DogEvent> DogEvents { get; set; }
+        public virtual List<DogCertificate> DogCertificates { get; set; }
 
     }
 }

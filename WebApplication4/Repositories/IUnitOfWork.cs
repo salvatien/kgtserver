@@ -13,10 +13,14 @@ namespace DogsServer.Repositories
         DogRepository DogRepository { get; }
         ActionRepository ActionRepository { get; }
         EventRepository EventRepository { get; }
+        CertificateRepository CertificateRepository { get; }
+        DogCertificateRepository DogCertificateRepository { get; }
         DogTrainingCommentRepository DogTrainingCommentRepository { get; }
         DogTrainingRepository DogTrainingRepository { get;  }
         TrainingCommentRepository TrainingCommentRepository { get;  }
         TrainingRepository TrainingRepository { get; }
+        DogEventRepository DogEventRepository { get; }
+        DogActionRepository DogActionRepository { get; }
 
         /// <summary>
         /// Commits all changes

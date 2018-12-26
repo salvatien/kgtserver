@@ -12,12 +12,16 @@ namespace DogsServer.Models
         public virtual DbSet<Dog> Dogs { get; set; }
         public virtual DbSet<Action> Actions { get; set; }
         public virtual DbSet<Event> Events { get; set; }
+        public virtual DbSet<Certificate> Certificates { get; set; }
+        public virtual DbSet<DogCertificate> DogCertificates { get; set; }
         public virtual DbSet<GuideEvent> GuideEvents { get; set; }
         public virtual DbSet<GuideAction> GuideActions { get; set; }
         public virtual DbSet<Training> Trainings { get; set; }
         public virtual DbSet<DogTraining> DogTrainings { get; set; }
+        public virtual DbSet<DogEvent> DogEvents { get; set; }
         public virtual DbSet<TrainingComment> TrainingComments { get; set; }
         public virtual DbSet<DogTrainingComment> DogTrainingComments { get; set; }
+        public virtual DbSet<DogAction> DogActions { get; set; }
         protected override void OnConfiguring
         (DbContextOptionsBuilder optionsBuilder)
         {
@@ -31,6 +35,7 @@ namespace DogsServer.Models
             modelBuilder.Entity<GuideEvent>().HasKey(ge => new { ge.GuideId, ge.EventId });
             modelBuilder.Entity<DogTraining>().HasKey(dt => new { dt.DogId, dt.TrainingId });
             modelBuilder.Entity<DogEvent>().HasKey(de => new { de.DogId, de.EventId });
+            modelBuilder.Entity<DogCertificate>().HasKey(dc => new { dc.DogId, dc.CertificateId });
 
             modelBuilder.Entity<TrainingComment>().HasKey(m => m.TrainingCommentId);
             modelBuilder.Entity<TrainingComment>().HasOne(m => m.Training)
@@ -97,6 +102,14 @@ namespace DogsServer.Models
                 .WithOne(ga => ga.Action)
                 .HasForeignKey(ga => ga.ActionId);
 
+            //dog certificates
+            modelBuilder.Entity<Dog>().HasMany(d => d.DogCertificates)
+                .WithOne(dc => dc.Dog)
+                .HasForeignKey(dc => dc.DogId);
+
+            modelBuilder.Entity<Certificate>().HasMany(c => c.DogCertificates)
+                .WithOne(dc => dc.Certificate)
+                .HasForeignKey(dc => dc.CertificateId);
         }
     }
 }

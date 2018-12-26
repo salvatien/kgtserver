@@ -19,6 +19,8 @@ namespace DogsServer.Repositories
            new ActionRepository(_dbContext);
         public EventRepository EventRepository =>
            new EventRepository(_dbContext);
+        public CertificateRepository CertificateRepository =>
+           new CertificateRepository(_dbContext);
         public DogTrainingCommentRepository DogTrainingCommentRepository => 
             new DogTrainingCommentRepository(_dbContext);
         public DogTrainingRepository DogTrainingRepository => 
@@ -27,7 +29,12 @@ namespace DogsServer.Repositories
             new TrainingCommentRepository(_dbContext);
         public TrainingRepository TrainingRepository =>
             new TrainingRepository(_dbContext);
-
+        public DogCertificateRepository DogCertificateRepository =>
+           new DogCertificateRepository(_dbContext);
+        public DogActionRepository DogActionRepository =>
+           new DogActionRepository(_dbContext);
+        public DogEventRepository DogEventRepository =>
+           new DogEventRepository(_dbContext);
         #endregion
         public UnitOfWork(AppDbContext dbContext)
         {
