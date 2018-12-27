@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using DogsServer.Models;
 using Microsoft.EntityFrameworkCore;
 using DogsServer.Repositories;
-
+using Dogs.ViewModels.Data.Models;
 
 namespace DogsServer.Controllers
 {
@@ -16,32 +16,77 @@ namespace DogsServer.Controllers
         private UnitOfWork unitOfWork = new UnitOfWork(new AppDbContext());
 
         [HttpGet]
-        public List<Event> Get()
+        public List<EventModel> Get()
         {
-            return unitOfWork.EventRepository.GetAll().ToList();
+            var events = unitOfWork.EventRepository.GetAll().ToList();
+            var eventModels = new List<EventModel>();
+            foreach (var oneEvent in events)
+            {
+                var eventModel = new EventModel
+                {
+                    EventId = oneEvent.EventId,
+                    City = oneEvent.City,
+                    Date = oneEvent.Date,
+                    Notes = oneEvent.Notes,
+                    StreetOrLocation = oneEvent.StreetOrLocation,
+                    Title = oneEvent.Title,
+                    GuideIds = oneEvent.GuideEvents.Select(x => x.GuideId).ToList()
+                };
+                eventModels.Add(eventModel);
+            }
+            return eventModels;
         }
 
         [HttpGet("{id}")]
-        public Event Get(int id)
+        public EventModel Get(int id)
         {
-            return unitOfWork.EventRepository.GetById(id);
+            var oneEvent = unitOfWork.EventRepository.GetById(id);
+            var eventModel = new EventModel
+            {
+                EventId = oneEvent.EventId,
+                City = oneEvent.City,
+                Date = oneEvent.Date,
+                Notes = oneEvent.Notes,
+                StreetOrLocation = oneEvent.StreetOrLocation,
+                Title = oneEvent.Title,
+                GuideIds = oneEvent.GuideEvents.Select(x => x.GuideId).ToList()
+            };
+            return eventModel;
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody]Event obj)
+        public IActionResult Post([FromBody]EventModel obj)
         {
-            unitOfWork.EventRepository.Insert(obj);
+            var oneEvent = new Event
+            {
+                EventId = obj.EventId,
+                City = obj.City,
+                Date = obj.Date,
+                Notes = obj.Notes,
+                StreetOrLocation = obj.StreetOrLocation,
+                Title = obj.Title,
+            };
+            unitOfWork.EventRepository.Insert(oneEvent);
             unitOfWork.Commit();
-            return new ObjectResult("Event added successfully!");
+            return new ObjectResult(oneEvent.EventId);
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody]Event obj)
+        public IActionResult Put(int id, [FromBody]EventModel obj)
         {
-            var Event = unitOfWork.EventRepository.GetById(id);
-            Event = obj;
+            var oneEvent = new Event
+            {
+                EventId = obj.EventId,
+                City = obj.City,
+                Date = obj.Date,
+                Notes = obj.Notes,
+                StreetOrLocation = obj.StreetOrLocation,
+                Title = obj.Title,
+            };
+            var oldEvent = unitOfWork.EventRepository.GetById(id);
+            oldEvent = oneEvent;
             unitOfWork.Commit();
-            return new ObjectResult("Event modified successfully!");
+            return new ObjectResult(oldEvent.EventId);
         }
 
         [HttpDelete("{id}")]

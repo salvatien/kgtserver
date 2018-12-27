@@ -16,12 +16,12 @@ namespace kgtwebClient.Helpers
 
         public static bool IsCurrentUserAdmin()
         {
-            return (bool)System.Web.HttpContext.Current.Session["isAdmin"];
+            return (bool)(System.Web.HttpContext.Current.Session["isAdmin"] ?? false);
         }
 
         public static bool IsCurrentUserMember()
         {
-            return (bool)System.Web.HttpContext.Current.Session["isMember"];
+            return (bool)(System.Web.HttpContext.Current.Session["isMember"] ?? false);
         }
 
         public class TokenResponse
