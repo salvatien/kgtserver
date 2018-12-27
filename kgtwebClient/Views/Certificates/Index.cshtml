@@ -1,0 +1,150 @@
+﻿@using Dogs.ViewModels.Data.Models;
+@using kgtwebClient.Helpers;
+
+@model List<Dogs.ViewModels.Data.Models.CertificateModel>
+
+
+@{
+    ViewBag.Title = "Index";
+}
+<div class="tables">
+    <input type="text" id="certificatesSearch" onkeyup="searchByCertificateName()" placeholder="Search for names.." title="Type in a name">
+    <button class="addButton" onclick="location.href='@Url.Action("AddCertificate", "Certificates")'">dodaj Certyfikat</button>
+    @*<button id="button1" onclick="location.href='@Url.Action("DeleteDog","Dogs",new { id=7})'">delete</button> *@
+    <div>
+        <table id="certificatesTable">
+            <tr>
+                <th>ID</th>
+                <th>Nazwa</th>
+                <th>Poziom trudności</th>
+
+                @*<th>Data urodzenia</th>
+                    <th>Poziom</th>
+                    <th>Tryb pracy</th>
+                    <th>Notatki</th>
+                *@
+                <th>Czas obowiązywania</th>
+
+
+            </tr>
+            @foreach (var item in Model)
+
+            {
+                <tr @*onclick="document.location = 'http://kgtwebclient.azurewebsites.net/Dogs/Dog/' + @item.DogId;"  *@>
+                    <td class="tdOnclick">
+                        @item.CertificateId
+                    </td>
+                    <td class="tdOnclick">
+                        @item.Name
+                    </td>
+                    @*<td class="tdOnclick">
+                            @item.DateOfBirth
+                        </td>
+                        <td class="tdOnclick">
+                            @item.Level
+                        </td>
+                        <td class="tdOnclick">
+                            @item.Workmode
+                        </td>
+                        <td class="tdOnclick">
+                            @item.Notes
+                        </td>
+                    *@
+
+
+                    <td class="tdOnclick">
+                        @item.Level
+                    </td>
+
+                    <td class="tdOnclick">
+                        @item.ValidThrough
+                    </td>
+
+                    @*buttons *@
+                    <td style="background-color:white">
+                        <button class="displayButton" onclick="location.href='@Url.Action("Certificate", "Certificates", new { id = @item.CertificateId })'">wyświetl</button>
+                    </td>
+                    @{ if (LoginHelper.IsCurrentUserAdmin())
+                        {
+                            <td style="background-color:white">
+                                @*location.href='@Url.Action("DeleteDog", "Dogs", new { id = @item.DogId })'*@
+                                <button class="deleteButton" onclick="deleteCertificate(@item.CertificateId)" id="@("deleteCertificateButton" + item.CertificateId)">usuń</button>
+                            </td>
+                            <td style="background-color:white">
+                                <button class="updateButton" onclick="location.href='@Url.Action("UpdateCertificate", "Certificates", new { id = @item.CertificateId })'">zmień</button>
+                            </td>
+                        } }
+
+                </tr>
+
+            }
+
+        </table>
+    </div>
+</div>
+<script>
+    function searchByCertificateName() {
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("certificatesSearch");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("certificatesTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+             /* search by dog's name*/
+            tdCertificateName = tr[i].getElementsByTagName("td")[1];
+            /* search by guide's  name*/
+            //tdGuideName = tr[i].getElementsByTagName("td")[2];
+            if (tdDogName /*|| tdGuideName*/) {
+                if (tdCertificateName.innerHTML.toUpperCase().indexOf(filter) > -1 /*|| tdGuideName.innerHTML.toUpperCase().indexOf(filter) > -1*/) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+    @* location.href='@Url.Action("DeleteDog", "Dogs", new { id = @item.DogId })' *@
+
+    function deleteCertificate(certificateId) {
+        // var id = dogId;
+        alert("Delete certificate: " + certificateId);
+        //document.getElementById("disp").innerHTML = "hi";
+        $.ajax({
+            url: "@Url.Action("DeleteCertificate", "Certificates")",
+            method: "POST", //First change type to method here
+
+            data: {
+                id: certificateId, // Second add quotes on the value.
+            },
+            success: function (response) {
+                if (response) {
+                    //var resp = jQuery.parseJSON(response);
+                    var resp = response;
+                    //console.log(resp);
+                    if (resp.success) {
+                        alert("udało się usunac certyfikat o id: " + resp.id);
+                        //usunięcie z tabeli tr ktory zawiera button o id deleteDogButton<id>
+                        //var buttonId = "deleteDogButton" + dogId;
+                    var button = $("#deleteCertificateButton" + resp.id );
+
+                    var tableRow = button.closest("tr");
+                        //alert(button.text());
+                        tableRow.remove();
+                    }
+                }
+            },
+            error: function () {
+                alert("error");
+            }
+
+        });
+    }
+
+    //$(document).ready(function () {
+    //    $('#dogsTable').on("click", "td.tdOnclick", function () {
+    //        alert('ho ho ho');
+    //    });
+    //});
+</script>
+
+

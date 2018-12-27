@@ -1,0 +1,61 @@
+﻿@using Dogs.ViewModels.Data.Models;
+@using kgtwebClient.Helpers;
+@model Dogs.ViewModels.Data.Models.CertificateModel
+
+@{
+    ViewBag.Title = "Cerfiticate";
+}
+
+
+<div style="margin:60px">
+    @{
+        if (LoginHelper.IsCurrentUserAdmin())
+        {
+            @Html.ActionLink("--Update Certificate--", "UpdateCertificate", "Certificates", new { id = Model.CertificateId }, null)
+        }
+    }
+
+    @Html.ActionLink("Back to List", "Index")
+    <div class="data">
+        <h4>@Html.DisplayFor(model => model.Name)</h4>
+        <hr />
+        <dl class="dl-horizontal" style="float:left">
+            <dt>
+                @Html.DisplayNameFor(model => model.Level)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Level)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Description)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.ValidThrough)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.ValidThrough)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.DogIds)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.DogIds)
+            </dd>
+
+        </dl>
+    </div>
+</div>
+<p style="margin:60px">
+    
+</p>
+
+

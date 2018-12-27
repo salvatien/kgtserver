@@ -1,0 +1,57 @@
+﻿
+@{
+    ViewBag.Title = "UpdateCertificate";
+}
+
+@using kgtwebClient.Helpers;
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model Dogs.ViewModels.Data.Models.CertificateModel
+
+
+<div style="margin:60px">
+
+    @using (Html.BeginForm("UpdateCertificate", "Certificates", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(m => m.CertificateId)
+        @* <fieldset>*@
+        <div style="float:left">
+            <div class="form-group">
+                @Html.LabelFor(m => m.Name, new { @class = "col-md-2 control-label form-field" })
+                <div class="col-md-10  form-field">
+                    @Html.TextBoxFor(m => m.Name, new { @Value = Model.Name, @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Description, new { @class = "col-md-2 control-label form-field" })
+                <div class="col-md-10  form-field">
+                    @Html.TextAreaFor(m => m.Description, new { @Value = Model.Description, @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Level, new { @class = "col-md-2 control-label form-field" })
+                <div class="col-md-10  form-field">
+                    @Html.TextBoxFor(m => m.Level, new { @Value = Model.Level, @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.ValidThrough, new { @class = "col-md-2 control-label  form-field" })
+                <div class="col-md-10 form-field">
+                    @Html.TextBoxFor(m => m.ValidThrough, new { @Value = Model.ValidThrough, @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" class="btn btn-default form-field" value="Prześlij dane" />
+                </div>
+            </div>
+            @*/////////////////////////////////////////////////////*@
+        </div>
+    }
+</div>
