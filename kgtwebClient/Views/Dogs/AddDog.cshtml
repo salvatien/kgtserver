@@ -8,6 +8,8 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     var EnumCount = Enum.GetValues(typeof(DogWorkmode)).Length;
     var guides = GuideHelpers.GetAllGuidesIdAndName();
+    var currentGuide = guides.Where(x => x.Value == LoginHelper.GetCurrentUserId().ToString()).FirstOrDefault();
+    currentGuide.Selected = true;
 }
 
 

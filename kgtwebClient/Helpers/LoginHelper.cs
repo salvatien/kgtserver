@@ -11,17 +11,23 @@ namespace kgtwebClient.Helpers
         public static bool IsAuthenticated()
         {
             return (!String.IsNullOrWhiteSpace((string)System.Web.HttpContext.Current.Session["token"])
-               && !String.IsNullOrWhiteSpace((string)System.Web.HttpContext.Current.Session["CurrentUserId"]));
+               && !String.IsNullOrWhiteSpace(((int)System.Web.HttpContext.Current.Session["CurrentUserId"]).ToString()));
         }
 
         public static bool IsCurrentUserAdmin()
         {
-            return (bool)System.Web.HttpContext.Current.Session["isAdmin"];
+
+            return (bool)(System.Web.HttpContext.Current.Session["isAdmin"] ?? false);
         }
 
         public static bool IsCurrentUserMember()
         {
             return (bool)System.Web.HttpContext.Current.Session["isMember"];
+        }
+
+        public static int GetCurrentUserId()
+        {
+            return (int)(System.Web.HttpContext.Current.Session["CurrentUserId"] ?? 0);
         }
 
         public class TokenResponse

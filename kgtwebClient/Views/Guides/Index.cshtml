@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "Index";
 }
-
+@using kgtwebClient.Helpers;
 @using Dogs.ViewModels.Data.Models;
 @model Dogs.ViewModels.Data.Models.GuideListModel
 
@@ -36,27 +36,32 @@
             {
             <tr @*onclick="document.location = 'http://kgtwebclient.azurewebsites.net/Dogs/Dog/' + @item.DogId;"  *@>
                 <td class="tdOnclick">
+                    @item.GuideId
+                </td>
+                <td class="tdOnclick">
                     @item.FirstName
                 </td>
                 <td class="tdOnclick">
                     @item.LastName
                 </td>
 
-
-
-                @*<td class="tdOnclick">@item.GuideIdAndName.GuideName</td>*@
-
-
-                <td style="background-color:white">
-                    @*location.href='@Url.Action("DeleteDog", "Dogs", new { id = @item.DogId })'*@
-                    <button class="deleteButton" onclick="deleteGuide(@item.GuideId)" id="@("deleteGuideButton" + item.GuideId)">usuń</button>
-                </td>
-                <td style="background-color:white">
-                    <button class="updateButton" onclick="location.href='@Url.Action("UpdateGuide", "Guides", new { id = @item.GuideId })'">zmień</button>
-                </td>
                 <td style="background-color:white">
                     <button class="displayButton" onclick="location.href='@Url.Action("Guide", "Guides", new { id = @item.GuideId })'">wyświetl</button>
                 </td>
+
+                @{ if (LoginHelper.IsCurrentUserAdmin() || LoginHelper.GetCurrentUserId() == item.GuideId)
+                    {
+
+                        <td style="background-color:white">
+                            @*location.href='@Url.Action("DeleteDog", "Dogs", new { id = @item.DogId })'*@
+                            <button class="deleteButton" onclick="deleteGuide(@item.GuideId)" id="@("deleteGuideButton" + item.GuideId)">usuń</button>
+                        </td>
+                        <td style="background-color:white">
+                            <button class="updateButton" onclick="location.href='@Url.Action("UpdateGuide", "Guides", new { id = @item.GuideId })'">zmień</button>
+                        </td>
+                    }
+                }
+
             </tr>
 
             }

@@ -90,23 +90,18 @@
                     @Html.TextBoxFor(m => m.Phone, new { @Value = Model.Phone, @class = "form-control" })
                 </div>
             </div>
-            <div class="form-group">
-                @Html.CheckBox("IsAdmin", checkboxAdmin)
-                @Html.LabelFor(m => m.IsAdmin, new { @class = "col-md-2 control-label form-field" })
-
-                @*<div class="col-md-10 form-field">
-            @Html.CheckBox("IsAdmin", checkboxAdmin)
-        </div>*@
-            </div>
-            <div class="form-group">
-                @Html.CheckBox("IsMember", checkboxMember)
-                @Html.LabelFor(m => m.IsMember, new { @class = "col-md-2 control-label form-field" })
-                @*<div class="col-md-10 form-field">*@
-                @*@Html.CheckBox("IsMember", checkboxMember)*@
-
-                @*@Html.CheckBoxFor(m => m.IsMember, new { @Value = Model.IsMember, @class = "form-control" })*@
-                @*</div>*@
-            </div>
+            @{  if (LoginHelper.IsCurrentUserAdmin())
+                {
+                    <div class="form-group">
+                        @Html.CheckBox("IsAdmin", checkboxAdmin)
+                        @Html.LabelFor(m => m.IsAdmin, new { @class = "col-md-2 control-label form-field" })
+                    </div>
+                    <div class="form-group">
+                        @Html.CheckBox("IsMember", checkboxMember)
+                        @Html.LabelFor(m => m.IsMember, new { @class = "col-md-2 control-label form-field" })
+                    </div>
+                }
+                }
             <div class="form-group">
                 @Html.LabelFor(m => m.Notes, new { @class = "col-md-2 control-label form-field" })
                 <div class="col-md-10 form-field">

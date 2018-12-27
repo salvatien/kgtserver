@@ -1,5 +1,7 @@
 ﻿@using Dogs.ViewModels.Data.Models;
+@using kgtwebClient.Helpers;
 @model Dogs.ViewModels.Data.Models.DogModel
+
 
 @{
     ViewBag.Title = "Dog";
@@ -65,8 +67,12 @@
     </div>
 </div>
 <p style="margin:60px">
-    @Html.ActionLink("--Update Dog--", "UpdateDog", "Dogs", new {id = Model.DogId}, null)
-
+    @{ 
+        if (LoginHelper.IsCurrentUserAdmin() || LoginHelper.GetCurrentUserId() == Model.GuideIdAndName.Id)
+        {
+            @Html.ActionLink("--Update Dog--", "UpdateDog", "Dogs", new { id = Model.DogId }, null)
+        }
+    }
 
     @Html.ActionLink("Back to List", "Index")
 </p>

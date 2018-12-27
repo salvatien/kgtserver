@@ -1,4 +1,6 @@
 ﻿@using Dogs.ViewModels.Data.Models;
+@using kgtwebClient.Helpers;
+
 @model Dogs.ViewModels.Data.Models.DogsListModel
 
 
@@ -60,16 +62,21 @@
                     @item.Breed
                 </td>
 
-                <td style="background-color:white">
-                    @*location.href='@Url.Action("DeleteDog", "Dogs", new { id = @item.DogId })'*@
-                    <button class="deleteButton" onclick="deleteDog(@item.DogId)" id="@("deleteDogButton" + item.DogId)">usuń</button>
-                </td>
-                <td style="background-color:white">
-                    <button class="updateButton" onclick="location.href='@Url.Action("UpdateDog", "Dogs", new { id = @item.DogId })'">zmień</button>
-                </td>
+                @*buttons *@
                 <td style="background-color:white">
                     <button class="displayButton" onclick="location.href='@Url.Action("Dog", "Dogs", new { id = @item.DogId })'">wyświetl</button>
                 </td>
+                @{ if (LoginHelper.IsCurrentUserAdmin() || LoginHelper.GetCurrentUserId() == item.GuideIdAndName.Id)
+                    {
+                        <td style="background-color:white">
+                            @*location.href='@Url.Action("DeleteDog", "Dogs", new { id = @item.DogId })'*@
+                            <button class="deleteButton" onclick="deleteDog(@item.DogId)" id="@("deleteDogButton" + item.DogId)">usuń</button>
+                        </td>
+                        <td style="background-color:white">
+                            <button class="updateButton" onclick="location.href='@Url.Action("UpdateDog", "Dogs", new { id = @item.DogId })'">zmień</button>
+                        </td>
+                    } }
+
             </tr>
 
             }

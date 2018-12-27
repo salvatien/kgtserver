@@ -4,14 +4,19 @@
 }
 
 @using Dogs.ViewModels.Data.Models;
+@using kgtwebClient.Helpers;
 @model Dogs.ViewModels.Data.Models.GuideModel
 
 
 
 <div style="margin:60px">
     <p style="margin:60px">
-        @Html.ActionLink("--Update Guide--", "UpdateGuide", "Guides", new { id = Model.GuideId }, null)
-
+        @{
+            if (LoginHelper.IsCurrentUserAdmin() || LoginHelper.GetCurrentUserId() == Model.GuideId)
+            {
+                @Html.ActionLink("--Update Guide--", "UpdateGuide", "Guides", new { id = Model.GuideId }, null)
+            }
+        }
         @Html.ActionLink("Back to List", "Index")
     </p>
     <div class="data">

@@ -87,7 +87,7 @@ namespace kgtwebClient.Controllers
 
                 var principal = new JwtSecurityTokenHandler().ValidateToken(token, validationParameters, out validatedToken);
                 var claims = principal.Claims;
-                var userId = principal.Claims.Where(c => c.Type == "KgtId").Select(c => c.Value).FirstOrDefault();
+                var userId = Int32.Parse(principal.Claims.Where(c => c.Type == "KgtId").Select(c => c.Value).FirstOrDefault());
                 serverHttpClient.DefaultRequestHeaders.Accept.Clear();
                 serverHttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
