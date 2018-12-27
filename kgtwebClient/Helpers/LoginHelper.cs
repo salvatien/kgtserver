@@ -13,6 +13,17 @@ namespace kgtwebClient.Helpers
             return (!String.IsNullOrWhiteSpace((string)System.Web.HttpContext.Current.Session["token"])
                && !String.IsNullOrWhiteSpace((string)System.Web.HttpContext.Current.Session["CurrentUserId"]));
         }
+
+        public static bool IsCurrentUserAdmin()
+        {
+            return (bool)System.Web.HttpContext.Current.Session["isAdmin"];
+        }
+
+        public static bool IsCurrentUserMember()
+        {
+            return (bool)System.Web.HttpContext.Current.Session["isMember"];
+        }
+
         public class TokenResponse
         {
             [JsonProperty(PropertyName = "access_token")]

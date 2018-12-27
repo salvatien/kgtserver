@@ -9,6 +9,7 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using Dogs.ViewModels.Data.Models;
 using Dogs.ViewModels.Data.Models.Account;
 using kgtwebClient.Helpers;
 using Microsoft.IdentityModel.Tokens;
@@ -87,14 +88,24 @@ namespace kgtwebClient.Controllers
                 var principal = new JwtSecurityTokenHandler().ValidateToken(token, validationParameters, out validatedToken);
                 var claims = principal.Claims;
                 var userId = principal.Claims.Where(c => c.Type == "KgtId").Select(c => c.Value).FirstOrDefault();
+                serverHttpClient.DefaultRequestHeaders.Accept.Clear();
+                serverHttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                System.Web.HttpContext.Current.Session.Timeout = 30;
-                System.Web.HttpContext.Current.Session["CurrentUserId"] = userId;
-                System.Web.HttpContext.Current.Session["token"] = token;
+                HttpResponseMessage responseMessage = serverHttpClient.GetAsync("guides/" + userId).Result;
+                if (responseMessage.IsSuccessStatusCode)
+                {
+                    var responseData = responseMessage.Content.ReadAsStringAsync().Result;
+                    var guide = JsonConvert.DeserializeObject<GuideModel>(responseData);
+                    System.Web.HttpContext.Current.Session.Timeout = 30;
+                    System.Web.HttpContext.Current.Session["CurrentUserId"] = userId;
+                    System.Web.HttpContext.Current.Session["token"] = token;
+                    System.Web.HttpContext.Current.Session["isMember"] = guide.IsMember;
+                    System.Web.HttpContext.Current.Session["isAdmin"] = guide.IsAdmin;
+                }
             }
-            else if(identityApiResponseMessage.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            else if (identityApiResponseMessage.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
-                return RedirectToAction("Error", "Home", new { error = "Błędny login lub hasło (lub inny błąd ale raczej to :D)."});
+                return RedirectToAction("Error", "Home", new { error = "Błędny login lub hasło (lub inny błąd ale raczej to :D)." });
             }
             else
             {
@@ -157,6 +168,10 @@ namespace kgtwebClient.Controllers
                         System.Web.HttpContext.Current.Session.Timeout = 30;
                         System.Web.HttpContext.Current.Session["CurrentUserId"] = responseServerData;
                         System.Web.HttpContext.Current.Session["token"] = token;
+                        System.Web.HttpContext.Current.Session["isMember"] = false;
+                        System.Web.HttpContext.Current.Session["isAdmin"] = false;
+
+
                     }
                 }
                 else if (identityApiResponseMessage.StatusCode == System.Net.HttpStatusCode.BadRequest)
