@@ -22,12 +22,12 @@ namespace DogsServer.Repositories
 
         public new IQueryable<Guide> SearchFor(Expression<Func<Guide, bool>> predicate)
         {
-            return DbSet.Include(x=> x.Dogs).Include(x=> x.GuideActions).Include(x => x.GuideEvents).Where(predicate);
+            return DbSet.Include(x=> x.Dogs).Include(x => x.GuideEvents).Where(predicate);
         }
 
         public new IQueryable<Guide> GetAll()
         {
-            return DbSet.Include(x => x.Dogs).Include(x => x.GuideEvents).Include(x => x.GuideActions);
+            return DbSet.Include(x => x.Dogs).Include(x => x.GuideEvents);
         }
 
         public Guide GetById(int id)
@@ -35,7 +35,7 @@ namespace DogsServer.Repositories
             //return DbSet.Find(id);
             //var dog = DbSet.Where(x => x.DogID == id).Include(x => x.Guide).FirstOrDefault();
             //return dog;
-            var guide = DbSet.Where(x => x.GuideId == id).Include(x => x.Dogs).Include(x => x.GuideEvents).Include(x => x.GuideActions).FirstOrDefault();
+            var guide = DbSet.Where(x => x.GuideId == id).Include(x => x.Dogs).Include(x => x.GuideEvents).FirstOrDefault();
             return guide;
         }
 
