@@ -15,8 +15,6 @@ namespace DogsServer.Repositories
            new GuideRepository(_dbContext);
         public DogRepository DogRepository =>
            new DogRepository(_dbContext);
-        public ActionRepository ActionRepository =>
-           new ActionRepository(_dbContext);
         public EventRepository EventRepository =>
            new EventRepository(_dbContext);
         public CertificateRepository CertificateRepository =>
@@ -31,8 +29,6 @@ namespace DogsServer.Repositories
             new TrainingRepository(_dbContext);
         public DogCertificateRepository DogCertificateRepository =>
            new DogCertificateRepository(_dbContext);
-        public DogActionRepository DogActionRepository =>
-           new DogActionRepository(_dbContext);
         public DogEventRepository DogEventRepository =>
            new DogEventRepository(_dbContext);
         #endregion

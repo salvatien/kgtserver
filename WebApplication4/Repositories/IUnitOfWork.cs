@@ -11,7 +11,6 @@ namespace DogsServer.Repositories
     {
         GuideRepository GuideRepository { get; }
         DogRepository DogRepository { get; }
-        ActionRepository ActionRepository { get; }
         EventRepository EventRepository { get; }
         CertificateRepository CertificateRepository { get; }
         DogCertificateRepository DogCertificateRepository { get; }
@@ -20,7 +19,6 @@ namespace DogsServer.Repositories
         TrainingCommentRepository TrainingCommentRepository { get;  }
         TrainingRepository TrainingRepository { get; }
         DogEventRepository DogEventRepository { get; }
-        DogActionRepository DogActionRepository { get; }
 
         /// <summary>
         /// Commits all changes

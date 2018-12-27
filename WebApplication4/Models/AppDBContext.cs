@@ -10,18 +10,15 @@ namespace DogsServer.Models
     {
         public virtual DbSet<Guide> Guides { get; set; }
         public virtual DbSet<Dog> Dogs { get; set; }
-        public virtual DbSet<Action> Actions { get; set; }
         public virtual DbSet<Event> Events { get; set; }
         public virtual DbSet<Certificate> Certificates { get; set; }
         public virtual DbSet<DogCertificate> DogCertificates { get; set; }
         public virtual DbSet<GuideEvent> GuideEvents { get; set; }
-        public virtual DbSet<GuideAction> GuideActions { get; set; }
         public virtual DbSet<Training> Trainings { get; set; }
         public virtual DbSet<DogTraining> DogTrainings { get; set; }
         public virtual DbSet<DogEvent> DogEvents { get; set; }
         public virtual DbSet<TrainingComment> TrainingComments { get; set; }
         public virtual DbSet<DogTrainingComment> DogTrainingComments { get; set; }
-        public virtual DbSet<DogAction> DogActions { get; set; }
         protected override void OnConfiguring
         (DbContextOptionsBuilder optionsBuilder)
         {
@@ -30,8 +27,6 @@ namespace DogsServer.Models
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<GuideAction>().HasKey(ga => new { ga.GuideId, ga.ActionId });
-            modelBuilder.Entity<DogAction>().HasKey(da => new { da.DogId, da.ActionId });
             modelBuilder.Entity<GuideEvent>().HasKey(ge => new { ge.GuideId, ge.EventId });
             modelBuilder.Entity<DogTraining>().HasKey(dt => new { dt.DogId, dt.TrainingId });
             modelBuilder.Entity<DogEvent>().HasKey(de => new { de.DogId, de.EventId });
@@ -75,15 +70,6 @@ namespace DogsServer.Models
                 .WithOne(de => de.Dog)
                 .HasForeignKey(de => de.DogId);
 
-            //dog actions
-            modelBuilder.Entity<Dog>().HasMany(d => d.DogActions)
-                .WithOne(da => da.Dog)
-                .HasForeignKey(da => da.DogId);
-
-            modelBuilder.Entity<Action>().HasMany(a => a.GuideActions)
-                .WithOne(ga => ga.Action)
-                .HasForeignKey(ga => ga.ActionId);
-
             //guide events
             modelBuilder.Entity<Guide>().HasMany(g => g.GuideEvents)
                 .WithOne(ge => ge.Guide)
@@ -93,14 +79,6 @@ namespace DogsServer.Models
                 .WithOne(ge => ge.Event)
                 .HasForeignKey(ge => ge.EventId);
 
-            //guide actions
-            modelBuilder.Entity<Guide>().HasMany(g => g.GuideActions)
-                .WithOne(ga => ga.Guide)
-                .HasForeignKey(ga => ga.GuideId);
-
-            modelBuilder.Entity<Action>().HasMany(a => a.GuideActions)
-                .WithOne(ga => ga.Action)
-                .HasForeignKey(ga => ga.ActionId);
 
             //dog certificates
             modelBuilder.Entity<Dog>().HasMany(d => d.DogCertificates)

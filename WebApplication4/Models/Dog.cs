@@ -27,7 +27,6 @@ namespace DogsServer.Models
         public string Notes { get; set; }
         [Required]
         public virtual Guide Guide { get; set; }
-        public virtual IList<DogAction> DogActions { get; set; }
         public virtual IList<DogTraining> DogTrainings { get; set; }
         public virtual IList<DogEvent> DogEvents { get; set; }
         public virtual List<DogCertificate> DogCertificates { get; set; }
