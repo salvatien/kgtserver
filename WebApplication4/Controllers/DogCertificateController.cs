@@ -64,15 +64,8 @@ namespace DogsServer.Controllers
         [HttpPut]
         public IActionResult Put(int dogId, int certificateId, [FromBody]DogCertificateModel obj)
         {
-            var dogCert = new DogCertificate
-            {
-                DogId = obj.DogId,
-                CertificateId = obj.CertificateId,
-                AcquiredOn = obj.AcquiredOn
-            };
-
             var dogCertificate = unitOfWork.DogCertificateRepository.GetByIds(dogId, certificateId);
-            dogCertificate = dogCert;
+            dogCertificate.AcquiredOn = obj.AcquiredOn;
             unitOfWork.Commit();
             return new ObjectResult(new { dogCertificate.DogId, dogCertificate.CertificateId });
         }

@@ -74,17 +74,12 @@ namespace DogsServer.Controllers
         {
 
             var certificate = unitOfWork.CertificateRepository.GetById(id);
-            var newCert = new Certificate
-            {
-                CertificateId = certificate.CertificateId,
-                Name = obj.Name,
-                Level = obj.Level,
-                Description = obj.Description,
-                ValidThrough = obj.ValidThrough
-            };
-            certificate = newCert;
+            certificate.Name = obj.Name;
+            certificate.Level = obj.Level;
+            certificate.Description = obj.Description;
+            certificate.ValidThrough = obj.ValidThrough;
             unitOfWork.Commit();
-            return new ObjectResult(newCert.CertificateId);
+            return new ObjectResult(certificate.CertificateId);
         }
 
         [HttpDelete("{id}")]
