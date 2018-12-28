@@ -14,11 +14,7 @@ namespace kgtwebClient.Helpers
 {
     public class GuideHelpers
     {
-#if DEBUG
-        static string url = "http://localhost:12321/api/";
-#else
-        static string url = "http://kgt.azurewebsites.net/api/";
-#endif
+        static string url = System.Configuration.ConfigurationManager.AppSettings["ServerBaseUrl"];
         private static readonly HttpClient client = new HttpClient { BaseAddress = new Uri(url) };
 
         public static List<SelectListItem> GetAllGuidesIdAndName()

@@ -345,6 +345,8 @@
                 setUpdatedDogTracepoints(i, dogTraceData[i].latitude, dogTraceData[i].longitude, dogTraceData[i].time);
 
             for (var i = dogTraceData.length; i < @Model.DogTrackPoints.Count; i++) {
+                console.log("dogTraceDataLength:" + dogTraceData.length);
+                console.log("model dog track points: " + @Model.DogTrackPoints.Count);
                 removeElement("dogLatitude" + i);
                 removeElement("dogLongitude" + i);
                 removeElement("dogTime" + i);

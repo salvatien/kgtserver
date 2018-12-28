@@ -99,7 +99,7 @@ namespace Dogs.Identity.Api.Controllers
                     {
                         await signInManager.SignInAsync(user, isPersistent: false);
                         var token = GetToken(user);
-                        var url = "http://localhost:12321/api/";
+                        var url = System.Configuration.ConfigurationManager.AppSettings["ServerBaseUrl"];
                         HttpClient client = new HttpClient { BaseAddress = new Uri(url) };
 
                         client.DefaultRequestHeaders.Accept.Clear();

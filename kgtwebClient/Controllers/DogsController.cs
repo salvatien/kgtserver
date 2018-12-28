@@ -16,13 +16,7 @@ namespace kgtwebClient.Controllers
 {
     public class DogsController : Controller
     {
-
-        //The URL of the WEB API Service
-        #if DEBUG
-        static string url = "http://localhost:12321/api/";
-        #else
-        static string url = "http://kgt.azurewebsites.net/api/";
-        #endif
+        static string url = System.Configuration.ConfigurationManager.AppSettings["ServerBaseUrl"];
         private static readonly HttpClient client = new HttpClient { BaseAddress = new Uri(url) };
 
 
