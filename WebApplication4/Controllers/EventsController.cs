@@ -63,6 +63,7 @@ namespace DogsServer.Controllers
                 City = obj.City,
                 Date = obj.Date,
                 Notes = obj.Notes,
+                Description = obj.Description,
                 StreetOrLocation = obj.StreetOrLocation,
                 Title = obj.Title,
             };

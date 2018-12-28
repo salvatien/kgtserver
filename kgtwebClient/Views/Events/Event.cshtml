@@ -1,0 +1,74 @@
+﻿@using Dogs.ViewModels.Data.Models;
+@using kgtwebClient.Helpers;
+@model Dogs.ViewModels.Data.Models.EventModel
+{
+    ViewBag.Title = "Event";
+}
+
+
+<div style="margin:60px">
+    @{
+        if (LoginHelper.IsCurrentUserAdmin())
+        {
+            @Html.ActionLink("--Update Event--", "UpdateEvent", "Events", new { id = Model.EventId }, null)
+        }
+    }
+
+    @Html.ActionLink("Back to List", "Index")
+    <div class="data">
+        <h4>@Html.DisplayFor(model => model.Title)</h4>
+        <hr />
+        <dl class="dl-horizontal" style="float:left">
+            <dt>
+                @Html.DisplayNameFor(model => model.Date)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Date)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Description)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.City)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.City)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.StreetOrLocation)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.StreetOrLocation)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.DogIds)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.DogIds)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.GuideIds)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.GuideIds)
+            </dd>
+
+        </dl>
+    </div>
+</div>
+<p style="margin:60px">
+
+</p>
+
+

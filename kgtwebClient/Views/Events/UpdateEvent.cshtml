@@ -1,0 +1,62 @@
+﻿
+@{
+    ViewBag.Title = "UpdateEvent";
+}
+
+@using kgtwebClient.Helpers;
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model Dogs.ViewModels.Data.Models.EventModel
+
+<div style="margin:60px">
+
+    @using (Html.BeginForm("UpdateEvent", "Events", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(m => m.EventId)
+        @* <fieldset>*@
+    <div style="float:left">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Title, new { @class = "col-md-2 control-label form-field" })
+            <div class="col-md-10  form-field">
+                @Html.TextBoxFor(m => m.Title, new { @Value = Model.Title, @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Description, new { @class = "col-md-2 control-label form-field" })
+            <div class="col-md-10  form-field">
+                @Html.TextAreaFor(m => m.Description, new { @Value = Model.Description, @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Date, new { @class = "col-md-2 control-label form-field" })
+            <div class="col-md-10  form-field">
+                @Html.TextBoxFor(m => m.Date, new { @Value = Model.Date, @type = "date", @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.City, new { @class = "col-md-2 control-label  form-field" })
+            <div class="col-md-10 form-field">
+                @Html.TextBoxFor(m => m.City, new { @Value = Model.City, @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.StreetOrLocation, new { @class = "col-md-2 control-label  form-field" })
+            <div class="col-md-10 form-field">
+                @Html.TextBoxFor(m => m.StreetOrLocation, new { @Value = Model.StreetOrLocation, @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" class="btn btn-default form-field" value="Prześlij dane" />
+            </div>
+        </div>
+        @*/////////////////////////////////////////////////////*@
+    </div>
+    }
+</div>

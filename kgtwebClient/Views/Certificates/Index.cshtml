@@ -94,7 +94,7 @@
             tdCertificateName = tr[i].getElementsByTagName("td")[1];
             /* search by guide's  name*/
             //tdGuideName = tr[i].getElementsByTagName("td")[2];
-            if (tdDogName /*|| tdGuideName*/) {
+            if (tdCertificateName /*|| tdGuideName*/) {
                 if (tdCertificateName.innerHTML.toUpperCase().indexOf(filter) > -1 /*|| tdGuideName.innerHTML.toUpperCase().indexOf(filter) > -1*/) {
                     tr[i].style.display = "";
                 } else {

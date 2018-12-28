@@ -169,6 +169,7 @@
     <Compile Include="Controllers\CertificatesController.cs" />
     <Compile Include="Controllers\DogsController.cs" />
     <Compile Include="Controllers\DogTrainingsController.cs" />
+    <Compile Include="Controllers\EventsController.cs" />
     <Compile Include="Controllers\GuidesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\TrainingsController.cs" />
@@ -335,6 +336,10 @@
     <Content Include="Views\Certificates\Certificate.cshtml" />
     <Content Include="Views\Certificates\AddCertificate.cshtml" />
     <Content Include="Views\Certificates\UpdateCertificate.cshtml" />
+    <Content Include="Views\Events\Index.cshtml" />
+    <Content Include="Views\Events\Event.cshtml" />
+    <Content Include="Views\Events\AddEvent.cshtml" />
+    <Content Include="Views\Events\UpdateEvent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,0 +1,148 @@
+﻿@using Dogs.ViewModels.Data.Models;
+@using kgtwebClient.Helpers;
+
+@model List<Dogs.ViewModels.Data.Models.EventModel>
+
+
+@{
+    ViewBag.Title = "Index";
+}
+<div class="tables">
+    <input type="text" id="eventsSearch" onkeyup="searchByEventName()" placeholder="Search for names.." title="Type in a name">
+    <button class="addButton" onclick="location.href='@Url.Action("AddEvents", "Events")'">dodaj Wydarzenie</button>
+    <div>
+        <table id="eventsTable">
+            <tr>
+                <th>ID</th>
+                <th>Nazwa</th>
+                <th>Data</th>
+
+                @*<th>Data urodzenia</th>
+                    <th>Poziom</th>
+                    <th>Tryb pracy</th>
+                    <th>Notatki</th>
+                *@
+                <th>Miasto</th>
+                <th>Lokalizacja</th>
+
+
+            </tr>
+            @foreach (var item in Model)
+
+            {
+            <tr @*onclick="document.location = 'http://kgtwebclient.azurewebsites.net/Dogs/Dog/' + @item.DogId;"  *@>
+                <td class="tdOnclick">
+                    @item.EventId
+                </td>
+                <td class="tdOnclick">
+                    @item.Title
+                </td>
+                @*<td class="tdOnclick">
+            @item.DateOfBirth
+        </td>
+        <td class="tdOnclick">
+            @item.Level
+        </td>
+        <td class="tdOnclick">
+            @item.Workmode
+        </td>
+        <td class="tdOnclick">
+            @item.Notes
+        </td>
+                *@
+
+
+                <td class="tdOnclick">
+                    @item.Date
+                </td>
+
+                <td class="tdOnclick">
+                    @item.City
+                </td>
+                <td class="tdOnclick">
+                    @item.StreetOrLocation
+                </td>
+
+                @*buttons *@
+                <td style="background-color:white">
+                    <button class="displayButton" onclick="location.href='@Url.Action("Event", "Events", new { id = @item.EventId })'">wyświetl</button>
+                </td>
+                @{ if (LoginHelper.IsCurrentUserMember())
+                    {
+                        if (LoginHelper.IsCurrentUserAdmin())
+                        {
+                        <td style="background-color:white">
+                            <button class="deleteButton" onclick="deleteEvent(@item.EventId)" id="@("deleteEventButton" + item.EventId)">usuń</button>
+                        </td>
+                        }
+                        <td style="background-color:white">
+                            <button class="updateButton" onclick="location.href='@Url.Action("UpdateEvent", "Events", new { id = @item.EventId })'">zmień</button>
+                        </td>
+                    } }
+
+            </tr>
+
+            }
+
+        </table>
+    </div>
+</div>
+<script>
+    function searchByEventName() {
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("eventsSearch");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("eventsTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+             /* search by dog's name*/
+            tdEventName = tr[i].getElementsByTagName("td")[1];
+            /* search by guide's  name*/
+            //tdGuideName = tr[i].getElementsByTagName("td")[2];
+            if (tdEventName /*|| tdGuideName*/) {
+                if (tdEventName.innerHTML.toUpperCase().indexOf(filter) > -1 /*|| tdGuideName.innerHTML.toUpperCase().indexOf(filter) > -1*/) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+    function deleteEvent(eventId) {
+        // var id = dogId;
+        alert("Delete event: " + eventId);
+        //document.getElementById("disp").innerHTML = "hi";
+        $.ajax({
+            url: "@Url.Action("DeleteEvent", "Events")",
+            method: "POST", //First change type to method here
+
+            data: {
+                id: eventId, // Second add quotes on the value.
+            },
+            success: function (response) {
+                if (response) {
+                    //var resp = jQuery.parseJSON(response);
+                    var resp = response;
+                    //console.log(resp);
+                    if (resp.success) {
+                        alert("udało się usunac wydarzenie o id: " + resp.id);
+                        //usunięcie z tabeli tr ktory zawiera button o id deleteDogButton<id>
+                        //var buttonId = "deleteDogButton" + dogId;
+                        var button = $("#deleteEventButton" + resp.id );
+
+                    var tableRow = button.closest("tr");
+                        //alert(button.text());
+                        tableRow.remove();
+                    }
+                }
+            },
+            error: function () {
+                alert("error");
+            }
+
+        });
+    }
+</script>
+
+
