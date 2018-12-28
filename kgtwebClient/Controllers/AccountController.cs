@@ -30,7 +30,8 @@ namespace kgtwebClient.Controllers
         {
             if(!LoginHelper.IsAuthenticated())
                 return RedirectToAction("Login", "Account");
-            return RedirectToAction("Guide", "Guides", new { id = Int32.Parse((string)System.Web.HttpContext.Current.Session["CurrentUserId"])});
+            return RedirectToAction("Guide", "Guides", new { id = 
+                System.Web.HttpContext.Current.Session["CurrentUserId"]});
         }
 
         // GET: /Account/Login
