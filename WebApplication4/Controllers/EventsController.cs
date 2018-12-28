@@ -28,6 +28,7 @@ namespace DogsServer.Controllers
                     City = oneEvent.City,
                     Date = oneEvent.Date,
                     Notes = oneEvent.Notes,
+                    Description = oneEvent.Description,
                     StreetOrLocation = oneEvent.StreetOrLocation,
                     Title = oneEvent.Title,
                     GuideIds = oneEvent.GuideEvents.Select(x => x.GuideId).ToList()
@@ -47,6 +48,7 @@ namespace DogsServer.Controllers
                 City = oneEvent.City,
                 Date = oneEvent.Date,
                 Notes = oneEvent.Notes,
+                Description = oneEvent.Description,
                 StreetOrLocation = oneEvent.StreetOrLocation,
                 Title = oneEvent.Title,
                 GuideIds = oneEvent.GuideEvents.Select(x => x.GuideId).ToList()

@@ -151,7 +151,7 @@ namespace kgtwebClient.Controllers
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Put, client.BaseAddress + "trainings/" + updatedEvent.EventId.ToString());
+            HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Put, client.BaseAddress + "events/" + updatedEvent.EventId.ToString());
 
 
             var eventSerialized = JsonConvert.SerializeObject(updatedEvent);
