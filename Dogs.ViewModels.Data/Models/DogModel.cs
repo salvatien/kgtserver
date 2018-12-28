@@ -18,6 +18,11 @@ namespace Dogs.ViewModels.Data.Models
         public DogLevel Level { get; set; }
         public DogWorkmode? Workmodes { get; set; }
         public string Notes { get; set; }
+        public string PhotoBlobUrl { get; set; }
         public IdNameModel GuideIdAndName { get; set; }
+        public List<int> TrainingIds { get; set; }
+        public List<int> EventIds { get; set; }
+        public List<int> CertificateIds { get; set; }
+
     }
 }

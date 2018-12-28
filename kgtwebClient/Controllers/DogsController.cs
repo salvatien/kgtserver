@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using kgtwebClient.Helpers;
+using System.IO;
 
 namespace kgtwebClient.Controllers
 {
@@ -74,37 +75,56 @@ namespace kgtwebClient.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> /*Task<ActionResult>*/ AddDog(DogModel addedDog)
+        public async Task<ActionResult> /*Task<ActionResult>*/ AddDog(DogModel addedDog, HttpPostedFileBase imageFile)
         {
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            /* for put $ post:
-            httpmethod.put i httpmethod.post
-            message.Content = new StringContent(***object-json-serialized***, 
-                                                System.Text.Encoding.UTF8, "application/json");
-             */
+            MultipartFormDataContent form = new MultipartFormDataContent();
+            var imageStreamContent = new StreamContent(imageFile.InputStream);
+            var byteArrayImageContent = new ByteArrayContent(imageStreamContent.ReadAsByteArrayAsync().Result);
+            byteArrayImageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
+            var imageFileName = imageFile.FileName + Guid.NewGuid().ToString();
+            form.Add(byteArrayImageContent, imageFileName, Path.GetFileName(imageFileName));
 
-            HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, client.BaseAddress + "dogs/");
+            var response = client.PostAsync("Dogs/Upload", form).Result;
 
-            var dogSerialized = JsonConvert.SerializeObject(addedDog);
-
-            message.Content = new StringContent(dogSerialized, System.Text.Encoding.UTF8, "application/json");
-
-            HttpResponseMessage responseMessage = client.SendAsync(message).Result; // await client.SendAsync(message)
-            if (responseMessage.IsSuccessStatusCode)    //200 OK
+            if (response.IsSuccessStatusCode)
             {
-                //display info
-                message.Dispose();
-                return RedirectToAction("Dog",  new { id = Int32.Parse(responseMessage.Content.ReadAsStringAsync().Result) });
-                //return View("Dog", responseMessage.Content);
-            }
-            else    // msg why not ok
-            {
-                message.Dispose();
-                return View(/*error*/);
-            }
+                //get blob urls - is it that simple or it has to be returned?
 
+                var imageBlobUrl = @"https://kgtstorage.blob.core.windows.net/images/" + imageFileName;
+
+                //add blob urls to model 
+                addedDog.PhotoBlobUrl = imageBlobUrl;
+
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, client.BaseAddress + "dogs/");
+
+                var dogSerialized = JsonConvert.SerializeObject(addedDog);
+
+                message.Content = new StringContent(dogSerialized, System.Text.Encoding.UTF8, "application/json");
+
+                HttpResponseMessage responseMessage = client.SendAsync(message).Result; // await client.SendAsync(message)
+                if (responseMessage.IsSuccessStatusCode)    //200 OK
+                {
+                    //display info
+                    message.Dispose();
+                    return RedirectToAction("Dog", new { id = Int32.Parse(responseMessage.Content.ReadAsStringAsync().Result) });
+                    //return View("Dog", responseMessage.Content);
+                }
+                else    // msg why not ok
+                {
+                    message.Dispose();
+                    ViewBag.Message = response.StatusCode;
+                    return View("Error");
+                }
+            }
+            else
+            {
+                ViewBag.Message = response.StatusCode;
+                return View("Error");
+            }
         }
 
         public JsonResult DeleteDog(int? id)
@@ -156,60 +176,58 @@ namespace kgtwebClient.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> UpdateDog(DogModel updatedDog)    //? -> może być null
+        public async Task<ActionResult> UpdateDog(DogModel updatedDog, HttpPostedFileBase imageFile)    //? -> może być null
         {
-            /* TODO change
-            if (!DogHelpers.ValidateUpdateDog(updatedDog))
-                return new JsonResult();
-            */
+            MultipartFormDataContent form = new MultipartFormDataContent();
+            var imageStreamContent = new StreamContent(imageFile.InputStream);
+            var byteArrayImageContent = new ByteArrayContent(imageStreamContent.ReadAsByteArrayAsync().Result);
+            byteArrayImageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
+            var imageFileName = imageFile.FileName + Guid.NewGuid().ToString();
+            form.Add(byteArrayImageContent, imageFileName, Path.GetFileName(imageFileName));
 
-            //client.BaseAddress = new Uri(url);
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            //client.DefaultRequestHeaders.Add("Connection", "Keep-Alive");
-            //client.DefaultRequestHeaders.Add("Keep-Alive", "3600");
-            System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
-            // dla put(update) i post(add):
-            //httpmethod.put i httpmethod.post
-            //message.Content = new StringContent(***object-json-serialized***, 
-            //                                  System.Text.Encoding.UTF8, "application/json");
+            var response = client.PostAsync("Dogs/Upload", form).Result;
 
-            HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Put, client.BaseAddress + "dogs/" + updatedDog.DogId.ToString());
-            /*var dog = new DogModel
+            if (response.IsSuccessStatusCode)
             {
-                DogId = updatedDog.DogId,
-                Name = updatedDog.Name,
-                Breed = updatedDog.Breed,
-                DateOfBirth = updatedDog.DateOfBirth,
-                Level = updatedDog.Level,
-                Workmodes = updatedDog.Workmodes,
-                Notes = updatedDog.Notes,
-                // change in the same way as in add dogs
-                GuideId = 1 //IT DOESNT WORK, IT SHOULD BE A REAL GUIDE, NOW SERVER JUST IGNORES GUIDE AND LEAVES THE OLD ONE UNCHANGED!
-            };*/
+                //get blob urls - is it that simple or it has to be returned?
 
-            var dogSerialized = JsonConvert.SerializeObject(updatedDog);
-            
+                var imageBlobUrl = @"https://kgtstorage.blob.core.windows.net/images/" + imageFileName;
 
-            message.Content = new StringContent(dogSerialized, System.Text.Encoding.UTF8, "application/json"); //dog serialized id.ToString()
-            HttpResponseMessage responseMessage = client.SendAsync(message).Result;
-            if (responseMessage.IsSuccessStatusCode)    //200 OK
-            {
-                //wyswietlić informację
-                
+                //add blob urls to model 
+                updatedDog.PhotoBlobUrl = imageBlobUrl;
 
-                message.Dispose();
-                return RedirectToAction("Dog", new { id = Int32.Parse(responseMessage.Content.ReadAsStringAsync().Result) });
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
 
+                HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Put, client.BaseAddress + "dogs/" + updatedDog.DogId.ToString());
+
+                var dogSerialized = JsonConvert.SerializeObject(updatedDog);
+
+
+                message.Content = new StringContent(dogSerialized, System.Text.Encoding.UTF8, "application/json"); //dog serialized id.ToString()
+                HttpResponseMessage responseMessage = client.SendAsync(message).Result;
+                if (responseMessage.IsSuccessStatusCode)    //200 OK
+                {
+                    //wyswietlić informację
+
+
+                    message.Dispose();
+                    return RedirectToAction("Dog", new { id = Int32.Parse(responseMessage.Content.ReadAsStringAsync().Result) });
+
+                }
+                else    // wiadomosc czego się nie udało
+                {
+                    message.Dispose();
+                    ViewBag.Message = response.StatusCode;
+                    return View("Error");
+                }
             }
-            else    // wiadomosc czego się nie udało
+            else
             {
-                
-                message.Dispose();
-                return View(/*widok błędu*/);
+                ViewBag.Message = response.StatusCode;
+                return View("Error");
             }
-
-        }
-    
+        }  
     }
 }

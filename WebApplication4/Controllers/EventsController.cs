@@ -75,17 +75,13 @@ namespace DogsServer.Controllers
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody]EventModel obj)
         {
-            var oneEvent = new Event
-            {
-                EventId = obj.EventId,
-                City = obj.City,
-                Date = obj.Date,
-                Notes = obj.Notes,
-                StreetOrLocation = obj.StreetOrLocation,
-                Title = obj.Title,
-            };
             var oldEvent = unitOfWork.EventRepository.GetById(id);
-            oldEvent = oneEvent;
+            oldEvent.City = obj.City;
+            oldEvent.Date = obj.Date;
+            oldEvent.Notes = obj.Notes;
+            oldEvent.Description = obj.Description;
+            oldEvent.StreetOrLocation = obj.StreetOrLocation;
+            oldEvent.Title = obj.Title;
             unitOfWork.Commit();
             return new ObjectResult(oldEvent.EventId);
         }

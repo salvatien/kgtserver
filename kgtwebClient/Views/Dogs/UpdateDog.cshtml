@@ -124,6 +124,10 @@
         @*<div>
             @Html.HiddenFor(m => m.GuideIdAndName.GuideId, new { @Value = })
         </div>*@
+        <div>
+            Zaktualizuj zdjęcie psa
+            @Html.TextBox("imageFile", "", new { type = "file" }) <br />
+        </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" class="btn btn-default form-field" value="Prześlij dane" onclick="return validateUpdateDog()" />
@@ -132,10 +136,7 @@
         @*/////////////////////////////////////////////////////*@
     </div>
 <div class="picture">
-    <img src="~/Images/januszek.jpg" height="400" width="400">
-    <br />
-    Wybierz nowe zdjęcie: <input type="file" name="file" />
-
+    <img src="@Model.PhotoBlobUrl" height="400" width="400">
 </div>
 @*</fieldset>*@
 }
