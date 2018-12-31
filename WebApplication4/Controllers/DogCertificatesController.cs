@@ -20,7 +20,7 @@ namespace DogsServer.Controllers
         {
             var dogCerts = unitOfWork.DogCertificateRepository.GetAll().ToList();
             var dogCertificateModels = new List<DogCertificateModel>();
-            foreach(var dogCert in dogCerts)
+            foreach (var dogCert in dogCerts)
             {
                 var dogCertModel = new DogCertificateModel
                 {
@@ -34,16 +34,66 @@ namespace DogsServer.Controllers
 
         }
 
-        [HttpGet]
+        [HttpGet("DogCertificate")]
         public DogCertificateModel Get(int dogId, int certificateId)
         {
             var dogCert = unitOfWork.DogCertificateRepository.GetByIds(dogId, certificateId);
             var dogCertModel = new DogCertificateModel
             {
                 DogId = dogCert.DogId,
+                Dog = new DogModel
+                {
+                    DogId = dogCert.Dog.DogId,
+                    Name = dogCert.Dog.Name,
+                    GuideIdAndName = new IdNameModel
+                    {
+                        Id = dogCert.Dog.Guide.GuideId,
+                        Name = $"{dogCert.Dog.Guide.FirstName} {dogCert.Dog.Guide.LastName}"
+                    }
+                },
                 CertificateId = dogCert.CertificateId,
+                Certificate = new CertificateModel
+                {
+                    CertificateId = dogCert.CertificateId,
+                    Description = dogCert.Certificate.Description,
+                    Name = dogCert.Certificate.Name,
+                    Level = dogCert.Certificate.Level,
+                    ValidThrough = dogCert.Certificate.ValidThrough
+                },
                 AcquiredOn = dogCert.AcquiredOn
             };
+            return dogCertModel;
+        }
+
+        [HttpGet ("GetAllByDogId")]
+        public List<DogCertificateModel> GetAllByDogId(int dogId)
+        {
+            var dogCertificates = unitOfWork.DogCertificateRepository.GetAllByDogId(dogId);
+            var dogCertModel = new List<DogCertificateModel>();
+            foreach (var dogCert in dogCertificates)
+            {
+                dogCertModel.Add( new DogCertificateModel
+                {
+                    DogId = dogCert.DogId,
+                    Dog = new DogModel
+                    {
+                    DogId = dogCert.Dog.DogId,
+                    Name = dogCert.Dog.Name,
+                    GuideIdAndName = new IdNameModel { Id = dogCert.Dog.Guide.GuideId,
+                                                       Name = $"{dogCert.Dog.Guide.FirstName} {dogCert.Dog.Guide.LastName}"}
+                    },
+                    CertificateId = dogCert.CertificateId,
+                    Certificate = new CertificateModel
+                    {
+                        CertificateId = dogCert.CertificateId,
+                        Description = dogCert.Certificate.Description,
+                        Name = dogCert.Certificate.Name,
+                        Level = dogCert.Certificate.Level,
+                        ValidThrough = dogCert.Certificate.ValidThrough
+                    },
+                    AcquiredOn = dogCert.AcquiredOn
+                });
+            }
             return dogCertModel;
         }
 
@@ -77,5 +127,7 @@ namespace DogsServer.Controllers
             unitOfWork.Commit();
             return new ObjectResult("DogCertificate deleted successfully!");
         }
+
+
     }
 }

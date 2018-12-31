@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using DogsServer.Models;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Collections.Generic;
 
 namespace DogsServer.Repositories
 {
@@ -33,7 +34,20 @@ namespace DogsServer.Repositories
 
         public DogCertificate GetByIds(int dogId, int certificateId)
         {
-            var DogCertificate = DbSet.Where(x => x.CertificateId == certificateId && x.DogId == dogId).Include(x => x.Dog).Include(x => x.Certificate).FirstOrDefault();
+            var DogCertificate = DbSet.Where(x => x.CertificateId == certificateId && x.DogId == dogId)
+                                      .Include(x => x.Dog)
+                                      .ThenInclude(x => x.Guide)
+                                      .Include(x => x.Certificate)
+                                      .FirstOrDefault();
+            return DogCertificate;
+        }
+
+        public List<DogCertificate> GetAllByDogId(int dogId)
+        {
+            var DogCertificate = DbSet.Where(x => x.DogId == dogId)
+                                      .Include(x => x.Dog).ThenInclude(x => x.Guide)
+                                      .Include(x => x.Certificate)
+                                      .ToList();
             return DogCertificate;
         }
     }

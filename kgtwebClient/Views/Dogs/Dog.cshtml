@@ -67,12 +67,19 @@
     </div>
 </div>
 <p style="margin:60px">
-    @{ 
+    @{
         if (LoginHelper.IsCurrentUserAdmin() || LoginHelper.GetCurrentUserId() == Model.GuideIdAndName.Id)
         {
-            @Html.ActionLink("--Update Dog--", "UpdateDog", "Dogs", new { id = Model.DogId }, null)
+            <button class="updateButton" onclick="location.href='@Url.Action("UpdateDog", "Dogs", new { id = Model.DogId })'">Zmień dane</button>
+            @*@Html.ActionLink("--Update Dog--", "UpdateDog", "Dogs", new { id = Model.DogId }, null)*@
         }
     }
+    <button class="displayButton" onclick="location.href='@Url.Action("Index", "DogTrainings", new { dogId = Model.DogId })'">Pokaż treningi psa</button>
+
+    <button class="displayButton" onclick="location.href='@Url.Action("Index", "DogCertificates", new { dogId = Model.DogId })'">Pokaż certyfikaty psa</button>
+    <button class="displayButton" onclick="location.href='@Url.Action("Index", "DogEvents", new { dogId = Model.DogId })'">Pokaż wydarzenia psa</button>
+
+
 
     @Html.ActionLink("Back to List", "Index")
 </p>

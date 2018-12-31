@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using DogsServer.Models;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Collections.Generic;
 
 namespace DogsServer.Repositories
 {
@@ -35,6 +36,15 @@ namespace DogsServer.Repositories
         {
             var DogEvent = DbSet.Where(x => x.EventId == eventId && x.DogId == dogId).Include(x => x.Dog).Include(x => x.Event).FirstOrDefault();
             return DogEvent;
+        }
+
+        public List<DogEvent> GetAllByDogId(int dogId)
+        {
+            var DogCertificate = DbSet.Where(x => x.DogId == dogId)
+                                      .Include(x => x.Dog).ThenInclude(x => x.Guide)
+                                      .Include(x => x.Event)
+                                      .ToList();
+            return DogCertificate;
         }
     }
 }

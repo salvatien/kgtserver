@@ -1,0 +1,143 @@
+﻿@using Dogs.ViewModels.Data.Models;
+@using kgtwebClient.Helpers;
+
+@model List<Dogs.ViewModels.Data.Models.DogCertificateModel>
+
+
+@{
+    ViewBag.Title = "Index";
+}
+<div class="tables">
+    <input type="text" id="certificatesSearch" onkeyup="searchByCertificateName()" placeholder="Search for names.." title="Type in a name">
+    @*  dodaj certyfikat dla psa - certifikat jjuż istnieje, wybieramy który ma być przypisany dla danego psa*@
+    <button class="addButton" onclick="location.href='@Url.Action("AddDogCertificate", "DogCertificates", new { dogId = Model[0].DogId})'">dodaj Certyfikat</button>
+    <div>
+        <table id="certificatesTable">
+            <tr>
+                <th>ID</th>
+                <th>Nazwa</th>
+                <th>Poziom trudności</th>
+
+                @*<th>Data urodzenia</th>
+                    <th>Poziom</th>
+                    <th>Tryb pracy</th>
+                    <th>Notatki</th>
+                *@
+                <th>Czas obowiązywania</th>
+                <th>Czas uzyskania</th>
+
+
+            </tr>
+            @foreach (var item in Model)
+
+            {
+                <tr>
+                    <td class="tdOnclick">
+                        @item.CertificateId
+                    </td>
+                    <td class="tdOnclick">
+                        @item.Certificate.Name
+                    </td>
+                    <td class="tdOnclick">
+                        @item.Certificate.Level
+                    </td>
+
+                    <td class="tdOnclick">
+                        @item.Certificate.ValidThrough
+                    </td>
+                    <td class="tdOnclick">
+                        @item.AcquiredOn
+                    </td>
+
+                    @*buttons *@
+                    <td style="background-color:white">
+                        <button class="displayButton" onclick="location.href='@Url.Action("DogCertificate", "DogCertificates", new { dogId = item.DogId, certificateId = @item.CertificateId })'">wyświetl</button>
+                    </td>
+                    @{ if (LoginHelper.IsCurrentUserAdmin())
+                        {
+                            <td style="background-color:white">
+                                @*location.href='@Url.Action("DeleteDog", "Dogs", new { id = @item.DogId })'*@
+                                <button class="deleteButton" onclick="deleteDogCertificate(@item.DogId, @item.CertificateId)" id="@($"deleteDog{item.DogId}Certificate{item.CertificateId}Button")">usuń</button>
+                            </td>
+
+
+                            //TODO: zmienić update dog certyfikatu - nowy widok i metody na kontrolerze
+                            @*<td style="background-color:white">
+                                <button class="updateButton" onclick="location.href='@Url.Action("UpdateCertificate", "Certificates", new { id = @item.CertificateId })'">zmień</button>
+                            </td>*@
+                        } }
+
+                </tr>
+
+            }
+
+        </table>
+    </div>
+</div>
+<script>
+    function searchByCertificateName() {
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("certificatesSearch");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("certificatesTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+             /* search by dog's name*/
+            tdCertificateName = tr[i].getElementsByTagName("td")[1];
+            /* search by guide's  name*/
+            //tdGuideName = tr[i].getElementsByTagName("td")[2];
+            if (tdCertificateName /*|| tdGuideName*/) {
+                if (tdCertificateName.innerHTML.toUpperCase().indexOf(filter) > -1 /*|| tdGuideName.innerHTML.toUpperCase().indexOf(filter) > -1*/) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+    @* location.href='@Url.Action("DeleteDog", "Dogs", new { id = @item.DogId })' *@
+
+    function deleteDogCertificate(dogId, certificateId) {
+        // var id = dogId;
+        alert("Delete Dogcertificate: " + certificateId + "dog: " + dogId);
+        //document.getElementById("disp").innerHTML = "hi";
+        $.ajax({
+            url: "@Url.Action("DeleteDogCertificate", "DogCertificates")",
+            method: "POST", //First change type to method here
+
+            data: {
+                dogId: dogId,
+                certificateId: certificateId // Second add quotes on the value.
+            },
+            success: function (response) {
+                if (response) {
+                    //var resp = jQuery.parseJSON(response);
+                    var resp = response;
+                    //console.log(resp);
+                    if (resp.success) {
+                        alert("udało się usunac certyfikat o id: " + resp.certificateId);
+                        //usunięcie z tabeli tr ktory zawiera button o id deleteDogButton<id>
+                        //var buttonId = "deleteDogButton" + dogId;
+                        var button = $("#deleteDog" + resp.dogId + "Certificate" + resp.certificateId + "Button");
+
+                    var tableRow = button.closest("tr");
+                        //alert(button.text());
+                        tableRow.remove();
+                    }
+                }
+            },
+            error: function () {
+                alert("error");
+            }
+
+        });
+    }
+
+    //$(document).ready(function () {
+    //    $('#dogsTable').on("click", "td.tdOnclick", function () {
+    //        alert('ho ho ho');
+    //    });
+    //});
+</script>
+
+

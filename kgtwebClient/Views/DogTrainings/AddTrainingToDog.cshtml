@@ -1,0 +1,75 @@
+﻿
+@model Dogs.ViewModels.Data.Models.DogTrainingModel
+@using kgtwebClient.Helpers;
+
+
+@{
+    /**/
+
+    ViewBag.Title = "AddDogTraining";
+    var remaininTrainings = TrainingHelpers.GetAllTrainingsExceptOneDog(Model.DogId);
+}
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div style="margin:60px">
+
+    @using (Html.BeginForm("Add", "DogTrainings", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(m => m.DogId)
+        <div style="float:left">
+            <div class="form-group">
+                @Html.LabelFor(m => m.TrainingId, new { @class = "col-md-2 control-label form-field" })
+                <div class="col-md-10  form-field">
+                    @*@Html.TextBoxFor(m => m.TrainingId, new { @class = "form-control" })*@
+                    @Html.DropDownListFor(m => m.TrainingId, remaininTrainings, new { @class = "form-control" })
+
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.LostPerson, new { @class = "col-md-2 control-label form-field" })
+                <div class="col-md-10  form-field">
+                    @Html.TextBoxFor(m => m.LostPerson, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Weather, new { @class = "col-md-2 control-label form-field" })
+                <div class="col-md-10 form-field">
+                    @Html.TextBoxFor(m => m.Weather, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Notes, new { @class = "col-md-2 control-label form-field" })
+                <div class="col-md-10 form-field">
+                    @Html.TextAreaFor(m => m.Notes, new { @class = "form-control" })
+                </div>
+            </div>
+            <div>
+                Dodaj plik .GPX ze śladem pozoranta
+                @Html.TextBox("lostPersonTrackFile", "", new { type = "file" }) <br />
+                Dodaj plik .GPX ze śladem psa
+                @Html.TextBox("dogTrackFile", "", new { type = "file" }) <br />
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" class="btn btn-default form-field" value="Prześlij dane" />
+                </div>
+            </div>
+
+            Godziny trwania będą wywnioskowane z pliku ze śladem psa.
+
+        </div>
+    }
+</div>
+
+@*
+    </body>
+    </html>
+*@
+

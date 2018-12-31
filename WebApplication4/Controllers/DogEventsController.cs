@@ -216,5 +216,45 @@ namespace DogsServer.Controllers
 
             return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(stringStream) };
         }
+
+        [HttpGet("GetAllByDogId")]
+        public List<DogEventModel> GetAllByDogId(int dogId)
+        {
+            var dogEvents = unitOfWork.DogEventRepository.GetAllByDogId(dogId);
+            var dogEventModel = new List<DogEventModel>();
+            foreach (var dogEvent in dogEvents)
+            {
+                dogEventModel.Add(new DogEventModel
+                {
+                    DogId = dogEvent.DogId,
+                    Dog = new DogModel
+                    {
+                        DogId = dogEvent.Dog.DogId,
+                        Name = dogEvent.Dog.Name,
+                        GuideIdAndName = new IdNameModel
+                        {
+                            Id = dogEvent.Dog.Guide.GuideId,
+                            Name = $"{dogEvent.Dog.Guide.FirstName} {dogEvent.Dog.Guide.LastName}"
+                        }
+                    },
+                    EventId = dogEvent.EventId,
+                    Event = new EventModel
+                    {
+                        City = dogEvent.Event.City,
+                        Date = dogEvent.Event.Date,
+                        Description = dogEvent.Event.Description,
+                        EventId = dogEvent.Event.EventId,
+                        Notes = dogEvent.Event.Notes,
+                        StreetOrLocation = dogEvent.Event.StreetOrLocation,
+                        Title = dogEvent.Event.Title
+
+                    },
+                    LostPerson = dogEvent.LostPerson,
+                    Weather = dogEvent.Weather,
+                    Notes = dogEvent.Notes
+                });
+            }
+            return dogEventModel;
+        }
     }
 }

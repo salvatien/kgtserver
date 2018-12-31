@@ -1,9 +1,164 @@
-﻿
+﻿@using Dogs.ViewModels.Data.Models;
+@using kgtwebClient.Helpers;
+
+@model List<Dogs.ViewModels.Data.Models.DogTrainingModel>
+
+@*TODO: get in different way dog id to AddTrainingToDog !!!!!!*@
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Home Page";
+    if (Model != null)
+    {
+        var id = Model[0].DogId;
+    }
 }
 
-<div style="margin:60px">
-    <button onclick="location.href='@Url.Action("Training", "DogTrainings", new { dogId = 1, trainingId = 1 /*@item.TrainingId */})'">test mapy T, Kasiowy usuniety :) </button>
-    <h2>Index</h2>
+
+
+@*<div class="jumbotron"> *@
+<div class="tables">
+    <input type="text" id="dogTrainingsSearch" onkeyup="searchByTrainingLocalization()" placeholder="Search for names.." title="Type in a name">
+
+    <button type="button" class="addButton" onclick="location.href='@Url.Action("AddTrainingToDog", "DogTrainings", new { dogId = Model[0].DogId })'">dodaj trening</button>
+    <div>
+        <table id="dogTrainingsTable">
+            <tr>
+                <th>ID</th>
+                <th>Lokalizacja</th>
+                <th>Adres</th>
+                @*<th>Data urodzenia</th>
+            <th>Poziom</th>
+            <th>Tryb pracy</th>
+            <th>Notatki</th>
+                *@
+                <th>Data</th>
+
+
+            </tr>
+            @foreach (var item in Model)
+
+            {
+                <tr @*onclick="document.location = 'http://kgtwebclient.azurewebsites.net/Dogs/Dog/' + @item.DogId;"  *@>
+                    <td class="tdOnclick">
+                        @item.TrainingId
+                    </td>
+                    <td class="tdOnclick">
+                        @item.Training.GeneralLocation
+                    </td>
+                    @*<td class="tdOnclick">
+                    @item.DateOfBirth
+                </td>
+                <td class="tdOnclick">
+                    @item.Level
+                </td>
+                <td class="tdOnclick">
+                    @item.Workmode
+                </td>
+                <td class="tdOnclick">
+                    @item.Notes
+                </td>
+                    *@
+
+
+                    <td class="tdOnclick">
+                        @item.Training.LocationDetails
+                    </td>
+
+                    <td class="tdOnclick">
+                        @item.Training.Date
+                    </td>
+
+                    @*buttons *@
+                    <td style="background-color:white">
+                        <button class="displayButton" onclick="location.href='@Url.Action("Training", "DogTrainings", new { dogId = @item.DogId, trainingId=@item.TrainingId  })'">wyświetl</button>
+
+                        @*<button class="displayButton" onclick="location.href='@Url.Action("Training", "Trainings", new { id = @item.TrainingId })'">wyświetl</button>*@
+                    </td>
+                    @{ if (LoginHelper.IsCurrentUserAdmin() || LoginHelper.IsCurrentUserMember())
+                        {
+                            <td style="background-color:white">
+                                <button class="deleteButton" onclick="deleteDogTraining(@item.DogId, @item.TrainingId)" id="@($"deleteDog{item.DogId}Training{item.TrainingId}Button")">usuń</button>
+                            </td>
+                            <td style="background-color:white">
+                                <button class="updateButton" onclick="location.href='@Url.Action("UpdateTraining", "Trainings", new { id = @item.TrainingId })'">zmień</button>
+                            </td>
+                        } }
+
+                </tr>
+                
+                
+                
+            }
+
+        </table>
+    </div>
 </div>
+<script>
+    function searchByTrainingLocalization() {
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("dogTrainingsSearch");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("dogTrainingsTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+             /* search by dog's name*/
+            tdDogTrainingsName = tr[i].getElementsByTagName("td")[1];
+            /* search by guide's  name*/
+            //tdGuideName = tr[i].getElementsByTagName("td")[2];
+            if (tdDogName) {
+                if (tdDogTrainingsName.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+    @* location.href='@Url.Action("DeleteDog", "Dogs", new { id = @item.DogId })' *@
+
+    function deleteDogTraining(dogId, trainingId) {
+       // var id = dogId;
+        alert("Delete dog: " + dogId);
+        //document.getElementById("disp").innerHTML = "hi";
+        $.ajax({
+            url: "@Url.Action("DeleteDogTraining", "DogTrainings")",
+            method: "POST", //First change type to method here
+
+            data: {
+                dogId: dogId, // Second add quotes on the value.
+                trainingId: trainingId
+            },
+            success: function (response) {
+                if (response) {
+                    //var resp = jQuery.parseJSON(response);
+                    var resp = response;
+                    //console.log(resp);
+                    if (resp.success) {
+                        alert("udało się usunac psa o id: " + resp.dogId + "trening: " + resp.trainingId);
+                        //usunięcie z tabeli tr ktory zawiera button o id deleteDogButton<id>
+                        //var buttonId = "deleteDogButton" + dogId;
+                        var button = $("#deleteDog" + resp.dogId + "Training" + resp.trainingId + "Button");
+
+                    var tableRow = button.closest("tr");
+                        //alert(button.text());
+                        tableRow.remove();
+                    }
+                }
+            },
+            error: function () {
+                alert("error");
+            }
+
+        });
+    }
+
+    //$(document).ready(function () {
+    //    $('#dogsTable').on("click", "td.tdOnclick", function () {
+    //        alert('ho ho ho');
+    //    });
+    //});
+</script>
+
+@*
+    </div>
+
+*@

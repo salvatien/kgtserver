@@ -65,6 +65,10 @@
                     <td style="background-color:white">
                         <button class="displayButton" onclick="location.href='@Url.Action("Training", "Trainings", new { id = @item.TrainingId })'">wyświetl</button>
                     </td>
+                    <td>
+                        <button type="button" class="displayButton" onclick="location.href='@Url.Action("Add", "DogTrainings", new { trainingId= @item.TrainingId  })'">Dodaj psa do treningu</button>
+
+                    </td>
                 </tr>
 
                 }

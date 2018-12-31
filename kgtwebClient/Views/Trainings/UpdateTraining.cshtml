@@ -17,7 +17,7 @@
 @model Dogs.ViewModels.Data.Models.TrainingModel
 
 <div style="margin:60px">
-    <button type="button" class="displayButton" onclick="location.href='@Url.Action("Add", "DogTrainings", new { trainingId= Model.TrainingId  })'">Dodaj trening psa do tego treningu</button>
+    @*<button type="button" class="displayButton" onclick="location.href='@Url.Action("Add", "DogTrainings", new { trainingId= Model.TrainingId  })'">Dodaj trening psa do tego treningu</button>*@
 
     @using (Html.BeginForm("UpdateTraining", "Trainings", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
@@ -67,6 +67,9 @@
                                     <td>
                                         <button type="button" class="displayButton" onclick="location.href='@Url.Action("Training", "DogTrainings", new { dogId = @dogTraining.DogId, trainingId=dogTraining.TrainingId  })'">wyświetl trening psa</button>
                                     </td>
+                                    <td>
+                                        <button type="button" class="deleteButton" onclick="deleteDogTraining(@dogTraining.DogId, @dogTraining.TrainingId)" id="@($"deleteDog{dogTraining.DogId}Training{dogTraining.TrainingId}Button")">usuń</button>
+                                    </td>
                                 </tr>
                             }
                         }
@@ -84,7 +87,43 @@
 
     }
 </div>
+<script>
+    function deleteDogTraining(dogId, trainingId) {
+        // var id = dogId;
+        alert("Delete dogtraining: training " + trainingId + " dog: " + dogId);
+        //document.getElementById("disp").innerHTML = "hi";
+        $.ajax({
+            url: "@Url.Action("DeleteDogTraining", "DogTrainings")",
+            method: "POST", //First change type to method here
 
+            data: {
+                dogId: dogId,
+                trainingId: trainingId
+            },
+            success: function (response) {
+                if (response) {
+                    //var resp = jQuery.parseJSON(response);
+                    var resp = response;
+                    //console.log(resp);
+                    if (resp.success) {
+                        alert("usunięto trening psa o id: " + resp.dogId + " treningId: " + resp.trainingId);
+                        //usunięcie z tabeli tr ktory zawiera button o id deleteDogButton<id>
+                        //var buttonId = "deleteDogButton" + dogId;
+                        var button = $("#deleteDog" + resp.dogId + "Training" + resp.trainingId + "Button");
+
+                    var tableRow = button.closest("tr");
+                        //alert(button.text());
+                        tableRow.remove();
+                    }
+                }
+            },
+            error: function () {
+                alert("error");
+            }
+
+        });
+    }
+</script>
 @*
     </body>
     </html>

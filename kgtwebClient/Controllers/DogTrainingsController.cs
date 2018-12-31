@@ -25,8 +25,24 @@ namespace kgtwebClient.Controllers
 
 
         // GET: Trainings
-        public ActionResult Index()
+       // [HttpGet("{dogId}")]
+        public async Task<ActionResult> Index(int dogId)
         {
+            //client.BaseAddress = new Uri(url);
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            HttpResponseMessage responseMessage = await client.GetAsync($"dogtrainings/GetAllByDogId?dogId={dogId}");
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                var responseData = responseMessage.Content.ReadAsStringAsync().Result;
+                var dogTrainings = JsonConvert.DeserializeObject<List<DogTrainingModel>>(responseData);
+                
+
+                ViewBag.RawData = responseData;
+
+                return View(dogTrainings);
+            }
             return View();
         }
 
@@ -315,6 +331,42 @@ namespace kgtwebClient.Controllers
         public ActionResult Add(int trainingId)
         {
             return View(new DogTrainingModel { TrainingId = trainingId});
+        }
+
+        [HttpGet]
+        public ActionResult AddTrainingToDog(int dogId)
+        {
+            return View(new DogTrainingModel { DogId = dogId });
+        }
+
+        public JsonResult DeleteDogTraining(int? dogId, int? trainingId)
+        {
+            //client.BaseAddress = new Uri(url);
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            /* dla put i post:
+            httpmethod.put i httpmethod.post
+            message.Content = new StringContent(***object-json-serialized***, 
+                                                System.Text.Encoding.UTF8, "application/json");
+             */
+            HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Delete, client.BaseAddress 
+                                        + $"dogtrainings/training?trainingId={trainingId}&dogId={dogId}");
+            //message.Content = new StringContent(id.ToString(), System.Text.Encoding.UTF8, "application/json");
+
+            HttpResponseMessage responseMessage = client.SendAsync(message).Result;
+            if (responseMessage.IsSuccessStatusCode)    //200 OK
+            {
+                //wyswietlić informację
+                message.Dispose();
+                return Json(new { success = true,  dogId = dogId.ToString(), trainingId = trainingId.ToString() });
+            }
+            else    // wiadomosc czego się nie udałos
+            {
+                message.Dispose();
+                return Json(false);
+            }
+
         }
     }
 }

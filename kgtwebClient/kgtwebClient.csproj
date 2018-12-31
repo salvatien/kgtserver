@@ -167,6 +167,8 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CertificatesController.cs" />
+    <Compile Include="Controllers\DogCertificatesController.cs" />
+    <Compile Include="Controllers\DogEventsController.cs" />
     <Compile Include="Controllers\DogsController.cs" />
     <Compile Include="Controllers\DogTrainingsController.cs" />
     <Compile Include="Controllers\EventsController.cs" />
@@ -176,10 +178,12 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\CertificateHelper.cs" />
     <Compile Include="Helpers\DogHelpers.cs" />
     <Compile Include="Helpers\EnumHelpers.cs" />
     <Compile Include="Helpers\GuideHelpers.cs" />
     <Compile Include="Helpers\LoginHelper.cs" />
+    <Compile Include="Helpers\TrainingHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -340,9 +344,15 @@
     <Content Include="Views\Events\Event.cshtml" />
     <Content Include="Views\Events\AddEvent.cshtml" />
     <Content Include="Views\Events\UpdateEvent.cshtml" />
+    <Content Include="Views\DogTrainings\AddTrainingToDog.cshtml" />
+    <Content Include="Views\DogCertificates\Index.cshtml" />
+    <Content Include="Views\DogCertificates\AddDogCertificate.cshtml" />
+    <Content Include="Views\DogCertificates\DogCertificate.cshtml" />
+    <Content Include="Views\DogEvents\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\NewFolder1\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

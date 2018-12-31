@@ -1,0 +1,58 @@
+﻿@model Dogs.ViewModels.Data.Models.DogCertificateModel
+@using kgtwebClient.Helpers;
+
+@{
+    ViewBag.Title = "DogCertificate";
+    var certificateEndDate = Model.AcquiredOn.Add(Model.Certificate.ValidThrough);
+}
+<script>
+    console.log("end date: " + @certificateEndDate);
+</script>
+<div style="margin:60px">
+    <p style="margin:60px">
+        @Html.ActionLink("Back to List", "Index", new { dogId = Model.DogId})
+    </p>
+    <div class="data">
+        <h4>@Html.DisplayFor(model => model.Certificate.Name)</h4>
+        <hr />
+        <dl class="dl-horizontal" style="float:left">
+            <dt>
+                @Html.DisplayNameFor(model => model.Certificate.Description)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Certificate.Description)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Certificate.Level)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Certificate.Level)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.AcquiredOn)
+            </dt>
+
+            <dd>
+                @Model.AcquiredOn.ToString("dd/MM/yyyy")
+            </dd>
+            @*///////////////////////////    TODO: sprawdzić czy działa po zmianie w bazie   ////////////////////////////////*@
+            <dt>
+                Data wygaśnięcia
+            </dt>
+
+            <dd>
+                @certificateEndDate.ToString("dd/MM/yyyy")
+            </dd>
+
+
+        </dl>
+    </div>
+
+</div>
+
+
+
