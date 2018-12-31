@@ -104,7 +104,7 @@ namespace kgtwebClient.Controllers
                                                 System.Text.Encoding.UTF8, "application/json");
              */
             HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Delete, client.BaseAddress
-                                        + $"dogcertificates/certificate?certificateId={certificateId}&dogId={dogId}");
+                                        + $"dogcertificates/dogcertificate?certificateId={certificateId}&dogId={dogId}");
             //message.Content = new StringContent(id.ToString(), System.Text.Encoding.UTF8, "application/json");
 
             HttpResponseMessage responseMessage = client.SendAsync(message).Result;

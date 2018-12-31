@@ -120,7 +120,7 @@ namespace DogsServer.Controllers
             return new ObjectResult(new { dogCertificate.DogId, dogCertificate.CertificateId });
         }
 
-        [HttpDelete]
+        [HttpDelete("dogcertificate")]
         public IActionResult Delete(int dogId, int certificateId)
         {
             unitOfWork.DogCertificateRepository.Delete(unitOfWork.DogCertificateRepository.GetByIds(dogId, certificateId));

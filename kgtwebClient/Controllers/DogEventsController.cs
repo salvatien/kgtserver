@@ -36,7 +36,6 @@ namespace kgtwebClient.Controllers
             return View();
         }
 
-
         public JsonResult DeleteDogEvent(int? dogId, int? eventId)
         {
             //client.BaseAddress = new Uri(url);
@@ -49,7 +48,7 @@ namespace kgtwebClient.Controllers
                                                 System.Text.Encoding.UTF8, "application/json");
              */
             HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Delete, client.BaseAddress
-                                        + $"dogevents/event?eventId={eventId}&dogId={dogId}");
+                                        + $"dogevents/dogevent?eventId={eventId}&dogId={dogId}");
             //message.Content = new StringContent(id.ToString(), System.Text.Encoding.UTF8, "application/json");
 
             HttpResponseMessage responseMessage = client.SendAsync(message).Result;
