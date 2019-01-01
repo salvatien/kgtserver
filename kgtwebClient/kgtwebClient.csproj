@@ -349,6 +349,8 @@
     <Content Include="Views\DogCertificates\AddDogCertificate.cshtml" />
     <Content Include="Views\DogCertificates\DogCertificate.cshtml" />
     <Content Include="Views\DogEvents\Index.cshtml" />
+    <Content Include="Views\DogEvents\DogEvent.cshtml" />
+    <Content Include="Views\DogEvents\AddDogEvent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
