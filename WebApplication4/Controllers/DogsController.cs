@@ -20,6 +20,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Strathweb.AspNetCore.AzureBlobFileProvider;
+using Microsoft.AspNetCore.Http.Internal;
+using System.Diagnostics;
+using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.ApplicationInsights;
 
 namespace DogsServer.Controllers
 {
@@ -160,31 +164,37 @@ namespace DogsServer.Controllers
         [DisableRequestSizeLimit]
         public async Task<IActionResult> Upload()
         {
-            var uploadSuccess = false;
-            if (Request.Form.Files.Count > 0)
-            {
-                foreach (var formFile in Request.Form.Files)
+            try {
+                Request.EnableRewind();
+                var uploadSuccess = false;
+                if (Request.Form.Files.Count > 0)
                 {
-                    if (formFile.Length <= 0)
+                    foreach (var formFile in Request.Form.Files)
                     {
-                        continue;
-                    }
-
-
-
-                    //read directly from stream for blob upload      
-                    using (var stream = formFile.OpenReadStream())
-                    {
-                        uploadSuccess = await UploadToBlob(formFile.FileName, stream);
+                        if (formFile.Length <= 0)
+                        {
+                            continue;
+                        }
+                        //read directly from stream for blob upload      
+                        using (var stream = formFile.OpenReadStream())
+                        {
+                            uploadSuccess = await UploadToBlob(formFile.FileName, stream);
+                        }
                     }
                 }
+            
 
+                if (uploadSuccess)
+                {
+                    return Ok("UploadSuccess");
+                }
+                else
+                    return BadRequest("UploadError");
             }
-
-            if (uploadSuccess)
-                return Ok("UploadSuccess");
-            else
-                return BadRequest("UploadError");
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         private async Task<bool> UploadToBlob(string filename, Stream stream)

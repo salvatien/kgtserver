@@ -10,6 +10,7 @@ using Dogs.ViewModels.Data.Models;
 using DogsServer.Models;
 using DogsServer.Repositories;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.FileProviders;
@@ -127,6 +128,7 @@ namespace DogsServer.Controllers
         [DisableRequestSizeLimit]
         public async Task<IActionResult> Upload()
         {
+            Request.EnableRewind();
             var uploadSuccess = false;
             if (Request.Form.Files.Count > 0)
             {
