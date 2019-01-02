@@ -55,21 +55,80 @@ namespace DogsServer.Controllers
 
             return new ObjectResult(new { eventId = dogEvent.EventId, dogId = dogEvent.DogId });
         }
+
+        [HttpGet]
+        public List<DogEventModel> Get()
+        {
+            var dogEvents = unitOfWork.DogEventRepository.GetAll().ToList();
+            var dogEventModels = new List<DogEventModel>();
+            foreach (var dogEvent in dogEvents)
+            {
+                var dogEventModel = new DogEventModel
+                {
+                    DogId = dogEvent.DogId,
+                    Dog = new DogModel
+                    {
+                        DogId = dogEvent.Dog.DogId,
+                        Breed = dogEvent.Dog.Breed,
+                        Name = dogEvent.Dog.Name,
+                        GuideIdAndName = new IdNameModel {Id = dogEvent.Dog.Guide.GuideId, Name = $"{dogEvent.Dog.Guide.FirstName} {dogEvent.Dog.Guide.LastName}" }
+                    },
+                    EventId = dogEvent.EventId,
+                    Event = new EventModel
+                    {
+                        City = dogEvent.Event.City,
+                        Date = dogEvent.Event.Date,
+                        Description = dogEvent.Event.Description,
+                        EventId = dogEvent.Event.EventId,
+                        Notes = dogEvent.Event.Notes,
+                        StreetOrLocation = dogEvent.Event.StreetOrLocation,
+                        Title = dogEvent.Event.Title
+                    },
+                    DogTrackBlobUrl = dogEvent.DogTrackBlobUrl,
+                    LostPerson = dogEvent.LostPerson,
+                    LostPersonTrackBlobUrl = dogEvent.LostPersonTrackBlobUrl,
+                    Notes = dogEvent.Notes,
+                    Weather = dogEvent.Weather
+                    
+                };
+                dogEventModels.Add(dogEventModel);
+            }
+            return dogEventModels;
+
+        }
+
         //api/DogEvents/DogEvent?dogId=5&eventId=1
         [HttpGet("DogEvent")]
         public DogEventModel Get(int dogId, int eventId)
         {
             //return unitOfWork.GuideRepository.GetById(id);
-            var t = unitOfWork.DogEventRepository.GetByIds(dogId, eventId);
+            var dogEvent = unitOfWork.DogEventRepository.GetByIds(dogId, eventId);
             var DogEventModel = new DogEventModel()
             {
-                DogId = t.DogId,
-                EventId = t.EventId,
-                DogTrackBlobUrl = t.DogTrackBlobUrl,
-                LostPerson = t.LostPerson,
-                LostPersonTrackBlobUrl = t.LostPersonTrackBlobUrl,
-                Notes = t.Notes,
-                Weather = t.Weather,
+                DogId = dogEvent.DogId,
+                Dog = new DogModel
+                {
+                    DogId = dogEvent.Dog.DogId,
+                    Breed = dogEvent.Dog.Breed,
+                    Name = dogEvent.Dog.Name,
+                    GuideIdAndName = new IdNameModel { Id = dogEvent.Dog.Guide.GuideId, Name = $"{dogEvent.Dog.Guide.FirstName} {dogEvent.Dog.Guide.LastName}" }
+                },
+                EventId = dogEvent.EventId,
+                Event = new EventModel
+                {
+                    City = dogEvent.Event.City,
+                    Date = dogEvent.Event.Date,
+                    Description = dogEvent.Event.Description,
+                    EventId = dogEvent.Event.EventId,
+                    Notes = dogEvent.Event.Notes,
+                    StreetOrLocation = dogEvent.Event.StreetOrLocation,
+                    Title = dogEvent.Event.Title
+                },
+                DogTrackBlobUrl = dogEvent.DogTrackBlobUrl,
+                LostPerson = dogEvent.LostPerson,
+                LostPersonTrackBlobUrl = dogEvent.LostPersonTrackBlobUrl,
+                Notes = dogEvent.Notes,
+                Weather = dogEvent.Weather,
                 
             };
             return DogEventModel;
@@ -137,6 +196,7 @@ namespace DogsServer.Controllers
             else
                 return BadRequest("UploadError");
         }
+
 
         private async Task<bool> UploadToBlob(string filename, Stream stream)
         {
@@ -221,10 +281,10 @@ namespace DogsServer.Controllers
         public List<DogEventModel> GetAllByDogId(int dogId)
         {
             var dogEvents = unitOfWork.DogEventRepository.GetAllByDogId(dogId);
-            var dogEventModel = new List<DogEventModel>();
+            var dogEventModels = new List<DogEventModel>();
             foreach (var dogEvent in dogEvents)
             {
-                dogEventModel.Add(new DogEventModel
+                dogEventModels.Add(new DogEventModel
                 {
                     DogId = dogEvent.DogId,
                     Dog = new DogModel
@@ -254,7 +314,7 @@ namespace DogsServer.Controllers
                     Notes = dogEvent.Notes
                 });
             }
-            return dogEventModel;
+            return dogEventModels;
         }
     }
 }
