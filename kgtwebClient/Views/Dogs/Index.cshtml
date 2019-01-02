@@ -12,7 +12,9 @@
 @*<div class="jumbotron"> *@
 <div class="tables">
     <input type="text" id="dogsSearch" onkeyup="searchByDogOrGuideName()" placeholder="Search for names.." title="Type in a name">
-    <button class="addButton" onclick="location.href='@Url.Action("AddDog", "Dogs")'">dodaj Psa</button>
+    @{  if (LoginHelper.IsAuthenticated()) {
+            <button class="addButton" onclick="location.href='@Url.Action("AddDog", "Dogs")'">dodaj Psa</button> }
+    }
     @*<button id="button1" onclick="location.href='@Url.Action("DeleteDog","Dogs",new { id=7})'">delete</button> *@
     <div>
         <table id="dogsTable">

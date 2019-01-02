@@ -1,4 +1,4 @@
-﻿ 
+﻿ @using kgtwebClient.Helpers;
 @{
     ViewBag.Title = "Index";
 }
@@ -14,8 +14,10 @@
 
 <div class="tables">
     <input type="text" id="trainingsSearch" onkeyup="searchByLocationOrDate()" placeholder="Search for location/date" title="Type in location or date">
-    <button class="addButton" onclick="location.href='@Url.Action("AddTraining", "Trainings")'">Dodaj Trening</button>
-    @*<button id="button1" onclick="location.href='@Url.Action("DeleteDog","Dogs",new { id=7})'">delete</button> *@
+    @{ if(LoginHelper.IsAuthenticated()) { 
+            <button class="addButton" onclick="location.href='@Url.Action("AddTraining", "Trainings")'">Dodaj Trening</button>
+        }
+    }
     <div>
         @if (Model == null || !Model.Any())
         {
@@ -52,23 +54,26 @@
                     </td>
 
 
-
-
-
-                    <td style="background-color:white">
-                        @*location.href='@Url.Action("DeleteDog", "Dogs", new { id = @item.DogId })'*@
-                        <button class="deleteButton" onclick="deleteTraining(@item.TrainingId)" id="@("deleteTrainingButton" + item.TrainingId)">usuń</button>
-                    </td>
-                    <td style="background-color:white">
-                        <button class="updateButton" onclick="location.href='@Url.Action("UpdateTraining", "Trainings", new { id = @item.TrainingId })'">zmień</button>
-                    </td>
                     <td style="background-color:white">
                         <button class="displayButton" onclick="location.href='@Url.Action("Training", "Trainings", new { id = @item.TrainingId })'">wyświetl</button>
                     </td>
-                    <td>
-                        <button type="button" class="displayButton" onclick="location.href='@Url.Action("Add", "DogTrainings", new { trainingId= @item.TrainingId  })'">Dodaj psa do treningu</button>
 
-                    </td>
+                    @{ if (LoginHelper.IsAuthenticated())
+                        {
+                            <td style="background-color:white">
+                                @*location.href='@Url.Action("DeleteDog", "Dogs", new { id = @item.DogId })'*@
+                                <button class="deleteButton" onclick="deleteTraining(@item.TrainingId)" id="@("deleteTrainingButton" + item.TrainingId)">usuń</button>
+                            </td>
+                            <td style="background-color:white">
+                                <button class="updateButton" onclick="location.href='@Url.Action("UpdateTraining", "Trainings", new { id = @item.TrainingId })'">zmień</button>
+                            </td>
+
+                            <td>
+                                <button type="button" class="displayButton" onclick="location.href='@Url.Action("Add", "DogTrainings", new { trainingId = @item.TrainingId })'">Dodaj psa do treningu</button>
+
+                            </td>
+                        }
+                    }
                 </tr>
 
                 }

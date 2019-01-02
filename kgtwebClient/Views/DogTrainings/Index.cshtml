@@ -17,8 +17,9 @@
 @*<div class="jumbotron"> *@
 <div class="tables">
     <input type="text" id="dogTrainingsSearch" onkeyup="searchByTrainingLocalization()" placeholder="Search for names.." title="Type in a name">
-
-    <button type="button" class="addButton" onclick="location.href='@Url.Action("AddTrainingToDog", "DogTrainings", new { dogId = Model[0].DogId })'">dodaj trening</button>
+    @{ if (LoginHelper.IsAuthenticated()) { 
+            <button type="button" class="addButton" onclick="location.href='@Url.Action("AddTrainingToDog", "DogTrainings", new { dogId = Model[0].DogId })'">dodaj trening</button>
+    }}
     <div>
         <table id="dogTrainingsTable">
             <tr>
@@ -26,9 +27,9 @@
                 <th>Lokalizacja</th>
                 <th>Adres</th>
                 @*<th>Data urodzenia</th>
-            <th>Poziom</th>
-            <th>Tryb pracy</th>
-            <th>Notatki</th>
+                    <th>Poziom</th>
+                    <th>Tryb pracy</th>
+                    <th>Notatki</th>
                 *@
                 <th>Data</th>
 
@@ -45,17 +46,17 @@
                         @item.Training.GeneralLocation
                     </td>
                     @*<td class="tdOnclick">
-                    @item.DateOfBirth
-                </td>
-                <td class="tdOnclick">
-                    @item.Level
-                </td>
-                <td class="tdOnclick">
-                    @item.Workmode
-                </td>
-                <td class="tdOnclick">
-                    @item.Notes
-                </td>
+                            @item.DateOfBirth
+                        </td>
+                        <td class="tdOnclick">
+                            @item.Level
+                        </td>
+                        <td class="tdOnclick">
+                            @item.Workmode
+                        </td>
+                        <td class="tdOnclick">
+                            @item.Notes
+                        </td>
                     *@
 
 
@@ -78,15 +79,15 @@
                             <td style="background-color:white">
                                 <button class="deleteButton" onclick="deleteDogTraining(@item.DogId, @item.TrainingId)" id="@($"deleteDog{item.DogId}Training{item.TrainingId}Button")">usuń</button>
                             </td>
-                            <td style="background-color:white">
-                                <button class="updateButton" onclick="location.href='@Url.Action("UpdateTraining", "Trainings", new { id = @item.TrainingId })'">zmień</button>
-                            </td>
+                            @*<td style="background-color:white">
+                                    <button class="updateButton" onclick="location.href='@Url.Action("UpdateTraining", "Trainings", new { id = @item.TrainingId })'">zmień</button>
+                                </td>*@
                         } }
 
                 </tr>
-                
-                
-                
+
+
+
             }
 
         </table>

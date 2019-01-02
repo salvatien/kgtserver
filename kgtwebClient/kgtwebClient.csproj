@@ -352,6 +352,8 @@
     <Content Include="Views\DogEvents\Index.cshtml" />
     <Content Include="Views\DogEvents\DogEvent.cshtml" />
     <Content Include="Views\DogEvents\AddDogEvent.cshtml" />
+    <Content Include="Views\DogEvents\AddDogToEvent.cshtml" />
+    <Content Include="Views\DogCertificates\AddDogToCertificate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

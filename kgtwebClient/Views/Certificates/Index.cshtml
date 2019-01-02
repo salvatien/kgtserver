@@ -9,7 +9,11 @@
 }
 <div class="tables">
     <input type="text" id="certificatesSearch" onkeyup="searchByCertificateName()" placeholder="Search for names.." title="Type in a name">
-    <button class="addButton" onclick="location.href='@Url.Action("AddCertificate", "Certificates")'">dodaj Certyfikat</button>
+   @{  if (LoginHelper.IsAuthenticated())
+        {
+            <button class="addButton" onclick="location.href='@Url.Action("AddCertificate", "Certificates")'">dodaj Certyfikat</button>
+        } 
+    }
     @*<button id="button1" onclick="location.href='@Url.Action("DeleteDog","Dogs",new { id=7})'">delete</button> *@
     <div>
         <table id="certificatesTable">
@@ -72,6 +76,9 @@
                             </td>
                             <td style="background-color:white">
                                 <button class="updateButton" onclick="location.href='@Url.Action("UpdateCertificate", "Certificates", new { id = @item.CertificateId })'">zmień</button>
+                            </td>
+                            <td>
+                                <button type="button" class="displayButton" onclick="location.href='@Url.Action("AddDogToCertificate", "DogCertificates", new { certificateId = @item.CertificateId })'">Przyznaj psu certyfikat</button>
                             </td>
                         } }
 

@@ -42,6 +42,9 @@ namespace kgtwebClient.Helpers
             var dogEvents = GetEventsByDogId(dogId).Result;
             var remainingEvents = allDogEvents.Except(dogEvents, new EventEqualityComparer());
 
+            //select only this event, which has IsCommercialTraining flag set to true - only this events may be dogEvents
+            remainingEvents = remainingEvents.Where(x => x.IsCommercialTraining == true).ToList();
+
             return remainingEvents.Select(x => new SelectListItem
             {
                 Value = x.EventId.ToString(),
@@ -59,26 +62,6 @@ namespace kgtwebClient.Helpers
             System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
 
             HttpResponseMessage responseMessage = client.GetAsync($"dogEvents/GetAllByDogId?dogId={dogId}").Result;
-            if (responseMessage.IsSuccessStatusCode)
-            {
-                var responseData = responseMessage.Content.ReadAsStringAsync().Result;
-                var dogEvents = JsonConvert.DeserializeObject<List<DogEventModel>>(responseData);
-
-                return dogEvents.Select(x => x.Event).ToList();
-
-            }
-            return new List<EventModel>();
-        }
-
-        public static async Task<List<EventModel>> GetEventsByEventId(int eventId)
-        {
-            //HttpClient client = new HttpClient { BaseAddress = new Uri(url) };
-
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
-
-            HttpResponseMessage responseMessage = client.GetAsync($"dogEvents/GetAllByEventId?eventId={eventId}").Result;
             if (responseMessage.IsSuccessStatusCode)
             {
                 var responseData = responseMessage.Content.ReadAsStringAsync().Result;

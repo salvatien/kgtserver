@@ -1,4 +1,6 @@
 ﻿@using System.Configuration;
+@using kgtwebClient.Helpers;
+
 @{
     ViewBag.Title = "Training";
     var googleMapsLinkWithApiKey = "https://maps.googleapis.com/maps/api/js?key=" + @ConfigurationManager.AppSettings["GoogleApiKey"] + "&callback=initMap";
@@ -382,11 +384,11 @@
         @*@Html.HiddenFor(m => m.DogTrackPoints)*@
 
         @*for (int i = 0; i < Model.DogTrackPoints.Count; i++)
-        {
-            @Html.Hidden("dogLatitude" + i, 0);
-            @Html.Hidden("dogLongitude" + i, 0);
-            @Html.Hidden("dogTime" + i, 0);
-        }*@
+            {
+                @Html.Hidden("dogLatitude" + i, 0);
+                @Html.Hidden("dogLongitude" + i, 0);
+                @Html.Hidden("dogTime" + i, 0);
+            }*@
 
         for (int i = 0; i < Model.DogTrackPoints.Count; i++)
         {
@@ -400,11 +402,11 @@
         @*@Html.HiddenFor(m => m.LostPersonTrackPoints)*@
 
         @*for (int i = 0; i < Model.LostPersonTrackPoints.Count; i++)
-        {
-            @Html.Hidden("personLatitude" + i, 0);
-            @Html.Hidden("personLongitude" + i, 0);
-            @Html.Hidden("personTime" + i, 0);
-        }*@
+            {
+                @Html.Hidden("personLatitude" + i, 0);
+                @Html.Hidden("personLongitude" + i, 0);
+                @Html.Hidden("personTime" + i, 0);
+            }*@
 
         for (int i = 0; i < Model.LostPersonTrackPoints.Count; i++)
         {
@@ -422,32 +424,63 @@
         @Html.HiddenFor(m => m.DogTrackLength)
         @Html.HiddenFor(m => m.Goal)
 
-        <div style="float:left">
-            <div class="form-group">
-                @Html.LabelFor(m => m.LostPerson, new { @class = "col-md-2 control-label form-field" })
-                <div class="col-md-10  form-field">
-                    @Html.TextBoxFor(m => m.LostPerson, new { @class = "form-control" })
+         if (LoginHelper.IsAuthenticated())
+         {
+                <div style="float:left">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.LostPerson, new { @class = "col-md-2 control-label form-field" })
+                        <div class="col-md-10  form-field">
+                            @Html.TextBoxFor(m => m.LostPerson, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Notes, new { @class = "col-md-2 control-label form-field" })
+                        <div class="col-md-10  form-field">
+                            @Html.TextBoxFor(m => m.Notes, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Weather, new { @class = "col-md-2 control-label form-field" })
+                        <div class="col-md-10  form-field">
+                            @Html.TextBoxFor(m => m.Weather, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" class="btn btn-default form-field" value="Prześlij dane" onclick="return validateUpdateTraining()" />
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.Notes, new { @class = "col-md-2 control-label form-field" })
-                <div class="col-md-10  form-field">
-                    @Html.TextBoxFor(m => m.Notes, new { @class = "form-control" })
+         }
+         else
+         {
+                <div style="float:left">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.LostPerson, new { @class = "col-md-2 control-label form-field" })
+                        <div class="col-md-10  form-field">
+                            @Html.TextBoxFor(m => m.LostPerson, new { @class = "form-control", disabled = "true" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Notes, new { @class = "col-md-2 control-label form-field" })
+                        <div class="col-md-10  form-field">
+                            @Html.TextBoxFor(m => m.Notes, new { @class = "form-control", disabled = "true" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Weather, new { @class = "col-md-2 control-label form-field" })
+                        <div class="col-md-10  form-field">
+                            @Html.TextBoxFor(m => m.Weather, new { @class = "form-control", disabled = "true" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" class="btn btn-default form-field" value="Prześlij dane" onclick="return validateUpdateTraining()" disabled/>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.Weather, new { @class = "col-md-2 control-label form-field" })
-                <div class="col-md-10  form-field">
-                    @Html.TextBoxFor(m => m.Weather, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" class="btn btn-default form-field" value="Prześlij dane" onclick="return validateUpdateTraining()"/>
-                </div>
-            </div>
-        </div>
-
+         }
+        
     }
 
 

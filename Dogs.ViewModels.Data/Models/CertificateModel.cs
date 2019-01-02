@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace Dogs.ViewModels.Data.Models
@@ -7,10 +8,14 @@ namespace Dogs.ViewModels.Data.Models
     public class CertificateModel
     {
         public int CertificateId { get; set; }
+        [Display(Name = "Nazwa")]
         public string Name { get; set; }
+        [Display(Name = "Poziom")]
         public string Level { get; set; }
+        [Display(Name = "Opis")]
         public string Description { get; set; }
-        public TimeSpan ValidThrough { get; set; }
+        [Display(Name = "Ważny przez (w miesiącach)")]
+        public TimeSpan ValidThrough { get; set; }              // dopisać do tłumczenia - (w miesiącach)
         public virtual List<int> DogIds { get; set; }
     }
 }

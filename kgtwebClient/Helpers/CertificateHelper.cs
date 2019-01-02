@@ -70,7 +70,7 @@ namespace kgtwebClient.Helpers
             return new List<CertificateModel>();
         }
 
-        public static async Task<List<CertificateModel>> GetCertificatesByCertificateId(int certificateId)
+        public static async Task<List<DogModel>> GetDogsByCertificateId(int certificateId)
         {
             //HttpClient client = new HttpClient { BaseAddress = new Uri(url) };
 
@@ -84,10 +84,10 @@ namespace kgtwebClient.Helpers
                 var responseData = responseMessage.Content.ReadAsStringAsync().Result;
                 var dogCertificates = JsonConvert.DeserializeObject<List<DogCertificateModel>>(responseData);
 
-                return dogCertificates.Select(x => x.Certificate).ToList();
+                return dogCertificates.Select(x => x.Dog).ToList();
 
             }
-            return new List<CertificateModel>();
+            return new List<DogModel>();
         }
 
         public static async Task<List<CertificateModel>> GetAllCertificates()

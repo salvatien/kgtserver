@@ -6,6 +6,10 @@
     ViewBag.Title = "Cerfiticate";
 }
 
+@{
+    var dogsInDogCertificate = CertificateHelper.GetDogsByCertificateId(Model.CertificateId).Result;
+}
+
 
 <div style="margin:60px">
     @{
@@ -47,15 +51,36 @@
                 @Html.DisplayNameFor(model => model.DogIds)
             </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.DogIds)
-            </dd>
+
+            @if (dogsInDogCertificate != null && dogsInDogCertificate.Any())
+            {
+                <dt>
+                    Psy posiadające certifikat:
+                </dt>
+                <dd>
+                    <table id="dogsTable">
+                        @{
+                            foreach (var dog in dogsInDogCertificate)
+                            {
+                                <tr>
+                                    <td>@dog.Name</td>
+                                    <td>@dog.Breed</td>
+                                    <td>@dog.GuideIdAndName.Name</td>
+                                    <td>
+                                        <button class="displayButton" onclick="location.href='@Url.Action("DogCertificate", "DogCertificates", new { dogId = @dog.DogId, certificateId=Model.CertificateId  })'">wyświetl szczegóły</button>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </table>
+                </dd>
+            }
 
         </dl>
     </div>
 </div>
 <p style="margin:60px">
-    
+
 </p>
 
 

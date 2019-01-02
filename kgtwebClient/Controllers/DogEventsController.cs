@@ -316,8 +316,14 @@ namespace kgtwebClient.Controllers
             }
         }
 
+        //[HttpGet]
+        //public ActionResult Add(int eventId)
+        //{
+        //    return View(new DogEventModel { EventId = eventId });
+        //}
+
         [HttpGet]
-        public ActionResult Add(int eventId)
+        public ActionResult AddDogToEvent(int eventId)
         {
             return View(new DogEventModel { EventId = eventId });
         }

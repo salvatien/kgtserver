@@ -9,21 +9,23 @@
 }
 <div class="tables">
     <input type="text" id="eventsSearch" onkeyup="searchByEventName()" placeholder="Search for names.." title="Type in a name">
-    <button class="addButton" onclick="location.href='@Url.Action("AddDogEvent", "DogEvents", new { dogId = Model[0].DogId})'">dodaj wydarzenie</button>
+    @{ if (LoginHelper.IsAuthenticated()) { 
+            <button class="addButton" onclick="location.href='@Url.Action("AddDogEvent", "DogEvents", new { dogId = Model[0].DogId})'">dodaj wydarzenie</button>
+    }}
     <div>
         <table id="eventsTable">
             <tr>
                 <th>ID</th>
                 <th>Nazwa</th>
-                <th>Poziom trudności</th>
+                <th>Data</th>
 
                 @*<th>Data urodzenia</th>
                     <th>Poziom</th>
                     <th>Tryb pracy</th>
                     <th>Notatki</th>
                 *@
-                <th>Czas obowiązywania</th>
-                <th>Czas uzyskania</th>
+                <th>Miasto</th>
+                <th>Lokalizacja</th>
 
 
             </tr>
@@ -58,9 +60,9 @@
                                 @*location.href='@Url.Action("DeleteDog", "Dogs", new { id = @item.DogId })'*@
                                 <button class="deleteButton" onclick="deleteDogEvent(@item.DogId, @item.EventId)" id="@($"deleteDog{item.DogId}Event{item.EventId}Button")">usuń</button>
                             </td>
-                            <td style="background-color:white">
-                                <button class="updateButton" onclick="location.href='@Url.Action("UpdateDogEvent", "DogEvents", new { dogId = @item.DogId, eventId = item.EventId })'">zmień</button>
-                            </td>
+                            @*<td style="background-color:white">
+                                    <button class="updateButton" onclick="location.href='@Url.Action("UpdateDogEvent", "DogEvents", new { dogId = @item.DogId, eventId = item.EventId })'">zmień</button>
+                                </td>*@
                         } }
 
                 </tr>
