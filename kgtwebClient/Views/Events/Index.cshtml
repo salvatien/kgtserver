@@ -9,84 +9,92 @@
 }
 <div class="tables">
     <input type="text" id="eventsSearch" onkeyup="searchByEventName()" placeholder="Search for names.." title="Type in a name">
-    <button class="addButton" onclick="location.href='@Url.Action("AddEvent", "Events")'">dodaj Wydarzenie</button>
-    <div>
-        <table id="eventsTable">
-            <tr>
-                <th>ID</th>
-                <th>Nazwa</th>
-                <th>Data</th>
+    @{ if (LoginHelper.IsAuthenticated())
+        {
+            <button class="addButton" onclick="location.href='@Url.Action("AddEvent", "Events")'">dodaj Wydarzenie</button>
+        } 
+     }
+            <div>
+                <table id="eventsTable">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nazwa</th>
+                        <th>Data</th>
 
-                @*<th>Data urodzenia</th>
-                    <th>Poziom</th>
-                    <th>Tryb pracy</th>
-                    <th>Notatki</th>
-                *@
-                <th>Miasto</th>
-                <th>Lokalizacja</th>
-
-
-            </tr>
-            @foreach (var item in Model)
-
-            {
-            <tr @*onclick="document.location = 'http://kgtwebclient.azurewebsites.net/Dogs/Dog/' + @item.DogId;"  *@>
-                <td class="tdOnclick">
-                    @item.EventId
-                </td>
-                <td class="tdOnclick">
-                    @item.Title
-                </td>
-                @*<td class="tdOnclick">
-            @item.DateOfBirth
-        </td>
-        <td class="tdOnclick">
-            @item.Level
-        </td>
-        <td class="tdOnclick">
-            @item.Workmode
-        </td>
-        <td class="tdOnclick">
-            @item.Notes
-        </td>
-                *@
+                        @*<th>Data urodzenia</th>
+                            <th>Poziom</th>
+                            <th>Tryb pracy</th>
+                            <th>Notatki</th>
+                        *@
+                        <th>Miasto</th>
+                        <th>Lokalizacja</th>
 
 
-                <td class="tdOnclick">
-                    @item.Date
-                </td>
+                    </tr>
+                    @foreach (var item in Model)
 
-                <td class="tdOnclick">
-                    @item.City
-                </td>
-                <td class="tdOnclick">
-                    @item.StreetOrLocation
-                </td>
-
-                @*buttons *@
-                <td style="background-color:white">
-                    <button class="displayButton" onclick="location.href='@Url.Action("Event", "Events", new { id = @item.EventId })'">wyświetl</button>
-                </td>
-                @{ if (LoginHelper.IsCurrentUserMember())
                     {
-                        if (LoginHelper.IsCurrentUserAdmin())
-                        {
-                        <td style="background-color:white">
-                            <button class="deleteButton" onclick="deleteEvent(@item.EventId)" id="@("deleteEventButton" + item.EventId)">usuń</button>
-                        </td>
-                        }
-                        <td style="background-color:white">
-                            <button class="updateButton" onclick="location.href='@Url.Action("UpdateEvent", "Events", new { id = @item.EventId })'">zmień</button>
-                        </td>
-                    } }
+                        <tr @*onclick="document.location = 'http://kgtwebclient.azurewebsites.net/Dogs/Dog/' + @item.DogId;"  *@>
+                            <td class="tdOnclick">
+                                @item.EventId
+                            </td>
+                            <td class="tdOnclick">
+                                @item.Title
+                            </td>
+                            @*<td class="tdOnclick">
+                                    @item.DateOfBirth
+                                </td>
+                                <td class="tdOnclick">
+                                    @item.Level
+                                </td>
+                                <td class="tdOnclick">
+                                    @item.Workmode
+                                </td>
+                                <td class="tdOnclick">
+                                    @item.Notes
+                                </td>
+                            *@
 
-            </tr>
 
-            }
+                            <td class="tdOnclick">
+                                @item.Date
+                            </td>
 
-        </table>
-    </div>
-</div>
+                            <td class="tdOnclick">
+                                @item.City
+                            </td>
+                            <td class="tdOnclick">
+                                @item.StreetOrLocation
+                            </td>
+
+                            @*buttons *@
+                            <td style="background-color:white">
+                                <button class="displayButton" onclick="location.href='@Url.Action("Event", "Events", new { id = @item.EventId })'">wyświetl</button>
+                            </td>
+                            @{ if (LoginHelper.IsCurrentUserMember())
+                                {
+                                    if (LoginHelper.IsCurrentUserAdmin())
+                                    {
+                                        <td style="background-color:white">
+                                            <button class="deleteButton" onclick="deleteEvent(@item.EventId)" id="@("deleteEventButton" + item.EventId)">usuń</button>
+                                        </td>
+                                    }
+                                    <td style="background-color:white">
+                                        <button class="updateButton" onclick="location.href='@Url.Action("UpdateEvent", "Events", new { id = @item.EventId })'">zmień</button>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="displayButton" onclick="location.href='@Url.Action("AddDogToEvent", "DogEvents", new { eventId = @item.EventId })'">Dodaj psa do wydarzenia</button>
+
+                                    </td>
+                                } }
+
+                        </tr>
+
+                    }
+
+                </table>
+            </div>
+        </div>
 <script>
     function searchByEventName() {
         var input, filter, table, tr, td, i;

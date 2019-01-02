@@ -275,5 +275,53 @@ namespace DogsServer.Controllers
             }
             return dogTrainingModels;
         }
+
+        [HttpGet("GetAllByTrainingId")]
+        public List<DogTrainingModel> GetAllByTrainingId(int trainingId)
+        {
+            //return unitOfWork.GuideRepository.GetById(id);
+            var allDogTrainings = unitOfWork.DogTrainingRepository.GetAllByTrainingId(trainingId);
+            var dogTrainingModels = new List<DogTrainingModel>();
+            foreach (var t in allDogTrainings)
+            {
+                dogTrainingModels.Add(new DogTrainingModel
+                {
+                    DogId = t.DogId,
+                    Dog = new DogModel
+                    {
+                        DogId = t.Dog.DogId,
+                        Name = t.Dog.Name,
+                        GuideIdAndName = new IdNameModel
+                        {
+                            Id = t.Dog.Guide.GuideId,
+                            Name = t.Dog.Guide.FirstName + " " + t.Dog.Guide.LastName
+                        }
+                    },
+                    TrainingId = t.TrainingId,
+                    Training = new TrainingModel
+                    {
+                        Date = t.Training.Date,
+                        GeneralLocation = t.Training.GeneralLocation,
+                        LocationDetails = t.Training.LocationDetails,
+                        Notes = t.Training.Notes,
+                        TrainingId = t.TrainingId
+                    },
+                    DogTrackBlobUrl = t.DogTrackBlobUrl,
+                    LostPerson = t.LostPerson,
+                    LostPersonTrackBlobUrl = t.LostPersonTrackBlobUrl,
+                    Notes = t.Notes,
+                    Weather = t.Weather//,
+                    //Comments = t.Comments.Select(c => new CommentModel
+                    //{
+                    //    AuthorId = c.AuthorId,
+                    //    AuthorName = c.Author.FirstName + " " + c.Author.LastName,
+                    //    CommentId = c.DogTrainingCommentId,
+                    //    Content = c.Content,
+                    //    Date = c.Date
+                    //}).ToList()
+                });
+            }
+            return dogTrainingModels;
+        }
     }
 }

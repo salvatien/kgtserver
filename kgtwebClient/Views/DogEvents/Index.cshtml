@@ -9,7 +9,9 @@
 }
 <div class="tables">
     <input type="text" id="eventsSearch" onkeyup="searchByEventName()" placeholder="Search for names.." title="Type in a name">
-    <button class="addButton" onclick="location.href='@Url.Action("AddDogEvent", "DogEvents", new { dogId = Model[0].DogId})'">dodaj wydarzenie</button>
+    @{ if (LoginHelper.IsAuthenticated()) { 
+            <button class="addButton" onclick="location.href='@Url.Action("AddDogEvent", "DogEvents", new { dogId = Model[0].DogId})'">dodaj wydarzenie</button>
+    }}
     <div>
         <table id="eventsTable">
             <tr>
@@ -59,8 +61,8 @@
                                 <button class="deleteButton" onclick="deleteDogEvent(@item.DogId, @item.EventId)" id="@($"deleteDog{item.DogId}Event{item.EventId}Button")">usuń</button>
                             </td>
                             @*<td style="background-color:white">
-                                <button class="updateButton" onclick="location.href='@Url.Action("UpdateDogEvent", "DogEvents", new { dogId = @item.DogId, eventId = item.EventId })'">zmień</button>
-                            </td>*@
+                                    <button class="updateButton" onclick="location.href='@Url.Action("UpdateDogEvent", "DogEvents", new { dogId = @item.DogId, eventId = item.EventId })'">zmień</button>
+                                </td>*@
                         } }
 
                 </tr>

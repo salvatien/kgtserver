@@ -92,6 +92,12 @@ namespace kgtwebClient.Controllers
             return View(new DogCertificateModel { DogId = dogId });
         }
 
+        [HttpGet]
+        public ActionResult AddDogToCertificate(int certificateId)
+        {
+            return View(new DogCertificateModel { CertificateId = certificateId });
+        }
+
         public JsonResult DeleteDogCertificate(int? dogId, int? certificateId)
         {
             //client.BaseAddress = new Uri(url);

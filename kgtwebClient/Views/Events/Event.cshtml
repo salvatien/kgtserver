@@ -5,6 +5,9 @@
     ViewBag.Title = "Event";
 }
 
+@{ 
+    var dogsInDogEvent = DogHelpers.GetDogsByEventId(Model.EventId);
+}
 
 <div style="margin:60px">
     @{
@@ -71,20 +74,22 @@
                 @Html.DisplayFor(model => model.IsCommercialTraining)
             </dd>
 
-            @if (Model.DogIds != null && Model.DogIds.Any())
+            @if (dogsInDogEvent != null && dogsInDogEvent.Any())
             {
                 <dt>
-                    @Html.DisplayNameFor(model => model.DogTrainings)
+                    Psy biorące udział w wydarzeniu:
                 </dt>
                 <dd>
                     <table id="dogsTable">
                         @{
-                            foreach (var dogTraining in Model.DogTrainings)
+                            foreach (var dog in dogsInDogEvent)
                             {
                                 <tr>
-                                    <td>@Html.DisplayFor(m => dogTraining.Dog.Name)</td>
+                                    <td>@dog.Name</td>
+                                    <td>@dog.Breed</td>
+                                    <td>@dog.GuideIdAndName.Name</td>
                                     <td>
-                                        <button class="displayButton" onclick="location.href='@Url.Action("Training", "DogTrainings", new { dogId = @dogTraining.DogId, trainingId=dogTraining.TrainingId  })'">wyświetl trening psa</button>
+                                        <button class="displayButton" onclick="location.href='@Url.Action("DogEvent", "DogEvents", new { dogId = @dog.DogId, eventId=Model.EventId  })'">wyświetl szczegóły</button>
                                     </td>
                                 </tr>
                             }

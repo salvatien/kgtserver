@@ -30,34 +30,45 @@
             <dd>
                 @Html.DisplayFor(model => model.City)
             </dd>
-            <dt>
-                @Html.DisplayNameFor(model => model.Address)
-            </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.Address)
-            </dd>
-            <dt>
-                @Html.DisplayNameFor(model => model.Phone)
-            </dt>
+            @{  if (LoginHelper.IsAuthenticated()) {
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Address)
+                    </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.Phone)
-            </dd>
-            <dt>
-                @Html.DisplayNameFor(model => model.IsAdmin)
-            </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Address)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Phone)
+                    </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.IsAdmin)
-            </dd>
-            <dt>
-                @Html.DisplayNameFor(model => model.IsMember)
-            </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Phone)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.IsAdmin)
+                    </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.IsMember)
-            </dd>
+                    <dd>
+                        @Html.DisplayFor(model => model.IsAdmin)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.IsMember)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.IsMember)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Notes)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Notes)
+                    </dd>
+                }
+            }
+
             <dt>
                 @Html.DisplayNameFor(model => model.Email)
             </dt>
@@ -65,12 +76,7 @@
             <dd>
                 @Html.DisplayFor(model => model.Email)
             </dd>
-            <dt>
-                @Html.DisplayNameFor(model => model.Notes)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.Notes)
-            </dd>
+
 
             <dt>
                 @Html.DisplayNameFor(model => model.Dogs)
@@ -92,9 +98,6 @@
             </dd>
 
         </dl>
-    </div>
-    <div class="picture">
-        <img src="~/Images/januszek.jpg" height="400" width="400">
     </div>
 </div>
 

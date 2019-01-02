@@ -10,7 +10,9 @@
 <div class="tables">
     <input type="text" id="certificatesSearch" onkeyup="searchByCertificateName()" placeholder="Search for names.." title="Type in a name">
     @*  dodaj certyfikat dla psa - certifikat jjuż istnieje, wybieramy który ma być przypisany dla danego psa*@
-    <button class="addButton" onclick="location.href='@Url.Action("AddDogCertificate", "DogCertificates", new { dogId = Model[0].DogId})'">dodaj Certyfikat</button>
+    @{ if (LoginHelper.IsAuthenticated()) { 
+            <button class="addButton" onclick="location.href='@Url.Action("AddDogCertificate", "DogCertificates", new { dogId = Model[0].DogId})'">dodaj Certyfikat</button>
+    }}
     <div>
         <table id="certificatesTable">
             <tr>
@@ -63,8 +65,8 @@
 
                             //TODO: zmienić update dog certyfikatu - nowy widok i metody na kontrolerze
                             @*<td style="background-color:white">
-                                <button class="updateButton" onclick="location.href='@Url.Action("UpdateCertificate", "Certificates", new { id = @item.CertificateId })'">zmień</button>
-                            </td>*@
+                                    <button class="updateButton" onclick="location.href='@Url.Action("UpdateCertificate", "Certificates", new { id = @item.CertificateId })'">zmień</button>
+                                </td>*@
                         } }
 
                 </tr>

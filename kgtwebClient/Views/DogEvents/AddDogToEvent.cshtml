@@ -1,38 +1,42 @@
 ﻿@using kgtwebClient.Helpers;
-@model Dogs.ViewModels.Data.Models.DogTrainingModel
-
 @{
-    ViewBag.Title = "AddDogTraining";
-}
-
-@{
-    var remainingDogs = DogHelpers.GetDogsNotInTraining(Model.TrainingId);
+    ViewBag.Title = "AddDogToEvent";
 }
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var remainingDogs = DogHelpers.GetDogsNotInEvent(Model.EventId);    //get all dogs except this which are in this event already
 }
 
-
+@model Dogs.ViewModels.Data.Models.DogEventModel
 
 
 <div style="margin:60px">
 
-    @using (Html.BeginForm("Add", "DogTrainings", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    @using (Html.BeginForm("AddDogEvent", "DogEvents", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         @Html.ValidationSummary(true)
-        @Html.HiddenFor(m => m.TrainingId)
+        @Html.HiddenFor(m => m.EventId)
         <div style="float:left">
             <div class="form-group">
                 @Html.LabelFor(m => m.DogId, new { @class = "col-md-2 control-label form-field" })
                 <div class="col-md-10  form-field">
                     @Html.DropDownListFor(m => m.DogId, remainingDogs, new { @class = "form-control" })
+                    @*@Html.TextBoxFor(m => m.CertificateId, new { @class = "form-control" })*@
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.LostPerson, new { @class = "col-md-2 control-label form-field" })
+                <div class="col-md-10 form-field">
+                    @Html.TextBoxFor(m => m.LostPerson, new { @class = "form-control" })
                 </div>
             </div>
             <div class="form-group">
-                @Html.LabelFor(m => m.LostPerson, new { @class = "col-md-2 control-label form-field" })
-                <div class="col-md-10  form-field">
-                    @Html.TextBoxFor(m => m.LostPerson, new { @class = "form-control" })
+                @Html.LabelFor(m => m.Notes, new { @class = "col-md-2 control-label form-field" })
+                <div class="col-md-10 form-field">
+                    @Html.TextBoxFor(m => m.Notes, new { @class = "form-control" })
                 </div>
             </div>
             <div class="form-group">
@@ -41,33 +45,20 @@
                     @Html.TextBoxFor(m => m.Weather, new { @class = "form-control" })
                 </div>
             </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.Notes, new { @class = "col-md-2 control-label form-field" })
-                <div class="col-md-10 form-field">
-                    @Html.TextAreaFor(m => m.Notes, new { @class = "form-control" })
-                </div>
-            </div>
             <div>
                 Dodaj plik .GPX ze śladem pozoranta
                 @Html.TextBox("lostPersonTrackFile", "", new { type = "file" }) <br />
+            </div>
+            <div>
                 Dodaj plik .GPX ze śladem psa
                 @Html.TextBox("dogTrackFile", "", new { type = "file" }) <br />
             </div>
-
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
                     <input type="submit" class="btn btn-default form-field" value="Prześlij dane" />
                 </div>
             </div>
-
-            Godziny trwania będą wywnioskowane z pliku ze śladem psa.
-
         </div>
     }
 </div>
-
-@*
-    </body>
-    </html>
-*@
 
