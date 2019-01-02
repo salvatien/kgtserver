@@ -70,6 +70,26 @@ namespace kgtwebClient.Helpers
             return new List<CertificateModel>();
         }
 
+        public static async Task<List<CertificateModel>> GetCertificatesByCertificateId(int certificateId)
+        {
+            //HttpClient client = new HttpClient { BaseAddress = new Uri(url) };
+
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+
+            HttpResponseMessage responseMessage = client.GetAsync($"dogCertificates/GetAllByCertificateId?certificateId={certificateId}").Result;
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                var responseData = responseMessage.Content.ReadAsStringAsync().Result;
+                var dogCertificates = JsonConvert.DeserializeObject<List<DogCertificateModel>>(responseData);
+
+                return dogCertificates.Select(x => x.Certificate).ToList();
+
+            }
+            return new List<CertificateModel>();
+        }
+
         public static async Task<List<CertificateModel>> GetAllCertificates()
         {
             client.DefaultRequestHeaders.Accept.Clear();
