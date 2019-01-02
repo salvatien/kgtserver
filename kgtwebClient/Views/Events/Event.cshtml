@@ -63,7 +63,35 @@
             <dd>
                 @Html.DisplayFor(model => model.GuideIds)
             </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.IsCommercialTraining)
+            </dt>
 
+            <dd>
+                @Html.DisplayFor(model => model.IsCommercialTraining)
+            </dd>
+
+            @if (Model.DogIds != null && Model.DogIds.Any())
+            {
+                <dt>
+                    @Html.DisplayNameFor(model => model.DogTrainings)
+                </dt>
+                <dd>
+                    <table id="dogsTable">
+                        @{
+                            foreach (var dogTraining in Model.DogTrainings)
+                            {
+                                <tr>
+                                    <td>@Html.DisplayFor(m => dogTraining.Dog.Name)</td>
+                                    <td>
+                                        <button class="displayButton" onclick="location.href='@Url.Action("Training", "DogTrainings", new { dogId = @dogTraining.DogId, trainingId=dogTraining.TrainingId  })'">wyświetl trening psa</button>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </table>
+                </dd>
+            }
         </dl>
     </div>
 </div>

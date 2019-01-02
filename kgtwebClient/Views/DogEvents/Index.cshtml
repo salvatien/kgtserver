@@ -15,15 +15,15 @@
             <tr>
                 <th>ID</th>
                 <th>Nazwa</th>
-                <th>Poziom trudności</th>
+                <th>Data</th>
 
                 @*<th>Data urodzenia</th>
                     <th>Poziom</th>
                     <th>Tryb pracy</th>
                     <th>Notatki</th>
                 *@
-                <th>Czas obowiązywania</th>
-                <th>Czas uzyskania</th>
+                <th>Miasto</th>
+                <th>Lokalizacja</th>
 
 
             </tr>
@@ -58,9 +58,9 @@
                                 @*location.href='@Url.Action("DeleteDog", "Dogs", new { id = @item.DogId })'*@
                                 <button class="deleteButton" onclick="deleteDogEvent(@item.DogId, @item.EventId)" id="@($"deleteDog{item.DogId}Event{item.EventId}Button")">usuń</button>
                             </td>
-                            <td style="background-color:white">
+                            @*<td style="background-color:white">
                                 <button class="updateButton" onclick="location.href='@Url.Action("UpdateDogEvent", "DogEvents", new { dogId = @item.DogId, eventId = item.EventId })'">zmień</button>
-                            </td>
+                            </td>*@
                         } }
 
                 </tr>

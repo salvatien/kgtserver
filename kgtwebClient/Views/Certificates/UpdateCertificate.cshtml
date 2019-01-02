@@ -43,7 +43,7 @@
             <div class="form-group">
                 @Html.LabelFor(m => m.ValidThrough, new { @class = "col-md-2 control-label  form-field" })
                 <div class="col-md-10 form-field">
-                    @Html.TextBoxFor(m => m.ValidThrough, new { @Value = Model.ValidThrough, @class = "form-control" })
+                    @Html.TextBoxFor(m => m.ValidThrough, new { @type = "number", @Value = Model.ValidThrough, @class = "form-control" })
                 </div>
             </div>
             <div class="form-group">

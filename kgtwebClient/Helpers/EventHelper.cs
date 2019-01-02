@@ -42,6 +42,9 @@ namespace kgtwebClient.Helpers
             var dogEvents = GetEventsByDogId(dogId).Result;
             var remainingEvents = allDogEvents.Except(dogEvents, new EventEqualityComparer());
 
+            //select only this event, which has IsCommercialTraining flag set to true - only this events may be dogEvents
+            remainingEvents = remainingEvents.Where(x => x.IsCommercialTraining == true).ToList();
+
             return remainingEvents.Select(x => new SelectListItem
             {
                 Value = x.EventId.ToString(),

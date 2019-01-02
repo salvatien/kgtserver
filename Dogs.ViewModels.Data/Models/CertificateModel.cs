@@ -10,7 +10,7 @@ namespace Dogs.ViewModels.Data.Models
         public string Name { get; set; }
         public string Level { get; set; }
         public string Description { get; set; }
-        public TimeSpan ValidThrough { get; set; }
+        public TimeSpan ValidThrough { get; set; }              // dopisać do tłumczenia - (w miesiącach)
         public virtual List<int> DogIds { get; set; }
     }
 }
