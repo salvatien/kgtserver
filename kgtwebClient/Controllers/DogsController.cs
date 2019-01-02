@@ -64,6 +64,8 @@ namespace kgtwebClient.Controllers
         [HttpGet]
         public  ActionResult AddDog()
         {
+            if (!LoginHelper.IsAuthenticated())
+                return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
            // var guides = GuideHelpers.GetAllGuidesIdAndName();
             return View();
         }
@@ -71,7 +73,8 @@ namespace kgtwebClient.Controllers
         [HttpPost]
         public async Task<ActionResult> /*Task<ActionResult>*/ AddDog(DogModel addedDog, HttpPostedFileBase imageFile)
         {
-
+            if (!LoginHelper.IsAuthenticated())
+                return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
             MultipartFormDataContent form = new MultipartFormDataContent();
             var imageStreamContent = new StreamContent(imageFile.InputStream);
             var byteArrayImageContent = new ByteArrayContent(imageStreamContent.ReadAsByteArrayAsync().Result);

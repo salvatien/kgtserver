@@ -31,7 +31,8 @@ namespace DogsServer.Controllers
                     Description = oneEvent.Description,
                     StreetOrLocation = oneEvent.StreetOrLocation,
                     Title = oneEvent.Title,
-                    GuideIds = oneEvent.GuideEvents.Select(x => x.GuideId).ToList()
+                    GuideIds = oneEvent.GuideEvents?.Select(x => x.GuideId).ToList(),
+                    DogIds = oneEvent.DogEvents?.Select(x=>x.DogId).ToList()
                 };
                 eventModels.Add(eventModel);
             }
@@ -51,7 +52,8 @@ namespace DogsServer.Controllers
                 Description = oneEvent.Description,
                 StreetOrLocation = oneEvent.StreetOrLocation,
                 Title = oneEvent.Title,
-                GuideIds = oneEvent.GuideEvents.Select(x => x.GuideId).ToList()
+                GuideIds = oneEvent.GuideEvents?.Select(x => x.GuideId).ToList(),
+                DogIds = oneEvent.DogEvents?.Select(x => x.DogId).ToList()
             };
             return eventModel;
         }
