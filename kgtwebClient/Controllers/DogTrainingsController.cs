@@ -100,51 +100,55 @@ namespace kgtwebClient.Controllers
                     TrainingId = dogTraining.TrainingId,
                     Weather = dogTraining.Weather
                 };
-                var webRequestDogTrack = WebRequest.Create(dogTraining.DogTrackBlobUrl);
-                try
+                if (!String.IsNullOrEmpty(dogTraining.DogTrackBlobUrl))
                 {
-                    using (var response = webRequestDogTrack.GetResponse())
-                    using (var content = response.GetResponseStream())
-                    using (var reader = new StreamReader(content))
+                    var webRequestDogTrack = WebRequest.Create(dogTraining.DogTrackBlobUrl);
+                    try
                     {
-                        XDocument gpxDoc = XDocument.Load(reader);
-                        var serializer = new XmlSerializer(typeof(Trkseg));
-                        var trkseg = (Trkseg)serializer.Deserialize(gpxDoc.Root.CreateReader());
-                        var t = trkseg.Trkpt;
+                        using (var response = webRequestDogTrack.GetResponse())
+                        using (var content = response.GetResponseStream())
+                        using (var reader = new StreamReader(content))
+                        {
+                            XDocument gpxDoc = XDocument.Load(reader);
+                            var serializer = new XmlSerializer(typeof(Trkseg));
+                            var trkseg = (Trkseg)serializer.Deserialize(gpxDoc.Root.CreateReader());
+                            var t = trkseg.Trkpt;
 
-                        dogTrainingViewModel.DogTrackPoints = t;
-                        //TODO: fill other fields DogTrainingViewModel class (dog part)
+                            dogTrainingViewModel.DogTrackPoints = t;
+                            //TODO: fill other fields DogTrainingViewModel class (dog part)
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        ViewBag.Message = e.Message;
+                        return View("Error");
                     }
                 }
-                catch (Exception e)
+                if (!String.IsNullOrEmpty(dogTraining.LostPersonTrackBlobUrl))
                 {
-                    ViewBag.Message = e.Message;
-                    return View("Error");
-                }
-
-                var webRequestLostPersonTrack = WebRequest.Create(dogTraining.LostPersonTrackBlobUrl);
-                try
-                {
-                    using (var response = webRequestLostPersonTrack.GetResponse())
-                    using (var content = response.GetResponseStream())
-                    using (var reader = new StreamReader(content))
+                    var webRequestLostPersonTrack = WebRequest.Create(dogTraining.LostPersonTrackBlobUrl);
+                    try
                     {
-                        XDocument gpxDoc = XDocument.Load(reader);
-                        var serializer = new XmlSerializer(typeof(Trkseg));
-                        var trkseg = (Trkseg)serializer.Deserialize(gpxDoc.Root.CreateReader());
-                        var t = trkseg.Trkpt;
+                        using (var response = webRequestLostPersonTrack.GetResponse())
+                        using (var content = response.GetResponseStream())
+                        using (var reader = new StreamReader(content))
+                        {
+                            XDocument gpxDoc = XDocument.Load(reader);
+                            var serializer = new XmlSerializer(typeof(Trkseg));
+                            var trkseg = (Trkseg)serializer.Deserialize(gpxDoc.Root.CreateReader());
+                            var t = trkseg.Trkpt;
 
-                        dogTrainingViewModel.LostPersonTrackPoints = t;
-                        //TODO: fill other fields DogTrainingViewModel class (person part)
+                            dogTrainingViewModel.LostPersonTrackPoints = t;
+                            //TODO: fill other fields DogTrainingViewModel class (person part)
 
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        ViewBag.Message = e.Message;
+                        return View("Error");
                     }
                 }
-                catch (Exception e)
-                {
-                    ViewBag.Message = e.Message;
-                    return View("Error");
-                }
-
                 return View(dogTrainingViewModel);
             }
             else

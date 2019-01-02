@@ -29,12 +29,13 @@ namespace DogsServer.Repositories
         public new IQueryable<DogEvent> GetAll()
         {
             //return DbSet;
-            return DbSet.Include(x => x.Dog).Include(x => x.Event);
+            return DbSet.Include(x => x.Dog).ThenInclude(x=> x.Guide).Include(x => x.Event);
         }
 
         public DogEvent GetByIds(int dogId, int eventId)
         {
-            var DogEvent = DbSet.Where(x => x.EventId == eventId && x.DogId == dogId).Include(x => x.Dog).Include(x => x.Event).FirstOrDefault();
+            var DogEvent = DbSet.Where(x => x.EventId == eventId && x.DogId == dogId).Include(x => x.Dog).ThenInclude(x => x.Guide)
+                .Include(x => x.Event).FirstOrDefault();
             return DogEvent;
         }
 
