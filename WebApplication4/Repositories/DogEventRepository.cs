@@ -41,11 +41,20 @@ namespace DogsServer.Repositories
 
         public List<DogEvent> GetAllByDogId(int dogId)
         {
-            var DogCertificate = DbSet.Where(x => x.DogId == dogId)
+            var dogEvent = DbSet.Where(x => x.DogId == dogId)
                                       .Include(x => x.Dog).ThenInclude(x => x.Guide)
                                       .Include(x => x.Event)
                                       .ToList();
-            return DogCertificate;
+            return dogEvent;
+        }
+
+        public List<DogEvent> GetAllByEventId(int eventId)
+        {
+            var dogEvent = DbSet.Where(x => x.EventId == eventId)
+                                      .Include(x => x.Dog).ThenInclude(x => x.Guide)
+                                      .Include(x => x.Event)
+                                      .ToList();
+            return dogEvent;
         }
     }
 }
