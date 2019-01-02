@@ -1,7 +1,438 @@
-﻿
+﻿@using System.Configuration;
+@using kgtwebClient.Helpers;
 @{
     ViewBag.Title = "DogEvent";
+    var googleMapsLinkWithApiKey = "https://maps.googleapis.com/maps/api/js?key=" + @ConfigurationManager.AppSettings["GoogleApiKey"] + "&callback=initMap";
 }
 
-<h2>DogEvent</h2>
+@model Dogs.ViewModels.Data.Models.DogEventViewModel
 
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Complex Polylines</title>
+    <style>
+        /* Always set the map height explicitly to define the size of the div
+        * element that contains the map. */
+        #map {
+            height: 100%;
+        }
+        /* Optional: Makes the sample page fill the window. */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="map" style="width:900px; height:500px; margin:60px"></div>
+
+    <script>
+
+        // This example creates an interactive map which constructs a polyline based on
+        // user clicks. Note that the polyline only appears once its path property
+        // contains two LatLng coordinates.
+        var polyPerson;     //lines for person track
+        var poly;           // lines for dos track
+        var map;
+        var personMarkers = [];
+        var dogMarkers = [];
+
+        var personTraceData = [];   //data about person trace - longitude, latitide, time
+        var dogTraceData = [];
+
+        function initPersonTraceData() {
+            @foreach (var pt in Model.LostPersonTrackPoints)
+            {
+                var t = pt.Time;
+                @: var date = '@HttpUtility.JavaScriptStringEncode(t)';
+                @*@: var time = new Date(date).toLocaleTimeString();*@
+                @: var time = new Date(date).toISOString();
+
+                @: personTraceData.push({latitude: @pt.Lat, longitude: @pt.Lon, time: time });
+            }
+        }
+
+        function initDogTraceData() {
+            @foreach (var pt in Model.DogTrackPoints)
+            {
+                var t = pt.Time;
+                @: var date = '@HttpUtility.JavaScriptStringEncode(t)';
+                @*@: var time = new Date(date).toLocaleTimeString();*@
+                @: var time = new Date(date).toISOString();
+                @: dogTraceData.push({ latitude: @pt.Lat, longitude: @pt.Lon, time: time });
+                @: console.log( "init dog trace data" + @pt.Lat +  @pt.Lon + "time: " +  time);
+            }
+        }
+
+        function createPersonMarkers() {
+            @{ int counter = 0; }
+            @foreach (var pt in @Model.LostPersonTrackPoints) {
+                var t = pt.Time;
+                @: var date = '@HttpUtility.JavaScriptStringEncode(t)';
+                @: var time = new Date(date).toLocaleTimeString();
+
+                @:  var marker = new google.maps.Marker({
+                @:        position: { lat: @pt.Lat, lng: @pt.Lon },
+                @:        label: {
+                @:          text: "@counter",
+                @:          fontSize: "0px"
+                @:        },
+                @:        icon: {
+                @:          path: google.maps.SymbolPath.CIRCLE,
+                @:          strokeColor: "blue",
+                @:          scale: 1.5
+                @:        },
+                @:        title: 'czas: ' + time    @*'\'   @pt.Time\''*@,
+                @:        map: map
+                @:  });
+
+                @:  personMarkers.push(marker);
+                @*@:  console.log(personMarkers);*@
+                counter++;
+
+                // add InfoWindow for marker
+                @*@:  console.log("time: " + time);*@
+                @:  google.maps.event.addListener(marker, 'click', function (event) {
+                @:      var infowindow = new google.maps.InfoWindow({
+                @:                      content: "<div class='personInfoWindow'>"
+                @:                      + 'szerokość:' + @pt.Lat +  ',\n długość:' + @pt.Lon
+                @:                      + ',\n czas:'
+                @:                      + new Date('@HttpUtility.JavaScriptStringEncode(pt.Time)').toLocaleTimeString()
+                @:                      + "<br><input type='button' class='markerStartButton' value='Oznacz jako punkt początkowy' onclick='setStartPoint(" + new google.maps.Marker(this).label.text + ")'>"
+                @:                      + "<input type='button' class='markerEndButton' value='Oznacz jako punkt końcowy' onclick='setEndPoint(" + new google.maps.Marker(this).label.text + ")'>"
+                @:                      + "</div>"
+
+                @:                  });
+
+                @:      infowindow.open(map, this);
+
+                @: });
+
+
+             }
+        }
+
+        function createPersonTrace() {
+            var personPoints = [];
+            @foreach (var pt in Model.LostPersonTrackPoints)
+            {
+                @: personPoints.push({ lat: @pt.Lat, lng: @pt.Lon});
+            }
+            console.log("person: " + personPoints[5].lat + " " + personPoints[5].lng);
+
+            polyPerson = new google.maps.Polyline({
+                path: personPoints,
+                strokeColor: '#0000FF',
+                strokeOpacity: 1.0,
+                strokeWeight: 3
+            });
+            polyPerson.setMap(map);
+        }
+
+        function createDogMarkers() {
+            @{ int labelCounter = 0; }
+            @foreach (var pt in @Model.DogTrackPoints) {
+                var t = pt.Time;
+                @: var date = '@HttpUtility.JavaScriptStringEncode(t)';
+                @: var time = new Date(date).toLocaleTimeString();
+
+                @:  var marker = new google.maps.Marker({
+                @:        position: { lat: @pt.Lat, lng: @pt.Lon },
+                @:        label: {
+                @:          text: "@labelCounter",
+                @:          fontSize: "0px"
+                @:        },
+                @:        icon: {
+                @:          path: google.maps.SymbolPath.CIRCLE,
+                @:          strokeColor: "red",
+                @:          scale: 1.5
+                @:        },
+                @:        title: 'czas: ' + time    @*'\'   @pt.Time\''*@,
+                @:        map: map
+                @:  });
+
+                @:  dogMarkers.push(marker);
+                @*@:  console.log(personMarkers);*@
+                labelCounter++;
+
+                @*@:  console.log("time: " + time);*@
+                @:  google.maps.event.addListener(marker, 'click', function (event) {
+                @:      var infowindow = new google.maps.InfoWindow({
+                @:                      content: "<div class = 'dogInfoWindow'>"
+                @:                      + 'szerokość:' + @pt.Lat +  ',\n długość:' + @pt.Lon
+                @:                      + ',\n czas:'
+                @:                      + new Date('@HttpUtility.JavaScriptStringEncode(pt.Time)').toLocaleTimeString()
+                @:                      + "<br><input type='button' class='markerStartButton' value='Oznacz jako punkt początkowy' onclick='setStartPointForDog(" + new google.maps.Marker(this).label.text + ")'>"
+                @:                      + "<input type='button' class='markerEndButton' value='Oznacz jako punkt końcowy' onclick='setEndPointForDog(" + new google.maps.Marker(this).label.text + ")'>"
+                @:                      + "</div>"
+                @:                  });
+
+                @:      infowindow.open(map, this);
+
+
+                @: });
+
+
+             }
+        }
+
+        function createDogTrace() {
+            var dogPoints = [];
+            @foreach (var pt in Model.DogTrackPoints)
+            {
+                @: dogPoints.push({ lat: @pt.Lat, lng: @pt.Lon});
+
+            }
+            poly = new google.maps.Polyline({
+                path: dogPoints,
+                strokeColor: '#FF0000',
+                strokeOpacity: 1.0,
+                strokeWeight: 3
+            });
+            poly.setMap(map);
+        }
+
+        function initMap() {
+            initPersonTraceData();
+            initDogTraceData();
+
+            map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 17,
+                center: { lat:50.0300860405, lng:19.8871636391 }  // Center the map on POLSZA
+            });
+            // dog trace - draw lines
+            createDogTrace();
+
+            // person trace - draw lines
+            createPersonTrace();
+            //person trace - draw markers
+            createPersonMarkers();
+            //dog trace - draw markers
+            createDogMarkers();
+
+            console.log("dogMarkers:" + dogMarkers.length + " personMarkers: " + personMarkers.length);
+
+        }
+
+        function setStartPoint(startMarker) {
+            //console.log("setSartPoint");
+            //console.log("marker " + startMarker);
+            for (let i = 0; i < personMarkers.length; i++) {
+                console.log("i: " + i);
+                console.log(personMarkers[i].label.text);
+
+                if (personMarkers[i].label.text == startMarker) {
+                    console.log("if");
+
+                    personMarkers.splice(0, i);
+                    personTraceData.splice(0, i);
+                    console.log("personTraceData: " + personTraceData[0].time);
+
+                    break;
+                }
+
+                personMarkers[i].setMap(null);
+                polyPerson.getPath().removeAt(personMarkers[i]);    //this works - don't change it to i (like in function setEndPoint)  don't know why xd
+            }
+
+        }
+
+        function setStartPointForDog(startMarker) {
+            console.log("setSartPoint");
+            console.log("marker " + startMarker);
+            for (let i = 0; i < dogMarkers.length; i++) {
+                //console.log("i: " + i);
+                //console.log(dogMarkers[i].label.text);
+
+                if (dogMarkers[i].label.text == startMarker) {
+                    console.log("if");
+
+                    dogMarkers.splice(0, i);
+                    dogTraceData.splice(0, i);
+                    console.log("dogTraceData: " + dogTraceData[0].time);
+
+
+                    break;
+                }
+
+                dogMarkers[i].setMap(null);
+                poly.getPath().removeAt(dogMarkers[i]);    //this works - don't change it to i (like in function setEndPoint)  don't know why xd
+            }
+
+        }
+
+        function setEndPoint(startMarker) {
+            console.log("setSartPoint");
+            console.log("marker " + startMarker);
+            for (let i = personMarkers.length - 1; i >= 0; i--) {
+                //console.log("i: " + i);
+                //console.log(personMarkers[i].label.text);
+
+
+                if (personMarkers[i].label.text == startMarker) {
+                    console.log("if");
+
+                    personMarkers.splice(i + 1, personMarkers.length - i);
+                    personTraceData.splice(i + 1, personTraceData.length - i);
+                    for (var j = 0; j < personTraceData.length; j++)
+                    console.log("personTraceData, time: " + personTraceData[j].time);
+                    break;
+                }
+
+
+                personMarkers[i].setMap(null);
+                polyPerson.getPath().removeAt(i);
+
+            }
+
+        }
+
+        function setEndPointForDog(startMarker) {
+            console.log("setEndPoint");
+            console.log("marker " + startMarker);
+            for (let i = dogMarkers.length - 1; i >= 0; i--) {
+                //console.log("i: " + i);
+                //console.log(dogMarkers[i].label.text);
+
+
+                if (dogMarkers[i].label.text == startMarker) {
+                    console.log("if");
+
+                    dogMarkers.splice(i + 1, dogMarkers.length - i);
+
+                    dogTraceData.splice(i + 1, dogTraceData.length - i);
+                    console.log("dogtracedate length: " + dogTraceData.length);
+                    for (var j = 0; j < dogTraceData.length; j++) {
+                        console.log("dogTraceData, time: " + dogTraceData[j].time);
+                    }
+
+                    console.log("length " + dogMarkers.length);
+                    break;
+                }
+
+
+                dogMarkers[i].setMap(null);
+                poly.getPath().removeAt(i);
+
+            }
+
+        }
+        function setUpdatedDogTracepoints(i, lat, lon, tim) {
+            $('#dogLatitude' + i).val(lat);
+            $('#dogLongitude' + i).val(lon);
+            $('#dogTime' + i).val(tim);
+        }
+
+        function setUpdatedPersonTracepoints(i, lat, lon, tim) {
+            $('#personLatitude' + i).val(lat);
+            $('#personLongitude' + i).val(lon);
+            $('#personTime' + i).val(tim);
+        }
+
+        function removeElement(elementId) {
+            // Removes an element from the document
+            var element = document.getElementById(elementId);
+            element.parentNode.removeChild(element);
+        }
+
+        function validateUpdateTraining() {
+            //here: add validation for form
+            for (var i = 0; i < dogTraceData.length; i++)
+                setUpdatedDogTracepoints(i, dogTraceData[i].latitude, dogTraceData[i].longitude, dogTraceData[i].time);
+
+            for (var i = dogTraceData.length; i < @Model.DogTrackPoints.Count; i++) {
+                console.log("dogTraceDataLength:" + dogTraceData.length);
+                console.log("model dog track points: " + @Model.DogTrackPoints.Count);
+                removeElement("dogLatitude" + i);
+                removeElement("dogLongitude" + i);
+                removeElement("dogTime" + i);
+            }
+
+            for (var i = 0; i < personTraceData.length; i++)
+                setUpdatedPersonTracepoints(i, personTraceData[i].latitude, personTraceData[i].longitude, personTraceData[i].time);
+
+            for (var i = personTraceData.length; i < @Model.LostPersonTrackPoints.Count; i++) {
+                removeElement("personLatitude" + i);
+                removeElement("personLongitude" + i);
+                removeElement("personTime" + i);
+            }
+
+            //return false;
+        }
+
+    </script>
+    <script async defer
+            src="@googleMapsLinkWithApiKey">
+    </script>
+
+    @*@using (Html.BeginForm("Update", "DogTrainings", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(m => m.Training)
+        @Html.HiddenFor(m => m.TrainingId)
+        @Html.HiddenFor(m => m.Dog)
+        @Html.HiddenFor(m => m.DogId)
+        @Html.HiddenFor(m => m.DogTrackFilename)
+        @Html.HiddenFor(m => m.LostPersonTrackFilename)
+        @Html.HiddenFor(m => m.DogTrackFilename)
+        
+
+        for (int i = 0; i < Model.DogTrackPoints.Count; i++)
+        {
+            @Html.HiddenFor(model => Model.DogTrackPoints[i].Lat, new { @id = "dogLatitude" + i })
+            @Html.HiddenFor(model => Model.DogTrackPoints[i].Lon, new { @id = "dogLongitude" + i })
+            @Html.HiddenFor(model => Model.DogTrackPoints[i].Time, new { @id = "dogTime" + i })
+
+        }
+   
+
+        for (int i = 0; i < Model.LostPersonTrackPoints.Count; i++)
+        {
+            @Html.HiddenFor(model => Model.LostPersonTrackPoints[i].Lat, new { @id = "personLatitude" + i })
+            @Html.HiddenFor(model => Model.LostPersonTrackPoints[i].Lon, new { @id = "personLongitude" + i })
+            @Html.HiddenFor(model => Model.LostPersonTrackPoints[i].Time, new { @id = "personTime" + i })
+
+        }
+        @Html.HiddenFor(m => m.TimeOfDogStart)
+        @Html.HiddenFor(m => m.TimeOfLostPersonStart)
+        @Html.HiddenFor(m => m.Duration)
+        @Html.HiddenFor(m => m.LostPersonTrackLength)
+        @Html.HiddenFor(m => m.DogTrackLength)
+        @Html.HiddenFor(m => m.Goal)
+
+        <div style="float:left">
+            <div class="form-group">
+                @Html.LabelFor(m => m.LostPerson, new { @class = "col-md-2 control-label form-field" })
+                <div class="col-md-10  form-field">
+                    @Html.TextBoxFor(m => m.LostPerson, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Notes, new { @class = "col-md-2 control-label form-field" })
+                <div class="col-md-10  form-field">
+                    @Html.TextBoxFor(m => m.Notes, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Weather, new { @class = "col-md-2 control-label form-field" })
+                <div class="col-md-10  form-field">
+                    @Html.TextBoxFor(m => m.Weather, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" class="btn btn-default form-field" value="Prześlij dane" onclick="return validateUpdateTraining()" />
+                </div>
+            </div>
+        </div>
+
+    }*@
+
+
+</body>
+</html>

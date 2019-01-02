@@ -181,6 +181,7 @@
     <Compile Include="Helpers\CertificateHelper.cs" />
     <Compile Include="Helpers\DogHelpers.cs" />
     <Compile Include="Helpers\EnumHelpers.cs" />
+    <Compile Include="Helpers\EventHelper.cs" />
     <Compile Include="Helpers\GuideHelpers.cs" />
     <Compile Include="Helpers\LoginHelper.cs" />
     <Compile Include="Helpers\TrainingHelper.cs" />
