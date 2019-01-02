@@ -56,7 +56,10 @@ namespace DogsServer.Controllers
                     Name = dog.Name,
                     Notes = dog.Notes,
                     PhotoBlobUrl = dog.PhotoBlobUrl,
-                    Workmodes = dog.Workmodes
+                    Workmodes = dog.Workmodes,
+                    CertificateIds = dog.DogCertificates?.Select(x=>x.CertificateId).ToList(),
+                    EventIds = dog.DogEvents?.Select(x=>x.EventId).ToList(),
+                    TrainingIds = dog.DogTrainings?.Select(x=>x.TrainingId).ToList()
                 };
                 dogModels.Add(dogModel);
             }
@@ -81,7 +84,10 @@ namespace DogsServer.Controllers
                 Name = dog.Name,
                 Notes = dog.Notes,
                 PhotoBlobUrl = dog.PhotoBlobUrl,
-                Workmodes = dog.Workmodes
+                Workmodes = dog.Workmodes,
+                CertificateIds = dog.DogCertificates?.Select(x => x.CertificateId).ToList(),
+                EventIds = dog.DogEvents?.Select(x => x.EventId).ToList(),
+                TrainingIds = dog.DogTrainings?.Select(x => x.TrainingId).ToList()
             };
             return dogModel;
         }

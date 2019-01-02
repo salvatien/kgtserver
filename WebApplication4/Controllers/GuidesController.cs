@@ -38,7 +38,8 @@ namespace DogsServer.Controllers
                     Notes = g.Notes,
                     IsAdmin = g.IsAdmin,
                     IsMember = g.IsMember,
-                    Dogs = g.Dogs.Select(d => new IdNameModel { Id = d.DogId, Name = d.Name }).ToList()
+                    Dogs = g.Dogs.Select(d => new IdNameModel { Id = d.DogId, Name = d.Name }).ToList(),
+                    EventIds = g.GuideEvents?.Select(e => e.EventId).ToList()
                 };
 
                 guideModelList.Add(guideModel);
@@ -64,7 +65,8 @@ namespace DogsServer.Controllers
                 Notes = g.Notes,
                 IsAdmin = g.IsAdmin,
                 IsMember = g.IsMember,
-                Dogs = g.Dogs.Select(d => new IdNameModel { Id = d.DogId, Name = d.Name }).ToList()
+                Dogs = g.Dogs.Select(d => new IdNameModel { Id = d.DogId, Name = d.Name }).ToList(),
+                EventIds = g.GuideEvents?.Select(e=>e.EventId).ToList()
             };
 
             return guideModel;

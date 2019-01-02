@@ -19,6 +19,6 @@ namespace Dogs.ViewModels.Data.Models
         public List<IdNameModel> Dogs { get; set; }
         public bool IsAdmin { get; set; }
         public bool IsMember { get; set; }
-
+        public List<int> EventIds { get; set; }
     }
 }
