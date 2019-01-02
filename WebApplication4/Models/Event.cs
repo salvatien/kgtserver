@@ -25,6 +25,7 @@ namespace DogsServer.Models
         [Required]
         public string Description { get; set; }
         public string Notes { get; set; }
+        public bool IsCommercialTraining { get; set; }
         public virtual IList<GuideEvent> GuideEvents { get; set; }
         public virtual IList<DogEvent> DogEvents { get; set; }
     }

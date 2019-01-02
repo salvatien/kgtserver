@@ -31,6 +31,7 @@ namespace DogsServer.Controllers
                     Description = oneEvent.Description,
                     StreetOrLocation = oneEvent.StreetOrLocation,
                     Title = oneEvent.Title,
+                    IsCommercialTraining = oneEvent.IsCommercialTraining,
                     GuideIds = oneEvent.GuideEvents?.Select(x => x.GuideId).ToList(),
                     DogIds = oneEvent.DogEvents?.Select(x=>x.DogId).ToList()
                 };
@@ -52,6 +53,7 @@ namespace DogsServer.Controllers
                 Description = oneEvent.Description,
                 StreetOrLocation = oneEvent.StreetOrLocation,
                 Title = oneEvent.Title,
+                IsCommercialTraining = oneEvent.IsCommercialTraining,
                 GuideIds = oneEvent.GuideEvents?.Select(x => x.GuideId).ToList(),
                 DogIds = oneEvent.DogEvents?.Select(x => x.DogId).ToList()
             };
@@ -70,6 +72,7 @@ namespace DogsServer.Controllers
                 Description = obj.Description,
                 StreetOrLocation = obj.StreetOrLocation,
                 Title = obj.Title,
+                IsCommercialTraining = obj.IsCommercialTraining
             };
             unitOfWork.EventRepository.Insert(oneEvent);
             unitOfWork.Commit();
@@ -86,6 +89,7 @@ namespace DogsServer.Controllers
             oldEvent.Description = obj.Description;
             oldEvent.StreetOrLocation = obj.StreetOrLocation;
             oldEvent.Title = obj.Title;
+            oldEvent.IsCommercialTraining = obj.IsCommercialTraining;
             unitOfWork.Commit();
             return new ObjectResult(oldEvent.EventId);
         }

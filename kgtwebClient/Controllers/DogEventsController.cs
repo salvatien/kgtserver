@@ -54,10 +54,10 @@ namespace kgtwebClient.Controllers
                 {
                     Dog = dogEvent.Dog,
                     DogId = dogEvent.DogId,
-                    DogTrackFilename = dogEvent.DogTrackBlobUrl
+                    DogTrackFilename = String.IsNullOrWhiteSpace(dogEvent.DogTrackBlobUrl) ? null : dogEvent.DogTrackBlobUrl
                         .Remove(dogEvent.DogTrackBlobUrl.IndexOf(blobTrackLinkBase), blobTrackLinkBase.Length),
                     LostPerson = dogEvent.LostPerson,
-                    LostPersonTrackFilename = dogEvent.LostPersonTrackBlobUrl
+                    LostPersonTrackFilename = String.IsNullOrWhiteSpace(dogEvent.LostPersonTrackBlobUrl) ? null : dogEvent.LostPersonTrackBlobUrl
                         .Remove(dogEvent.LostPersonTrackBlobUrl.IndexOf(blobTrackLinkBase), blobTrackLinkBase.Length),
                     Notes = dogEvent.Notes,
                     Event = dogEvent.Event,
@@ -305,7 +305,7 @@ namespace kgtwebClient.Controllers
                 var responseData = responseMessage.Content.ReadAsStringAsync().Result;
                 var definition = new { DogId = "", EventId = "" };
                 var ids = JsonConvert.DeserializeAnonymousType(responseData, definition);
-                return RedirectToAction("Event", new { dogId = ids.DogId, eventId = ids.EventId });
+                return RedirectToAction("DogEvent", new { dogId = ids.DogId, eventId = ids.EventId });
                 //return View("Dog", responseMessage.Content);
             }
             else    // msg why not ok

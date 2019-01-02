@@ -23,7 +23,7 @@ namespace DogsServer.Repositories
 
         public new IQueryable<DogEvent> SearchFor(Expression<Func<DogEvent, bool>> predicate)
         {
-            return DbSet.Include(x => x.Dog).Include(x => x.Event).Where(predicate);
+            return DbSet.Include(x => x.Dog).ThenInclude(x=>x.Guide).Include(x => x.Event).Where(predicate);
         }
 
         public new IQueryable<DogEvent> GetAll()
