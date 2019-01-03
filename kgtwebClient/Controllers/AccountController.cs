@@ -167,7 +167,7 @@ namespace kgtwebClient.Controllers
                     {
                         var responseServerData = responseServerMessage.Content.ReadAsStringAsync().Result;
                         System.Web.HttpContext.Current.Session.Timeout = 30;
-                        System.Web.HttpContext.Current.Session["CurrentUserId"] = responseServerData;
+                        System.Web.HttpContext.Current.Session["CurrentUserId"] = Int32.Parse(responseServerData);
                         System.Web.HttpContext.Current.Session["token"] = token;
                         System.Web.HttpContext.Current.Session["isMember"] = false;
                         System.Web.HttpContext.Current.Session["isAdmin"] = false;
