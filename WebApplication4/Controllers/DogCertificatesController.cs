@@ -58,7 +58,7 @@ namespace DogsServer.Controllers
                     Description = dogCert.Certificate.Description,
                     Name = dogCert.Certificate.Name,
                     Level = dogCert.Certificate.Level,
-                    ValidThrough = dogCert.Certificate.ValidThrough
+                    ValidThroughMonths = dogCert.Certificate.ValidThroughMonths
                 },
                 AcquiredOn = dogCert.AcquiredOn
             };
@@ -89,7 +89,7 @@ namespace DogsServer.Controllers
                         Description = dogCert.Certificate.Description,
                         Name = dogCert.Certificate.Name,
                         Level = dogCert.Certificate.Level,
-                        ValidThrough = dogCert.Certificate.ValidThrough
+                        ValidThroughMonths = dogCert.Certificate.ValidThroughMonths
                     },
                     AcquiredOn = dogCert.AcquiredOn
                 });
@@ -124,7 +124,7 @@ namespace DogsServer.Controllers
                         Description = dogCert.Certificate.Description,
                         Name = dogCert.Certificate.Name,
                         Level = dogCert.Certificate.Level,
-                        ValidThrough = dogCert.Certificate.ValidThrough
+                        ValidThroughMonths = dogCert.Certificate.ValidThroughMonths
                     },
                     AcquiredOn = dogCert.AcquiredOn
                 });

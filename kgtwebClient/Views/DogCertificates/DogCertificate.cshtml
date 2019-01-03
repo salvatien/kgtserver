@@ -3,7 +3,7 @@
 
 @{
     ViewBag.Title = "DogCertificate";
-    var certificateEndDate = Model.AcquiredOn.Add(Model.Certificate.ValidThrough);
+    var certificateEndDate = Model.AcquiredOn.AddMonths(Model.Certificate.ValidThroughMonths);
 }
 <script>
     console.log("end date: " + @certificateEndDate);

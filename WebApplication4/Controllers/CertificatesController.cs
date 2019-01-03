@@ -29,7 +29,7 @@ namespace DogsServer.Controllers
                     Name = cert.Name,
                     Level = cert.Level,
                     Description = cert.Description,
-                    ValidThrough = cert.ValidThrough,
+                    ValidThroughMonths = cert.ValidThroughMonths,
                     DogIds = cert.DogCertificates.Select(x => x.DogId).ToList()
                 };
                 certificateModels.Add(certModel);
@@ -48,7 +48,7 @@ namespace DogsServer.Controllers
                 Name = cert.Name,
                 Level = cert.Level,
                 Description = cert.Description,
-                ValidThrough = cert.ValidThrough,
+                ValidThroughMonths = cert.ValidThroughMonths,
                 DogIds = cert.DogCertificates.Select(x => x.DogId).ToList()
             };
             return certModel;
@@ -62,7 +62,7 @@ namespace DogsServer.Controllers
                 Name = obj.Name,
                 Level = obj.Level,
                 Description = obj.Description,
-                ValidThrough = obj.ValidThrough
+                ValidThroughMonths = obj.ValidThroughMonths
             };
             unitOfWork.CertificateRepository.Insert(cert);
             unitOfWork.Commit();
@@ -77,7 +77,7 @@ namespace DogsServer.Controllers
             certificate.Name = obj.Name;
             certificate.Level = obj.Level;
             certificate.Description = obj.Description;
-            certificate.ValidThrough = obj.ValidThrough;
+            certificate.ValidThroughMonths = obj.ValidThroughMonths;
             unitOfWork.Commit();
             return new ObjectResult(certificate.CertificateId);
         }
