@@ -15,6 +15,8 @@ using Dogs.ViewModels.Data.Models.Account;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
+using System.Net.Mail;
+using System.Net;
 
 namespace Dogs.Identity.Api.Controllers
 {
@@ -83,7 +85,8 @@ namespace Dogs.Identity.Api.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] RegisterModel registerModel)
         {
-            try {
+            try
+            {
                 if (ModelState.IsValid)
                 {
                     var user = new ApplicationUser
@@ -124,7 +127,7 @@ namespace Dogs.Identity.Api.Controllers
                 }
                 return BadRequest(ModelState);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return BadRequest();
             }
@@ -176,5 +179,87 @@ namespace Dogs.Identity.Api.Controllers
 
         }
 
+        [HttpPost]
+        [Route("sendresetpasswordemail")]
+        [AllowAnonymous]
+        public async Task<IActionResult> SendResetPasswordEmail([FromBody] string userNameOrEmail)
+        {
+            try
+            {
+                var user = await userManager.FindByNameAsync(userNameOrEmail);
+
+                if (user == null)
+                {
+                    user = await userManager.FindByEmailAsync(userNameOrEmail);
+                }
+
+                if (user == null)
+                {
+                    return NotFound();
+                }
+
+                var token = await userManager.GeneratePasswordResetTokenAsync(user);
+
+
+                var clientBaseUrl = this.configuration.GetValue<string>("ClientBaseUrl");
+
+                var resetLink = clientBaseUrl + "Account/ResetPassword?token=" + token;
+
+
+                SmtpClient client = new SmtpClient(
+                    this.configuration.GetValue<String>("SendEmails:Host"),
+                    this.configuration.GetValue<int>("SendEmails:Port"));
+                client.UseDefaultCredentials = false;
+                client.Credentials = new NetworkCredential(
+                    this.configuration.GetValue<String>("SendEmails:MailAddressConfiguration"),
+                    this.configuration.GetValue<String>("SendEmails:Password"));
+                client.EnableSsl = true;
+                MailMessage mailMessage = new MailMessage();
+                mailMessage.From = new MailAddress(this.configuration.GetValue<String>("SendEmails:MailAddressVisible"));
+                mailMessage.To.Add(user.Email);
+                mailMessage.Body = "Oto Twój link do zresetowania hasła. Kliknij w niego " +
+                    "lub skopiuj go do paska adresu w przeglądarce, aby ustawić nowe hasło. \n" + resetLink;
+                mailMessage.Subject = "Baza KGT - zmiana hasła";
+                client.Send(mailMessage);
+
+                return Ok();
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+        [HttpPost]
+        [Route("resetpassword")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordModel model)
+        {
+            var user = await userManager.FindByNameAsync(model.UserNameOrEmail);
+
+            if (user == null)
+            {
+                user = await userManager.FindByEmailAsync(model.UserNameOrEmail);
+            }
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            //because token consists of + signs which are turned into spaces in URL query string, so it has to be reversed
+            var token = model.Token.Replace(" ", "+");
+
+            IdentityResult result = userManager.ResetPasswordAsync
+              (user, token, model.Password).Result;
+            if (result.Succeeded)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest(result.Errors);
+            }
+
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Dogs.ViewModels.Data.Models;
+using kgtwebClient.Helpers;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,9 @@ namespace kgtwebClient.Controllers
 
         public async Task<ActionResult> Index(int dogId)
         {
+            if (!LoginHelper.IsAuthenticated())
+                return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
+
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -32,11 +36,14 @@ namespace kgtwebClient.Controllers
 
                 return View(dogCertificates);
             }
-            return View();
+            ViewBag.Message = "Kod błędu: " + responseMessage.StatusCode;
+            return View("Error");
         }
 
         public async Task<ActionResult> DogCertificate(int certificateId, int dogId)
         {
+            if (!LoginHelper.IsAuthenticated())
+                return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -51,50 +58,64 @@ namespace kgtwebClient.Controllers
 
                 return View(dogCertificate);
             }
-            return View();
+            
+            ViewBag.Message = "Kod błędu: " + responseMessage.StatusCode;
+            return View("Error");
         }
 
         [HttpPost]
         public ActionResult AddDogCertificate(DogCertificateModel addedDogCertificate)
         {
+            if (!LoginHelper.IsAuthenticated())
+                return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
+            else if (!LoginHelper.IsCurrentUserAdmin())
+                return RedirectToAction("Error", "Home", new { error = "Nie masz wystarczających uprawnień by dodać certyfikat." });
 
-                //add dogtraining
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, client.BaseAddress + "dogcertificates/");
+            //add dogtraining
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, client.BaseAddress + "dogcertificates/");
 
-                var dogCertificateSerialized = JsonConvert.SerializeObject(addedDogCertificate);
+            var dogCertificateSerialized = JsonConvert.SerializeObject(addedDogCertificate);
 
-                message.Content = new StringContent(dogCertificateSerialized, System.Text.Encoding.UTF8, "application/json");
+            message.Content = new StringContent(dogCertificateSerialized, System.Text.Encoding.UTF8, "application/json");
 
-                HttpResponseMessage responseMessage = client.SendAsync(message).Result; // await client.SendAsync(message)
-                if (responseMessage.IsSuccessStatusCode)    //200 OK
-                {
-                    //display info
-                    message.Dispose();
-                    var responseData = responseMessage.Content.ReadAsStringAsync().Result;
-                    var definition = new { DogId = "", CertificateId = "" };
-                    var ids = JsonConvert.DeserializeAnonymousType(responseData, definition);
-                    return RedirectToAction("Index", new { dogId = ids.DogId});
-                    //return View("Dog", responseMessage.Content);
-                }
-                else    // msg why not ok
-                {
-                    message.Dispose();
-                    ViewBag.Message = responseMessage.StatusCode;
-                    return View("Error");
-                }
+            HttpResponseMessage responseMessage = client.SendAsync(message).Result; // await client.SendAsync(message)
+            if (responseMessage.IsSuccessStatusCode)    //200 OK
+            {
+                //display info
+                message.Dispose();
+                var responseData = responseMessage.Content.ReadAsStringAsync().Result;
+                var definition = new { DogId = "", CertificateId = "" };
+                var ids = JsonConvert.DeserializeAnonymousType(responseData, definition);
+                return RedirectToAction("Index", new { dogId = ids.DogId});
+                //return View("Dog", responseMessage.Content);
+            }
+            else    // msg why not ok
+            {
+                message.Dispose();
+                ViewBag.Message = responseMessage.StatusCode;
+                return View("Error");
+            }
         }
 
         [HttpGet]
         public ActionResult AddDogCertificate(int dogId)
         {
+            if (!LoginHelper.IsAuthenticated())
+                return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
+            else if (!LoginHelper.IsCurrentUserAdmin())
+                return RedirectToAction("Error", "Home", new { error = "Nie masz wystarczających uprawnień by dodać certyfikat." });
             return View(new DogCertificateModel { DogId = dogId });
         }
 
         [HttpGet]
         public ActionResult AddDogToCertificate(int certificateId)
         {
+            if (!LoginHelper.IsAuthenticated())
+                return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
+            else if (!LoginHelper.IsCurrentUserAdmin())
+                return RedirectToAction("Error", "Home", new { error = "Nie masz wystarczających uprawnień by dodać certyfikat." });
             return View(new DogCertificateModel { CertificateId = certificateId });
         }
 
@@ -123,7 +144,8 @@ namespace kgtwebClient.Controllers
             else    // wiadomosc czego się nie udałos
             {
                 message.Dispose();
-                return Json(false);
+                return Json( new { success = false, errorCode = responseMessage.StatusCode });
+
             }
 
         }

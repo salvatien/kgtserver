@@ -1,4 +1,5 @@
 ﻿using Dogs.ViewModels.Data.Models;
+using kgtwebClient.Helpers;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,8 @@ namespace kgtwebClient.Controllers
 
         public async Task<ActionResult> Index(int dogId)
         {
+            if (!LoginHelper.IsAuthenticated())
+                return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -36,11 +39,16 @@ namespace kgtwebClient.Controllers
 
                 return View(dogEvents);
             }
-            return View();
+            
+            ViewBag.Message = "Kod błędu: " + responseMessage.StatusCode;
+            return View("Error");
         }
 
         public async Task<ActionResult> DogEvent (int eventId, int dogId)
         {
+            if (!LoginHelper.IsAuthenticated())
+                return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
+
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             var blobTrackLinkBase = @"https://kgtstorage.blob.core.windows.net/tracks/";
@@ -122,28 +130,12 @@ namespace kgtwebClient.Controllers
             }
         }
 
-        //public async Task<ActionResult> DogEvent(int eventId, int dogId)
-        //{
-        //    client.DefaultRequestHeaders.Accept.Clear();
-        //    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-        //    HttpResponseMessage responseMessage = await client.GetAsync($"dogEvents/DogEvent?dogId={dogId}&eventId={eventId}");
-        //    if (responseMessage.IsSuccessStatusCode)
-        //    {
-        //        var responseData = responseMessage.Content.ReadAsStringAsync().Result;
-        //        var dogEvent = JsonConvert.DeserializeObject<DogEventModel>(responseData);
-
-
-        //        ViewBag.RawData = responseData;
-
-        //        return View(dogEvent);
-        //    }
-        //    return View();
-        //}
-
         [HttpPost]
         public ActionResult UpdateTracks(int dogId, int eventId, string lostPersonTrackFileName, string dogTrackFileName, Trkseg lostPersonTrackPoints, Trkseg dogTrackPoints)
         {
+            if (!LoginHelper.IsAuthenticated())
+                return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
+            
             var updatedLostPersonTrackStream = new MemoryStream();
             var lostPersonFileSerializer = new XmlSerializer(typeof(Trkseg));
             lostPersonFileSerializer.Serialize(updatedLostPersonTrackStream, lostPersonTrackPoints);
@@ -183,6 +175,9 @@ namespace kgtwebClient.Controllers
         [HttpPost]
         public ActionResult Update(DogEventViewModel model)
         {
+            if (!LoginHelper.IsAuthenticated())
+                return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
+
             var lostPersonTrackPoints = new Trkseg { Trkpt = model.LostPersonTrackPoints };
             var dogTrackPoints = new Trkseg { Trkpt = model.DogTrackPoints };
             UpdateTracks(model.DogId, model.EventId, model.LostPersonTrackFilename, model.DogTrackFilename, lostPersonTrackPoints, dogTrackPoints);
@@ -227,6 +222,11 @@ namespace kgtwebClient.Controllers
         [HttpPost]
         public ActionResult AddDogEvent(DogEventModel model, HttpPostedFileBase lostPersonTrackFile, HttpPostedFileBase dogTrackFile)
         {
+            if (!LoginHelper.IsAuthenticated())
+                return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
+            else if (!LoginHelper.IsCurrentUserAdmin() && !LoginHelper.IsCurrentUserMember())
+                return RedirectToAction("Error", "Home", new { error = "Nie masz wystarczających uprawnień by dodać wydarzenie psa." });
+
             if (lostPersonTrackFile != null && dogTrackFile != null)
             {
                 var originalLostPersonTrackStream = lostPersonTrackFile.InputStream;
@@ -316,20 +316,19 @@ namespace kgtwebClient.Controllers
             }
         }
 
-        //[HttpGet]
-        //public ActionResult Add(int eventId)
-        //{
-        //    return View(new DogEventModel { EventId = eventId });
-        //}
-
         [HttpGet]
         public ActionResult AddDogToEvent(int eventId)
         {
+            if (!LoginHelper.IsAuthenticated())
+                return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
+
             return View(new DogEventModel { EventId = eventId });
         }
 
         public JsonResult DeleteDogEvent(int? dogId, int? eventId)
         {
+            if (!LoginHelper.IsAuthenticated())
+                return Json(new { success = false, errorCode = "403" });
             //client.BaseAddress = new Uri(url);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -353,7 +352,7 @@ namespace kgtwebClient.Controllers
             else    // wiadomosc czego się nie udałos
             {
                 message.Dispose();
-                return Json(false);
+                return Json(new { success = false, errorCode = responseMessage.StatusCode });
             }
 
         }
@@ -361,40 +360,11 @@ namespace kgtwebClient.Controllers
         [HttpGet]
         public ActionResult AddDogEvent(int dogId)
         {
+            if (!LoginHelper.IsAuthenticated())
+                return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
             return View(new DogEventModel { DogId = dogId });
         }
 
 
-        //[HttpPost]
-        //public ActionResult AddDogEvent(DogEventModel addedDogEvent)
-        //{
-
-        //    //add dogevent
-        //    client.DefaultRequestHeaders.Accept.Clear();
-        //    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-        //    HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, client.BaseAddress + "dogevents/");
-
-        //    var dogEventSerialized = JsonConvert.SerializeObject(addedDogEvent);
-
-        //    message.Content = new StringContent(dogEventSerialized, System.Text.Encoding.UTF8, "application/json");
-
-        //    HttpResponseMessage responseMessage = client.SendAsync(message).Result; // await client.SendAsync(message)
-        //    if (responseMessage.IsSuccessStatusCode)    //200 OK
-        //    {
-        //        //display info
-        //        message.Dispose();
-        //        var responseData = responseMessage.Content.ReadAsStringAsync().Result;
-        //        var definition = new { DogId = "", EventId = "" };
-        //        var ids = JsonConvert.DeserializeAnonymousType(responseData, definition);
-        //        return RedirectToAction("Index", new { dogId = ids.DogId });
-        //        //return View("Dog", responseMessage.Content);
-        //    }
-        //    else    // msg why not ok
-        //    {
-        //        message.Dispose();
-        //        ViewBag.Message = responseMessage.StatusCode;
-        //        return View("Error");
-        //    }
-        //}
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Dogs.ViewModels.Data.Models;
+using kgtwebClient.Helpers;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -20,25 +21,26 @@ namespace kgtwebClient.Controllers
         private static readonly HttpClient client = new HttpClient { BaseAddress = new Uri(url) };
 
 
-            // get all dogs from db
-            public async Task<ActionResult> Index()
+        // get all dogs from db
+        public async Task<ActionResult> Index()
+        {
+            //client.BaseAddress = new Uri(url);
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            HttpResponseMessage responseMessage = await client.GetAsync("certificates/");
+            if (responseMessage.IsSuccessStatusCode)
             {
-                //client.BaseAddress = new Uri(url);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                HttpResponseMessage responseMessage = await client.GetAsync("certificates/");
-                if (responseMessage.IsSuccessStatusCode)
-                {
-                    var responseData = responseMessage.Content.ReadAsStringAsync().Result;
-                    var certificates = JsonConvert.DeserializeObject<List<CertificateModel>>(responseData);
+                var responseData = responseMessage.Content.ReadAsStringAsync().Result;
+                var certificates = JsonConvert.DeserializeObject<List<CertificateModel>>(responseData);
                     
-                    ViewBag.RawData = responseData;
+                ViewBag.RawData = responseData;
 
-                    return View(certificates);
-                }
-                return View();
+                return View(certificates);
             }
+            ViewBag.Message = "Kod błędu: " + responseMessage.StatusCode;
+            return View("Error");
+        }
 
         public async Task<ActionResult> Certificate(int id)
         {
@@ -54,18 +56,28 @@ namespace kgtwebClient.Controllers
 
                 return View(certificate);
             }
-            return View();
+            ViewBag.Message = "Kod błędu: " + responseMessage.StatusCode;
+            return View("Error");
         }
         [HttpGet]
         public ActionResult AddCertificate()
         {
             // var guides = GuideHelpers.GetAllGuidesIdAndName();
+            if (!LoginHelper.IsAuthenticated())
+                return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
+            else if(!LoginHelper.IsCurrentUserAdmin())
+                return RedirectToAction("Error", "Home", new { error = "Nie masz wystarczających uprawnień by dodać certyfikat." });
             return View();
         }
 
         [HttpPost]
         public async Task<ActionResult> /*Task<ActionResult>*/ AddCertificate(CertificateModel addedCertificate)
         {
+            if (!LoginHelper.IsAuthenticated())
+                return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
+            else if (!LoginHelper.IsCurrentUserAdmin())
+                return RedirectToAction("Error", "Home", new { error = "Nie masz wystarczających uprawnień by dodać certyfikat." });
+
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -91,13 +103,18 @@ namespace kgtwebClient.Controllers
             else    // msg why not ok
             {
                 message.Dispose();
-                return View(/*error*/);
+                ViewBag.Message = "Kod błędu: " + responseMessage.StatusCode;
+                return View("Error");
             }
 
         }
 
         public JsonResult DeleteCertificate(int? id)
         {
+            if (!LoginHelper.IsAuthenticated())
+                return Json(new { success = false, errorCode = "403" });
+            else if (!LoginHelper.IsCurrentUserAdmin())
+                return Json(new { success = false, errorCode = "403" });
             //client.BaseAddress = new Uri(url);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -120,7 +137,7 @@ namespace kgtwebClient.Controllers
             else    // wiadomosc czego się nie udałos
             {
                 message.Dispose();
-                return Json(false);
+                return Json(new { success = false, errorCode = responseMessage.StatusCode });
             }
 
         }
@@ -129,6 +146,11 @@ namespace kgtwebClient.Controllers
         [HttpGet]
         public async Task<ActionResult> UpdateCertificate(int id)
         {
+            if (!LoginHelper.IsAuthenticated())
+                return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
+            else if (!LoginHelper.IsCurrentUserAdmin())
+                return RedirectToAction("Error", "Home", new { error = "Nie masz wystarczających uprawnień by dodać certyfikat." });
+
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -142,16 +164,18 @@ namespace kgtwebClient.Controllers
 
                 return View(certificate);
             }
-            return View();
+            ViewBag.Message = "Kod błędu: " + responseMessage.StatusCode;
+            return View("Error");
         }
 
         [HttpPost]
         public async Task<ActionResult> UpdateCertificate(CertificateModel updatedCertificate)    //? -> może być null
         {
-            /* TODO change
-            if (!DogHelpers.ValidateUpdateDog(updatedDog))
-                return new JsonResult();
-            */
+            if (!LoginHelper.IsAuthenticated())
+                return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
+            else if (!LoginHelper.IsCurrentUserAdmin())
+                return RedirectToAction("Error", "Home", new { error = "Nie masz wystarczających uprawnień by dodać certyfikat." });
+
 
             //client.BaseAddress = new Uri(url);
             client.DefaultRequestHeaders.Accept.Clear();
@@ -184,7 +208,8 @@ namespace kgtwebClient.Controllers
             {
 
                 message.Dispose();
-                return View(/*widok błędu*/);
+                ViewBag.Message = "Kod błędu: " + responseMessage.StatusCode;
+                return View("Error");
             }
 
         }
