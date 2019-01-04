@@ -167,6 +167,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CertificatesController.cs" />
+    <Compile Include="Controllers\CommentsController.cs" />
     <Compile Include="Controllers\DogCertificatesController.cs" />
     <Compile Include="Controllers\DogEventsController.cs" />
     <Compile Include="Controllers\DogsController.cs" />
@@ -361,6 +362,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Comments\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

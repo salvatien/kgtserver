@@ -103,7 +103,7 @@ namespace DogsServer.Controllers
             return CommentModels;
         }
 
-        [HttpGet("TrainingCommentById/{id}")]
+        [HttpGet("DogTrainingComment/{id}")]
         public CommentModel GetDogTrainingCommentById(int id)
         {
             var comment = unitOfWork.DogTrainingCommentRepository.GetById(id);
@@ -144,10 +144,9 @@ namespace DogsServer.Controllers
             }
             return CommentModels;
         }
-        //from form instead of form body because there is a problem with AJAX post here. 
-        //This is why ajax post has content type x-www-form-urlencoded
+
         [HttpPost("TrainingComment")]
-        public IActionResult AddNewTrainingComment([FromForm]CommentModel obj)
+        public IActionResult AddNewTrainingComment([FromBody]CommentModel obj)
         {
             var comment = new TrainingComment
             {
@@ -161,10 +160,9 @@ namespace DogsServer.Controllers
             unitOfWork.Commit();
             return new ObjectResult(comment.TrainingCommentId);
         }
-        //from form instead of form body because there is a problem with AJAX post here. 
-        //This is why ajax post has content type x-www-form-urlencoded
+
         [HttpPost("DogTrainingComment")]
-        public IActionResult AddNewDogTrainingComment([FromForm]CommentModel obj)
+        public IActionResult AddNewDogTrainingComment([FromBody]CommentModel obj)
         {
             var comment = new DogTrainingComment
             {

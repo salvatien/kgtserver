@@ -459,22 +459,29 @@
                     @{
                         foreach (var comment in Model.Comments)
                         {
-                            <tr class="comment">
-                                @if (comment.AuthorId == LoginHelper.GetCurrentUserId())
-                                {
-                                    <td>Ja</td>
-                                }
-                                else
-                                {
-                                    <td>@Html.DisplayFor(m => comment.AuthorName)</td>
-                                }
-                                <td>@Html.DisplayFor(m => comment.Date)</td>
-                                <td>@Html.DisplayFor(m => comment.Content)</td>
-                                @if (comment.Date > mostRecentCommentDate)
-                                {
-                                    mostRecentCommentDate = comment.Date;
-                                }
-                            </tr>
+                    <tr class="comment">
+                        @if (comment.AuthorId == LoginHelper.GetCurrentUserId())
+                        {
+                            <td>Ja</td>
+                        }
+                        else
+                        {
+                            <td>@Html.DisplayFor(m => comment.AuthorName)</td>
+                        }
+                        <td>@Html.DisplayFor(m => comment.Date)</td>
+                        <td>@Html.DisplayFor(m => comment.Content)</td>
+                        @if (comment.Date > mostRecentCommentDate)
+                        {
+                            mostRecentCommentDate = comment.Date;
+                        }
+                        @{ if (LoginHelper.IsCurrentUserAdmin() || LoginHelper.GetCurrentUserId() == comment.AuthorId)
+                            {
+                                <td style="background-color:white">
+                                    <button class="deleteButton" type="button" onclick="deleteComment(@comment.CommentId)" id="@("deleteCommentButton" + comment.CommentId)">usuń</button>
+                                </td>
+                            }
+                        }
+                    </tr>
 
                         }
                     }
@@ -562,9 +569,9 @@
         var ticks = @mostRecentCommentDate.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
         var time = new Date(ticks);
             $.ajax({
-                url: 'http://localhost:12321/api/Comments/DogTrainingCommentsByDogIdAndTrainingId?dogId=@Model.DogId&trainingId=@Model.TrainingId',
-            type: 'GET',
-            dataType: 'json',
+                url: "@Url.Action("GetDogTrainingCommentsByDogIdAndTrainingId", "Comments", new { dogId = Model.DogId, trainingId = Model.TrainingId})",
+                type: 'GET',
+                dataType: 'json',
                 success: function (data, textStatus, xhr) {
                     for (comment of data) {
                         var date = new Date(comment.date);
@@ -602,16 +609,28 @@
   
         $.ajax({  
             type: 'POST',  
-            url: 'http://localhost:12321/api/Comments/DogTrainingComment',
+            url: "@Url.Action("AddDogTrainingComment", "Comments")",
             data: comment,  
             dataType: 'json',
             contentType: "application/x-www-form-urlencoded",
             success: function (response) {  
-                var itemIndex = $(".comment").length;
-                e.preventDefault();
-                var html = $('<tr class="comment" id="comment-"' + itemIndex + '><td>' + "Ja" + '</td><td>' + comment.Date + '</td><td>' + comment.Content + '</td></tr>');
-                $("#commentsTable").append(html);
-                $('#newCommentMessage').val("");  
+                if (response.success) {
+                    var id = response.id;
+                    var itemIndex = $(".comment").length;
+                    e.preventDefault();
+                    //html code for a new row containing this comment
+                    var html = $('<tr class="comment" id="comment-"' + itemIndex + '>'
+                        + '<td>' + "Ja" + '</td>'
+                        + '<td>' + comment.Date + '</td>'
+                        + '<td>' + comment.Content + '</td>'
+                        + '<td style="background-color:white">'
+                            + '<button class="deleteButton"  type="button" onclick="deleteComment(' + id + ')" '
+                                + 'id="@("deleteCommentButton")' + id + '">usuń'
+                            + '</button>'
+                        + '</td ></tr > ');
+                    $("#commentsTable").append(html);
+                    $('#newCommentMessage').val("");
+                }
             },  
             error: function (response) {  
                 alert('Sorry: Something Wrong');  
@@ -619,8 +638,39 @@
   
         });  
   
-        });  
+        }); 
+        
+        function deleteComment(commentId) {
+        alert("Delete comment: " + commentId);
+        $.ajax({
+            url: "@Url.Action("DeleteDogTrainingComment", "Comments")",
+            method: "POST", //First change type to method here
+            data: {
+                id: commentId, 
+            },
+            success: function (response) {
+                if (response) {
+                    //var resp = jQuery.parseJSON(response);
+                    var resp = response;
+                    //console.log(resp);
+                    if (resp.success) {
+                        alert("udało się usunac komentarz o id: " + resp.id);
+                        //usunięcie z tabeli tr ktory zawiera button o id deleteDogButton<id>
+                        //var buttonId = "deleteDogButton" + dogId;
+                    var button = $("#deleteCommentButton" + resp.id );
 
+                    var tableRow = button.closest("tr");
+                        //alert(button.text());
+                        tableRow.remove();
+                    }
+                }
+            },
+            error: function () {
+                alert("error");
+            }
+
+        });
+    }
     </script>
 
 </body>
