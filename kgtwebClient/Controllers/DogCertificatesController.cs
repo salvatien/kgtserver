@@ -34,7 +34,7 @@ namespace kgtwebClient.Controllers
 
 
                 ViewBag.RawData = responseData;
-
+                ViewBag.Id = dogId;
                 return View(dogCertificates);
             }
             ViewBag.Message = "Kod błędu: " + responseMessage.StatusCode;

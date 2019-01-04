@@ -108,7 +108,7 @@ namespace kgtwebClient.Controllers
         public JsonResult DeleteEvent(int? id)
         {
             if (!LoginHelper.IsAuthenticated())
-                return Json(new { success = false, errorCode = 403 });
+                return Json(new { success = false, errorCode = 401 });
             else if (!LoginHelper.IsCurrentUserAdmin() && !LoginHelper.IsCurrentUserMember())
                 return Json(new { success = false, errorCode = 403});
 

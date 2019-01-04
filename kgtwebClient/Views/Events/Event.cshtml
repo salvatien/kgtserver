@@ -88,9 +88,14 @@
                                     <td>@dog.Name</td>
                                     <td>@dog.Breed</td>
                                     <td>@dog.GuideIdAndName.Name</td>
-                                    <td>
-                                        <button class="displayButton" onclick="location.href='@Url.Action("DogEvent", "DogEvents", new { dogId = @dog.DogId, eventId=Model.EventId  })'">wyświetl szczegóły</button>
-                                    </td>
+                                    @if (LoginHelper.IsCurrentUserAdmin()
+                                        || LoginHelper.IsCurrentUserMember() 
+                                        ||LoginHelper.GetCurrentUserId() == dog.GuideIdAndName.Id)
+                                    {
+                                        <td>
+                                            <button class="displayButton" onclick="location.href='@Url.Action("DogEvent", "DogEvents", new { dogId = @dog.DogId, eventId = Model.EventId })'">wyświetl szczegóły</button>
+                                        </td>
+                                    }
                                 </tr>
                             }
                         }

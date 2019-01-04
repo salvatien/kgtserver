@@ -32,6 +32,8 @@ namespace DogsServer.Controllers
         [HttpPost]
         public IActionResult Add([FromBody]TrainingModel obj)
         {
+            if (!IsCurrentUserAdmin() && !IsCurrentUserMember())
+                return Forbid();
             //dogs will be added to the training later
             var training = new Training
             {
@@ -54,6 +56,8 @@ namespace DogsServer.Controllers
         [HttpGet]
         public List<TrainingModel> Get()
         {
+            if (!IsCurrentUserAdmin() && !IsCurrentUserMember())
+                return null;
             var trainings = unitOfWork.TrainingRepository.GetAll().ToList();
             var trainingModelList = new List<TrainingModel>();
             foreach (var t in trainings)
@@ -102,6 +106,8 @@ namespace DogsServer.Controllers
         [HttpGet("{id}")]
         public TrainingModel Get(int id)
         {
+            if (!IsCurrentUserAdmin() && !IsCurrentUserMember())
+                return null;
             //return unitOfWork.GuideRepository.GetById(id);
             var t = unitOfWork.TrainingRepository.GetById(id);
             var trainingModel = new TrainingModel()
@@ -145,6 +151,8 @@ namespace DogsServer.Controllers
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody]JObject obj)
         {
+            if (!IsCurrentUserAdmin() && !IsCurrentUserMember())
+                return Forbid();
             try
             {
                 var training = unitOfWork.TrainingRepository.GetById(id);
@@ -166,6 +174,8 @@ namespace DogsServer.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
+            if (!IsCurrentUserAdmin())
+                return Forbid();
             unitOfWork.TrainingRepository.Delete(unitOfWork.TrainingRepository.GetById(id));
             unitOfWork.Commit();
             return new ObjectResult("Training deleted successfully!");

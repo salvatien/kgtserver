@@ -77,6 +77,8 @@ namespace DogsServer.Controllers
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody]GuideModel obj)
         {
+            if (!IsCurrentUserAdmin() && id != GetCurrentUserId())
+                return Forbid();
             var guide = unitOfWork.GuideRepository.GetById(id);
             var guideModel = obj;
 
@@ -102,6 +104,8 @@ namespace DogsServer.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
+            if (!IsCurrentUserAdmin())
+                return Forbid();
             unitOfWork.GuideRepository.Delete(unitOfWork.GuideRepository.GetById(id));
             unitOfWork.Commit();
             return new ObjectResult("Guide deleted successfully!");

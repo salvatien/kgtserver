@@ -158,6 +158,12 @@ namespace DogsServer.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
+            var dog = unitOfWork.DogRepository.GetById(id);
+            if (!IsCurrentUserAdmin() && GetCurrentUserId() != dog.Guide.GuideId)
+            {
+                return Forbid();
+            }
+                
             unitOfWork.DogRepository.Delete(unitOfWork.DogRepository.GetById(id));
             unitOfWork.Commit();
             return new ObjectResult("Dog deleted successfully!");

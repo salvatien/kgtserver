@@ -40,6 +40,8 @@ namespace DogsServer.Controllers
         [HttpPost]
         public IActionResult Add([FromBody]DogEventModel obj)
         {
+            if (!IsCurrentUserAdmin() && !IsCurrentUserMember())
+                return Forbid();
             //dogs will be added to the event later
             var dogEvent = new DogEvent
             {
@@ -164,6 +166,8 @@ namespace DogsServer.Controllers
         [HttpDelete("DogEvent")]
         public IActionResult Delete(int dogId, int eventId)
         {
+            if (!IsCurrentUserAdmin() && !IsCurrentUserMember())
+                return Forbid();
             unitOfWork.DogEventRepository.Delete(unitOfWork.DogEventRepository.GetByIds(dogId, eventId));
             unitOfWork.Commit();
             return new ObjectResult("event deleted successfully!");

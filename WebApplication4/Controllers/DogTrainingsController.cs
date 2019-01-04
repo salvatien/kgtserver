@@ -40,6 +40,8 @@ namespace DogsServer.Controllers
         [HttpPost]
         public IActionResult Add([FromBody]DogTrainingModel obj)
         {
+            if (!IsCurrentUserAdmin() && !IsCurrentUserMember())
+                return Forbid();
             //dogs will be added to the training later
             var training = new DogTraining
             {
@@ -63,6 +65,8 @@ namespace DogsServer.Controllers
         [HttpGet("Training")]
         public DogTrainingModel Get(int dogId, int trainingId)
         {
+            if (!IsCurrentUserAdmin() && !IsCurrentUserMember())
+                return null;
             //return unitOfWork.GuideRepository.GetById(id);
             var t = unitOfWork.DogTrainingRepository.GetByIds(dogId, trainingId);
             var dogTrainingModel = new DogTrainingModel()
@@ -91,6 +95,8 @@ namespace DogsServer.Controllers
         {
             try
             {
+                if (!IsCurrentUserAdmin() && !IsCurrentUserMember())
+                    return Forbid();
                 var dogTraining = unitOfWork.DogTrainingRepository.GetByIds(dogId, trainingId);
                 var updatedTraining = obj.ToObject<DogTrainingModel>();
                 //these never change - only the file behind that URL may change, but not the URL itself
@@ -121,6 +127,8 @@ namespace DogsServer.Controllers
         [HttpDelete("Training")]
         public IActionResult Delete(int dogId, int trainingId)
         {
+            if (!IsCurrentUserAdmin() && !IsCurrentUserMember())
+                return Forbid();
             unitOfWork.DogTrainingRepository.Delete(unitOfWork.DogTrainingRepository.GetByIds(dogId, trainingId));
             unitOfWork.Commit();
             return new ObjectResult("Training deleted successfully!");
@@ -130,6 +138,8 @@ namespace DogsServer.Controllers
         [DisableRequestSizeLimit]
         public async Task<IActionResult> Upload()
         {
+            if (!IsCurrentUserAdmin() && !IsCurrentUserMember())
+                return Forbid();
             Request.EnableRewind();
             var uploadSuccess = false;
             if (Request.Form.Files.Count > 0)
@@ -160,6 +170,9 @@ namespace DogsServer.Controllers
 
         private async Task<bool> UploadToBlob(string filename, Stream stream)
         {
+            if (!IsCurrentUserAdmin() && !IsCurrentUserMember())
+                return false;
+
             CloudStorageAccount storageAccount = null;
             CloudBlobContainer cloudBlobContainer = null;
             string storageConnectionString = "DefaultEndpointsProtocol=https;AccountName=kgtstorage;AccountKey=PcFA7+GInK3Q/tqsavRf6tyGD0p8b2dsh7V2CsqKHukZsDyvIKuUBMK4XWhB+ygQbT23pJuXfIbDPJfh7EpQGw==;EndpointSuffix=core.windows.net";
@@ -223,6 +236,8 @@ namespace DogsServer.Controllers
         //[DisableRequestSizeLimit]
         public HttpResponseMessage GetTrack(string filename)
         {
+            if (!IsCurrentUserAdmin() && !IsCurrentUserMember())
+                return new HttpResponseMessage(HttpStatusCode.Forbidden);
             var trackContents = provider.FileProviders.ToList()[0].GetDirectoryContents("");
             //IDirectoryContents contents = provider.GetDirectoryContents("/tracks");
             var fileList = trackContents.ToList();
@@ -239,6 +254,8 @@ namespace DogsServer.Controllers
         [HttpGet("GetAllByDogId")]
         public List<DogTrainingModel> GetAllByDogId(int dogId)
         {
+            if (!IsCurrentUserAdmin() && !IsCurrentUserMember())
+                return null;
             //return unitOfWork.GuideRepository.GetById(id);
             var allDogTrainings = unitOfWork.DogTrainingRepository.GetAllByDogId(dogId);
             var dogTrainingModels = new List<DogTrainingModel>();
@@ -283,6 +300,8 @@ namespace DogsServer.Controllers
         [HttpGet("GetAllByTrainingId")]
         public List<DogTrainingModel> GetAllByTrainingId(int trainingId)
         {
+            if (!IsCurrentUserAdmin() && !IsCurrentUserMember())
+                return null;
             //return unitOfWork.GuideRepository.GetById(id);
             var allDogTrainings = unitOfWork.DogTrainingRepository.GetAllByTrainingId(trainingId);
             var dogTrainingModels = new List<DogTrainingModel>();

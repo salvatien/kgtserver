@@ -57,6 +57,8 @@ namespace DogsServer.Controllers
         [HttpPost]
         public IActionResult Post([FromBody]CertificateModel obj)
         {
+            if (!IsCurrentUserAdmin())
+                return Forbid();
             var cert = new Certificate
             {
                 Name = obj.Name,
@@ -72,7 +74,8 @@ namespace DogsServer.Controllers
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody]CertificateModel obj)
         {
-
+            if (!IsCurrentUserAdmin())
+                return Forbid();
             var certificate = unitOfWork.CertificateRepository.GetById(id);
             certificate.Name = obj.Name;
             certificate.Level = obj.Level;
@@ -85,6 +88,8 @@ namespace DogsServer.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
+            if (!IsCurrentUserAdmin())
+                return Forbid();
             unitOfWork.CertificateRepository.Delete(unitOfWork.CertificateRepository.GetById(id));
             unitOfWork.Commit();
             return new ObjectResult("Certificate deleted successfully!");

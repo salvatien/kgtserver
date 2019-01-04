@@ -35,7 +35,7 @@ namespace kgtwebClient.Controllers
                 var responseData = responseMessage.Content.ReadAsStringAsync().Result;
                 var dogEvents = JsonConvert.DeserializeObject<List<DogEventModel>>(responseData);
 
-
+                ViewBag.Id = dogId;
                 ViewBag.RawData = responseData;
 
                 return View(dogEvents);
@@ -216,7 +216,7 @@ namespace kgtwebClient.Controllers
                 var responseData = responseMessage.Content.ReadAsStringAsync().Result;
                 var definition = new { DogId = "", EventId = "" };
                 var ids = JsonConvert.DeserializeAnonymousType(responseData, definition);
-                return RedirectToAction("Event", new { dogId = ids.DogId, eventId = ids.EventId });
+                return RedirectToAction("DogEvent", new { dogId = ids.DogId, eventId = ids.EventId });
             }
             else    // msg why not ok
             {

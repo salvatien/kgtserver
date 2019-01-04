@@ -46,10 +46,11 @@ namespace kgtwebClient.Controllers
                 
 
                 ViewBag.RawData = responseData;
-
+                ViewBag.Id = dogId;
                 return View(dogTrainings);
             }
-            return View();
+            ViewBag.Message = "Kod błędu: " + responseMessage.StatusCode;
+            return View("Error");
         }
 
         
