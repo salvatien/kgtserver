@@ -13,9 +13,9 @@ using System.Web.Mvc;
 
 namespace kgtwebClient.Controllers
 {
+    //this controller is used only by AJAX calls - it only gets data, doesnt render any views - all methods return JsonResult
     public class CommentsController : Controller
     {
-
         //The URL of the WEB API Service
         static string url = System.Configuration.ConfigurationManager.AppSettings["ServerBaseUrl"];
         private static readonly HttpClient client = new HttpClient { BaseAddress = new Uri(url) };
