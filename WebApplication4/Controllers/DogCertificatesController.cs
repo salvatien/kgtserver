@@ -7,9 +7,11 @@ using DogsServer.Models;
 using Microsoft.EntityFrameworkCore;
 using DogsServer.Repositories;
 using Dogs.ViewModels.Data.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DogsServer.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     public class DogCertificatesController : BaseController
     {

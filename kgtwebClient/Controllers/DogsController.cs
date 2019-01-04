@@ -19,14 +19,15 @@ namespace kgtwebClient.Controllers
         static string url = System.Configuration.ConfigurationManager.AppSettings["ServerBaseUrl"];
         private static readonly HttpClient client = new HttpClient { BaseAddress = new Uri(url) };
 
-
         // get all dogs from db
         public async Task<ActionResult> Index()
         {
             //client.BaseAddress = new Uri(url);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+            //not necessary - its not blocked on server, but better to add it just in case we want to block it
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             HttpResponseMessage responseMessage = await client.GetAsync("dogs/");
             if (responseMessage.IsSuccessStatusCode)
             {
@@ -44,13 +45,13 @@ namespace kgtwebClient.Controllers
             }
             return View();
         }
-
         public async Task<ActionResult> Dog(int id)
         {
             //client.BaseAddress = new Uri(url);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             HttpResponseMessage responseMessage = await client.GetAsync("dogs/" + id.ToString());
             if (responseMessage.IsSuccessStatusCode)
             {
@@ -99,7 +100,8 @@ namespace kgtwebClient.Controllers
 
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+                client.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
                 HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, client.BaseAddress + "dogs/");
 
                 var dogSerialized = JsonConvert.SerializeObject(addedDog);
@@ -136,7 +138,8 @@ namespace kgtwebClient.Controllers
                 return Json(new { success = false, errorCode = 403 });            //client.BaseAddress = new Uri(url);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             /* dla put i post:
             httpmethod.put i httpmethod.post
             message.Content = new StringContent(***object-json-serialized***, 
@@ -167,7 +170,8 @@ namespace kgtwebClient.Controllers
                 return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             HttpResponseMessage responseMessage = await client.GetAsync("dogs/" + id.ToString());
             if (responseMessage.IsSuccessStatusCode)
             {
@@ -192,7 +196,8 @@ namespace kgtwebClient.Controllers
             byteArrayImageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
             var imageFileName = imageFile.FileName + Guid.NewGuid().ToString();
             form.Add(byteArrayImageContent, imageFileName, Path.GetFileName(imageFileName));
-
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             var response = client.PostAsync("Dogs/Upload", form).Result;
 
             if (response.IsSuccessStatusCode)
@@ -206,6 +211,8 @@ namespace kgtwebClient.Controllers
 
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
                 System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
 
                 HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Put, client.BaseAddress + "dogs/" + updatedDog.DogId.ToString());

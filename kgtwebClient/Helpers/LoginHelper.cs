@@ -29,6 +29,11 @@ namespace kgtwebClient.Helpers
             return (int)(System.Web.HttpContext.Current.Session["CurrentUserId"] ?? 0);
         }
 
+        public static string GetToken()
+        {
+            return (string)System.Web.HttpContext.Current.Session["token"];
+        }
+
         public class TokenResponse
         {
             [JsonProperty(PropertyName = "access_token")]

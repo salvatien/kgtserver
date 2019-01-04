@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Dogs.ViewModels.Data.Models;
 using DogsServer.Models;
 using DogsServer.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -22,6 +23,7 @@ namespace DogsServer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class TrainingsController : BaseController
     {
         private UnitOfWork unitOfWork = new UnitOfWork(new AppDbContext());

@@ -15,11 +15,13 @@ using Microsoft.AspNetCore.Authentication;
 namespace DogsServer.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     public class GuidesController : BaseController
     {
         private UnitOfWork unitOfWork = new UnitOfWork(new AppDbContext());
 
         [HttpGet]
+        [AllowAnonymous]
         public List<GuideModel> Get()
         {
             var guides =  unitOfWork.GuideRepository.GetAll().ToList();

@@ -27,7 +27,8 @@ namespace kgtwebClient.Controllers
                 return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             HttpResponseMessage responseMessage = await client.GetAsync($"dogEvents/GetAllByDogId?dogId={dogId}");
             if (responseMessage.IsSuccessStatusCode)
             {
@@ -51,6 +52,8 @@ namespace kgtwebClient.Controllers
 
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Authorization = 
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             var blobTrackLinkBase = @"https://kgtstorage.blob.core.windows.net/tracks/";
             HttpResponseMessage responseMessage =
                 await client.GetAsync($"dogevents/dogevent?eventId={eventId}&dogId={dogId}");
@@ -135,7 +138,10 @@ namespace kgtwebClient.Controllers
         {
             if (!LoginHelper.IsAuthenticated())
                 return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
-            
+
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
+
             var updatedLostPersonTrackStream = new MemoryStream();
             var lostPersonFileSerializer = new XmlSerializer(typeof(Trkseg));
             lostPersonFileSerializer.Serialize(updatedLostPersonTrackStream, lostPersonTrackPoints);
@@ -193,6 +199,8 @@ namespace kgtwebClient.Controllers
 
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
 
             HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Put, client.BaseAddress + $"dogevents/dogevent?dogId={model.DogId}&eventId={model.EventId}");
@@ -269,6 +277,10 @@ namespace kgtwebClient.Controllers
                 dogImageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
                 var dogFileName = dogTrackFile.FileName + Guid.NewGuid().ToString();
                 form.Add(dogImageContent, dogFileName, Path.GetFileName(dogFileName));
+
+                client.DefaultRequestHeaders.Authorization = 
+                    new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
+
                 var response = client.PostAsync("DogEvents/Upload", form).Result;
 
                 if (response.IsSuccessStatusCode)
@@ -291,6 +303,8 @@ namespace kgtwebClient.Controllers
             //add dogevent
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, client.BaseAddress + "dogevents/");
 
             var dogEventSerialized = JsonConvert.SerializeObject(model);
@@ -336,7 +350,8 @@ namespace kgtwebClient.Controllers
             //client.BaseAddress = new Uri(url);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             /* dla put i post:
             httpmethod.put i httpmethod.post
             message.Content = new StringContent(***object-json-serialized***, 

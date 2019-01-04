@@ -56,6 +56,8 @@ namespace kgtwebClient.Helpers
 
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
 
             HttpResponseMessage responseMessage = client.GetAsync($"dogCertificates/GetAllByDogId?dogId={dogId}").Result;
@@ -76,6 +78,8 @@ namespace kgtwebClient.Helpers
 
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
 
             HttpResponseMessage responseMessage = client.GetAsync($"dogCertificates/GetAllByCertificateId?certificateId={certificateId}").Result;
@@ -94,6 +98,8 @@ namespace kgtwebClient.Helpers
         {
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
 
             HttpResponseMessage responseMessage = client.GetAsync("Certificates/").Result;

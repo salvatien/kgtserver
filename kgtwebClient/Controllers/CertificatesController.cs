@@ -27,7 +27,8 @@ namespace kgtwebClient.Controllers
             //client.BaseAddress = new Uri(url);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             HttpResponseMessage responseMessage = await client.GetAsync("certificates/");
             if (responseMessage.IsSuccessStatusCode)
             {
@@ -47,7 +48,8 @@ namespace kgtwebClient.Controllers
             //client.BaseAddress = new Uri(url);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             HttpResponseMessage responseMessage = await client.GetAsync("certificates/" + id.ToString());
             if (responseMessage.IsSuccessStatusCode)
             {
@@ -80,7 +82,8 @@ namespace kgtwebClient.Controllers
 
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             /* for put $ post:
             httpmethod.put i httpmethod.post
             message.Content = new StringContent(***object-json-serialized***, 
@@ -118,7 +121,8 @@ namespace kgtwebClient.Controllers
             //client.BaseAddress = new Uri(url);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             /* dla put i post:
             httpmethod.put i httpmethod.post
             message.Content = new StringContent(***object-json-serialized***, 
@@ -153,7 +157,8 @@ namespace kgtwebClient.Controllers
 
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             HttpResponseMessage responseMessage = await client.GetAsync("certificates/" + id.ToString());
             if (responseMessage.IsSuccessStatusCode)
             {
@@ -180,18 +185,12 @@ namespace kgtwebClient.Controllers
             //client.BaseAddress = new Uri(url);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            //client.DefaultRequestHeaders.Add("Connection", "Keep-Alive");
-            //client.DefaultRequestHeaders.Add("Keep-Alive", "3600");
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
-            // dla put(update) i post(add):
-            //httpmethod.put i httpmethod.post
-            //message.Content = new StringContent(***object-json-serialized***, 
-            //                                  System.Text.Encoding.UTF8, "application/json");
 
             HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Put, client.BaseAddress + "certificates/" + updatedCertificate.CertificateId.ToString());
-
             var certificateSerialized = JsonConvert.SerializeObject(updatedCertificate);
-
 
             message.Content = new StringContent(certificateSerialized, System.Text.Encoding.UTF8, "application/json"); //dog serialized id.ToString()
             HttpResponseMessage responseMessage = client.SendAsync(message).Result;

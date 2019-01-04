@@ -37,7 +37,7 @@ public class TrainingHelpers
         
         public static List<SelectListItem> GetAllTrainingsExceptOneDog(int dogId)
         {
-            var allDogTrainings = GetAllTrainings().Result;
+            var allDogTrainings = GetAllTrainings();
             var dogTrainings = GetTrainingsByDogId(dogId).Result;
             var remainingTrainings = allDogTrainings.Except(dogTrainings, new TrainingEqualityComparer());
 
@@ -52,6 +52,8 @@ public class TrainingHelpers
 
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
 
             HttpResponseMessage responseMessage = client.GetAsync($"dogtrainings/GetAllByDogId?dogId={dogId}").Result;
@@ -66,10 +68,12 @@ public class TrainingHelpers
             return new List<TrainingModel>();
         }
 
-        public static async Task<List<TrainingModel>> GetAllTrainings()
+        public static List<TrainingModel> GetAllTrainings()
         {
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
             
             HttpResponseMessage responseMessage = client.GetAsync("Trainings/").Result;

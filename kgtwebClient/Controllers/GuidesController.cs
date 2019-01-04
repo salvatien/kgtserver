@@ -38,7 +38,8 @@ namespace kgtwebClient.Controllers
             //client.BaseAddress = new Uri(url);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             HttpResponseMessage responseMessage = await client.GetAsync("guides/" + id.ToString());
             if (responseMessage.IsSuccessStatusCode)
             {
@@ -47,7 +48,8 @@ namespace kgtwebClient.Controllers
 
                 return View(guide);
             }
-            return View();
+            ViewBag.Message = "Kod błędu: " + responseMessage.StatusCode;
+            return View("Error");
         } 
 
         public JsonResult DeleteGuide(int? id)
@@ -60,7 +62,8 @@ namespace kgtwebClient.Controllers
             //client.BaseAddress = new Uri(url);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             /* dla put i post:
             httpmethod.put i httpmethod.post
             message.Content = new StringContent(***object-json-serialized***, 
@@ -96,7 +99,8 @@ namespace kgtwebClient.Controllers
 
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             HttpResponseMessage responseMessage = await client.GetAsync("guides/" + id.ToString());
             if (responseMessage.IsSuccessStatusCode)
             {
@@ -107,7 +111,8 @@ namespace kgtwebClient.Controllers
 
                 return View(guide);
             }
-            return View();
+            ViewBag.Message = "Kod błędu: " + responseMessage.StatusCode;
+            return View("Error");
         }
 
         [HttpPost]
@@ -127,7 +132,8 @@ namespace kgtwebClient.Controllers
             //client.BaseAddress = new Uri(url);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             // dla put(update) i post(add):
             //httpmethod.put i httpmethod.post
             //message.Content = new StringContent(***object-json-serialized***, 
@@ -162,7 +168,8 @@ namespace kgtwebClient.Controllers
             else    // wiadomosc czego się nie udało
             {
                 message.Dispose();
-                return View(/*error*/);
+                ViewBag.Message = "Kod błędu:" + responseMessage.StatusCode;
+                return View("Error");
             }
 
         }

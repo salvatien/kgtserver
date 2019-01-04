@@ -7,7 +7,7 @@ using DogsServer.Models;
 using Microsoft.EntityFrameworkCore;
 using DogsServer.Repositories;
 using Dogs.ViewModels.Data.Models;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace DogsServer.Controllers
 {
@@ -53,7 +53,7 @@ namespace DogsServer.Controllers
             };
             return certModel;
         }
-
+        [Authorize]
         [HttpPost]
         public IActionResult Post([FromBody]CertificateModel obj)
         {
@@ -68,7 +68,7 @@ namespace DogsServer.Controllers
             unitOfWork.Commit();
             return new ObjectResult(cert.CertificateId);
         }
-
+        [Authorize]
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody]CertificateModel obj)
         {
@@ -81,7 +81,7 @@ namespace DogsServer.Controllers
             unitOfWork.Commit();
             return new ObjectResult(certificate.CertificateId);
         }
-
+        [Authorize]
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {

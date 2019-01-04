@@ -24,10 +24,12 @@ using Microsoft.AspNetCore.Http.Internal;
 using System.Diagnostics;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.ApplicationInsights;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DogsServer.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     public class DogsController : BaseController
     {
         private UnitOfWork unitOfWork = new UnitOfWork(new AppDbContext());
@@ -40,6 +42,7 @@ namespace DogsServer.Controllers
 
 
         [HttpGet]
+        [AllowAnonymous]
         public List<DogModel> Get()
         {
             var dogs = unitOfWork.DogRepository.GetAll().ToList();
@@ -71,6 +74,7 @@ namespace DogsServer.Controllers
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public DogModel Get(int id)
         {
             var dog = unitOfWork.DogRepository.GetById(id);

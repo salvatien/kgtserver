@@ -7,11 +7,12 @@ using DogsServer.Models;
 using Microsoft.EntityFrameworkCore;
 using DogsServer.Repositories;
 using Dogs.ViewModels.Data.Models;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace DogsServer.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     public class CommentsController : BaseController
     {
         private UnitOfWork unitOfWork = new UnitOfWork(new AppDbContext());

@@ -24,11 +24,12 @@ namespace kgtwebClient.Controllers
         public JsonResult GetTrainingCommentsByTrainingId(int trainingId)
         {
             if (!LoginHelper.IsAuthenticated())
-                return Json(new { success = false, errorCode = "403" });
+                return Json(new { success = false, errorCode = "401" });
             //client.BaseAddress = new Uri(url);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             HttpResponseMessage responseMessage = client.GetAsync("comments/TrainingCommentsByTrainingId/" + trainingId).Result;
             if (responseMessage.IsSuccessStatusCode)
             {
@@ -45,11 +46,12 @@ namespace kgtwebClient.Controllers
         public JsonResult AddTrainingComment(CommentModel addedTrainingComment)
         {
             if (!LoginHelper.IsAuthenticated())
-                return Json(new { success = false, errorCode = "403" });
+                return Json(new { success = false, errorCode = "401" });
 
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             /* for put $ post:
             httpmethod.put i httpmethod.post
             message.Content = new StringContent(***object-json-serialized***, 
@@ -81,11 +83,12 @@ namespace kgtwebClient.Controllers
         public JsonResult DeleteTrainingComment(int? id)
         {
             if (!LoginHelper.IsAuthenticated())
-                return Json(new { success = false, errorCode = "403" });
+                return Json(new { success = false, errorCode = "401" });
             //client.BaseAddress = new Uri(url);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             /* dla put i post:
             httpmethod.put i httpmethod.post
             message.Content = new StringContent(***object-json-serialized***, 
@@ -115,11 +118,12 @@ namespace kgtwebClient.Controllers
         public JsonResult GetDogTrainingCommentsByDogIdAndTrainingId(int dogId, int trainingId)
         {
             if (!LoginHelper.IsAuthenticated())
-                return Json(new { success = false, errorCode = "403" });
+                return Json(new { success = false, errorCode = "401" });
             //client.BaseAddress = new Uri(url);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             HttpResponseMessage responseMessage = 
                 client.GetAsync($"comments/DogTrainingCommentsByDogIdAndTrainingId?trainingId={trainingId}&dogId={dogId}").Result;
             if (responseMessage.IsSuccessStatusCode)
@@ -137,11 +141,12 @@ namespace kgtwebClient.Controllers
         public JsonResult AddDogTrainingComment(CommentModel addedDogTrainingComment)
         {
             if (!LoginHelper.IsAuthenticated())
-                return Json(new { success = false, errorCode = "403" });
+                return Json(new { success = false, errorCode = "401" });
 
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             /* for put $ post:
             httpmethod.put i httpmethod.post
             message.Content = new StringContent(***object-json-serialized***, 
@@ -173,11 +178,12 @@ namespace kgtwebClient.Controllers
         public JsonResult DeleteDogTrainingComment(int? id)
         {
             if (!LoginHelper.IsAuthenticated())
-                return Json(new { success = false, errorCode = "403" });
+                return Json(new { success = false, errorCode = "401" });
             //client.BaseAddress = new Uri(url);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             /* dla put i post:
             httpmethod.put i httpmethod.post
             message.Content = new StringContent(***object-json-serialized***, 

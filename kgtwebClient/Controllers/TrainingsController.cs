@@ -33,6 +33,8 @@ namespace kgtwebClient.Controllers
 
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
 
 
@@ -62,7 +64,8 @@ namespace kgtwebClient.Controllers
             //client.BaseAddress = new Uri(url);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             HttpResponseMessage responseMessage = await client.GetAsync("trainings/" + id.ToString());
             if (responseMessage.IsSuccessStatusCode)
             {
@@ -96,10 +99,10 @@ namespace kgtwebClient.Controllers
 
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
 
-            
             HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, client.BaseAddress + "trainings/");
-            
 
             var trainingSerialized = JsonConvert.SerializeObject(addedTraining);
 
@@ -132,7 +135,8 @@ namespace kgtwebClient.Controllers
             //client.BaseAddress = new Uri(url);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Delete, client.BaseAddress + "trainings/" + id.ToString());
             message.Content = new StringContent(id.ToString(), System.Text.Encoding.UTF8, "application/json");
 
@@ -162,7 +166,8 @@ namespace kgtwebClient.Controllers
 
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             HttpResponseMessage responseMessage = await client.GetAsync("trainings/" + id.ToString());
             if (responseMessage.IsSuccessStatusCode)
             {
@@ -188,7 +193,8 @@ namespace kgtwebClient.Controllers
 
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Put, client.BaseAddress + "trainings/" + updatedTraining.TrainingId.ToString());
             
 

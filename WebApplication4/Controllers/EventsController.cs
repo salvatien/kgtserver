@@ -7,15 +7,18 @@ using DogsServer.Models;
 using Microsoft.EntityFrameworkCore;
 using DogsServer.Repositories;
 using Dogs.ViewModels.Data.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DogsServer.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     public class EventsController : BaseController
     {
         private UnitOfWork unitOfWork = new UnitOfWork(new AppDbContext());
 
         [HttpGet]
+        [AllowAnonymous]
         public List<EventModel> Get()
         {
             var events = unitOfWork.EventRepository.GetAll().ToList();
@@ -39,7 +42,7 @@ namespace DogsServer.Controllers
             }
             return eventModels;
         }
-
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public EventModel Get(int id)
         {

@@ -168,7 +168,8 @@ namespace kgtwebClient.Controllers
                 var userId = Int32.Parse(principal.Claims.Where(c => c.Type == "KgtId").Select(c => c.Value).FirstOrDefault());
                 serverHttpClient.DefaultRequestHeaders.Accept.Clear();
                 serverHttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+                serverHttpClient.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", token);
                 HttpResponseMessage responseMessage = serverHttpClient.GetAsync("guides/" + userId).Result;
                 if (responseMessage.IsSuccessStatusCode)
                 {

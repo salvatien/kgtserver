@@ -24,7 +24,8 @@ namespace kgtwebClient.Controllers
 
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             HttpResponseMessage responseMessage = await client.GetAsync($"dogCertificates/GetAllByDogId?dogId={dogId}");
             if (responseMessage.IsSuccessStatusCode)
             {
@@ -46,7 +47,8 @@ namespace kgtwebClient.Controllers
                 return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             HttpResponseMessage responseMessage = await client.GetAsync($"dogCertificates/DogCertificate?dogId={dogId}&certificateId={certificateId}");
             if (responseMessage.IsSuccessStatusCode)
             {
@@ -74,6 +76,8 @@ namespace kgtwebClient.Controllers
             //add dogtraining
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, client.BaseAddress + "dogcertificates/");
 
             var dogCertificateSerialized = JsonConvert.SerializeObject(addedDogCertificate);
@@ -121,10 +125,16 @@ namespace kgtwebClient.Controllers
 
         public JsonResult DeleteDogCertificate(int? dogId, int? certificateId)
         {
+            if (!LoginHelper.IsAuthenticated())
+                return Json(new { success = false, errorCode = 401 });
+            else if (!LoginHelper.IsCurrentUserAdmin())
+                return Json(new { success = false, errorCode = 403 });
+
             //client.BaseAddress = new Uri(url);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             /* dla put i post:
             httpmethod.put i httpmethod.post
             message.Content = new StringContent(***object-json-serialized***, 
