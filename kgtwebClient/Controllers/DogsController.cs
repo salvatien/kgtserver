@@ -66,7 +66,9 @@ namespace kgtwebClient.Controllers
         {
             if (!LoginHelper.IsAuthenticated())
                 return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
-           // var guides = GuideHelpers.GetAllGuidesIdAndName();
+            else if (!LoginHelper.IsCurrentUserAdmin() && !LoginHelper.IsCurrentUserMember())
+                return RedirectToAction("Error", "Home", new { error = "Nie masz wystarczających uprawnień by dodać psa." });
+            // var guides = GuideHelpers.GetAllGuidesIdAndName();
             return View();
         }
 
@@ -75,6 +77,8 @@ namespace kgtwebClient.Controllers
         {
             if (!LoginHelper.IsAuthenticated())
                 return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
+            else if (!LoginHelper.IsCurrentUserAdmin() && !LoginHelper.IsCurrentUserMember())
+                return RedirectToAction("Error", "Home", new { error = "Nie masz wystarczających uprawnień by dodać psa." });
             MultipartFormDataContent form = new MultipartFormDataContent();
             var imageStreamContent = new StreamContent(imageFile.InputStream);
             var byteArrayImageContent = new ByteArrayContent(imageStreamContent.ReadAsByteArrayAsync().Result);
@@ -126,7 +130,10 @@ namespace kgtwebClient.Controllers
 
         public JsonResult DeleteDog(int? id)
         {
-            //client.BaseAddress = new Uri(url);
+            if (!LoginHelper.IsAuthenticated())
+                return Json(new { success = false, errorCode = 403 });
+            else if (!LoginHelper.IsCurrentUserAdmin() && !LoginHelper.IsCurrentUserMember())
+                return Json(new { success = false, errorCode = 403 });            //client.BaseAddress = new Uri(url);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -156,6 +163,8 @@ namespace kgtwebClient.Controllers
         //TODO metody UpdateDog(ta niżej) i Dog robią to samo -> wyrzucić środek do innej metody i wywoływać ją sobie wewnątrz
         [HttpGet]
         public async Task<ActionResult> UpdateDog(int id) {
+            if (!LoginHelper.IsAuthenticated())
+                return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -175,6 +184,8 @@ namespace kgtwebClient.Controllers
         [HttpPost]
         public async Task<ActionResult> UpdateDog(DogModel updatedDog, HttpPostedFileBase imageFile)    //? -> może być null
         {
+            if (!LoginHelper.IsAuthenticated())
+                return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
             MultipartFormDataContent form = new MultipartFormDataContent();
             var imageStreamContent = new StreamContent(imageFile.InputStream);
             var byteArrayImageContent = new ByteArrayContent(imageStreamContent.ReadAsByteArrayAsync().Result);

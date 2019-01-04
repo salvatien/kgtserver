@@ -330,7 +330,6 @@
     <Content Include="Views\Guides\Index.cshtml" />
     <Content Include="Views\Guides\UpdateGuide.cshtml" />
     <Content Include="Views\Guides\Guide.cshtml" />
-    <Content Include="Views\Guides\AddGuide.cshtml" />
     <Content Include="Views\DogTrainings\Index.cshtml" />
     <Content Include="Views\DogTrainings\Add.cshtml" />
     <Content Include="Views\DogTrainings\Training.cshtml" />

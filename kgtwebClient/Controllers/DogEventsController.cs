@@ -321,6 +321,8 @@ namespace kgtwebClient.Controllers
         {
             if (!LoginHelper.IsAuthenticated())
                 return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
+            else if (!LoginHelper.IsCurrentUserAdmin() && !LoginHelper.IsCurrentUserMember())
+                return RedirectToAction("Error", "Home", new { error = "Nie masz wystarczających uprawnień by dodać wydarzenie psa." });
 
             return View(new DogEventModel { EventId = eventId });
         }
@@ -328,6 +330,8 @@ namespace kgtwebClient.Controllers
         public JsonResult DeleteDogEvent(int? dogId, int? eventId)
         {
             if (!LoginHelper.IsAuthenticated())
+                return Json(new { success = false, errorCode = "403" });
+            else if (!LoginHelper.IsCurrentUserAdmin() && !LoginHelper.IsCurrentUserMember())
                 return Json(new { success = false, errorCode = "403" });
             //client.BaseAddress = new Uri(url);
             client.DefaultRequestHeaders.Accept.Clear();
@@ -362,6 +366,8 @@ namespace kgtwebClient.Controllers
         {
             if (!LoginHelper.IsAuthenticated())
                 return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
+            else if (!LoginHelper.IsCurrentUserAdmin() && !LoginHelper.IsCurrentUserMember())
+                return RedirectToAction("Error", "Home", new { error = "Nie masz wystarczających uprawnień by dodać wydarzenie psa." });
             return View(new DogEventModel { DogId = dogId });
         }
 

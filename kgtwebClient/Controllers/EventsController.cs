@@ -1,4 +1,5 @@
 ﻿using Dogs.ViewModels.Data.Models;
+using kgtwebClient.Helpers;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace kgtwebClient.Controllers
         private static readonly HttpClient client = new HttpClient { BaseAddress = new Uri(url) };
 
 
-        // get all dogs from db
+        // get all events from db
         public async Task<ActionResult> Index()
         {
             client.DefaultRequestHeaders.Accept.Clear();
@@ -60,12 +61,20 @@ namespace kgtwebClient.Controllers
         [HttpGet]
         public async Task<ActionResult> AddEvent()
         {
+            if (!LoginHelper.IsAuthenticated())
+                return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
+            else if (!LoginHelper.IsCurrentUserAdmin() && !LoginHelper.IsCurrentUserMember())
+                return RedirectToAction("Error", "Home", new { error = "Nie masz wystarczających uprawnień by przeglądać tę sekcję" });
             return View();
         }
 
         [HttpPost]
         public async Task<ActionResult> AddEvent(EventModel addedEvent)
         {
+            if (!LoginHelper.IsAuthenticated())
+                return RedirectToAction("Login", "Account");
+            else if (!LoginHelper.IsCurrentUserAdmin() && !LoginHelper.IsCurrentUserMember())
+                return RedirectToAction("Error", "Home", new { error = "Nie masz wystarczających uprawnień by zmieniać te dane" });
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -95,6 +104,12 @@ namespace kgtwebClient.Controllers
 
         public JsonResult DeleteEvent(int? id)
         {
+            if (!LoginHelper.IsAuthenticated())
+                return Json(new { success = false, errorCode = 403 });
+            else if (!LoginHelper.IsCurrentUserAdmin() && !LoginHelper.IsCurrentUserMember())
+                return Json(new { success = false, errorCode = 403});
+
+
             //client.BaseAddress = new Uri(url);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -120,6 +135,11 @@ namespace kgtwebClient.Controllers
         [HttpGet]
         public async Task<ActionResult> UpdateEvent(int id)
         {
+            if (!LoginHelper.IsAuthenticated())
+                return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
+            else if (!LoginHelper.IsCurrentUserAdmin() && !LoginHelper.IsCurrentUserMember())
+                return RedirectToAction("Error", "Home", new { error = "Nie masz wystarczających uprawnień by przeglądać tę sekcję" });
+
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -140,6 +160,10 @@ namespace kgtwebClient.Controllers
         [HttpPost]
         public async Task<ActionResult> UpdateEvent(EventModel updatedEvent)    //? -> może być null
         {
+            if (!LoginHelper.IsAuthenticated())
+                return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
+            else if (!LoginHelper.IsCurrentUserAdmin() && !LoginHelper.IsCurrentUserMember())
+                return RedirectToAction("Error", "Home", new { error = "Nie masz wystarczających uprawnień by zmieniać te dane" });
 
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

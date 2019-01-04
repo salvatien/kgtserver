@@ -19,29 +19,10 @@ namespace kgtwebClient.Controllers
         private static readonly HttpClient client = new HttpClient { BaseAddress = new Uri(url) };
 
 
-        // get all dogs from db
+        // get all guides from db
         public async Task<ActionResult> Index()
         {
-            ////client.BaseAddress = new Uri(url);
-            //client.DefaultRequestHeaders.Accept.Clear();
-            //client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-            //HttpResponseMessage responseMessage = await client.GetAsync("guides/");
-            //if (responseMessage.IsSuccessStatusCode)
-            //{
-            //    var responseData = responseMessage.Content.ReadAsStringAsync().Result;
-            //    var guides = JsonConvert.DeserializeObject<List<GuideModel>>(responseData);
-
-            //    var guidesList = new GuideListModel
-            //    {
-            //        ListOfGuides = guides
-            //    };
-
-            //    ViewBag.RawData = responseData;
-
-            //    return View(guidesList);
-            //}
-            //return View();
+            
             System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
             var guides = GuideHelpers.GetAllGuides().Result;
             if (guides.ListOfGuides.Any())
@@ -51,6 +32,9 @@ namespace kgtwebClient.Controllers
 
         public async Task<ActionResult> Guide(int id)
         {
+            if (!LoginHelper.IsAuthenticated())
+                return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
+            
             //client.BaseAddress = new Uri(url);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -64,61 +48,15 @@ namespace kgtwebClient.Controllers
                 return View(guide);
             }
             return View();
-        }
-        [HttpGet]
-        public async Task<ActionResult> AddGuide()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> AddGuide(GuideModel addedGuide)
-        {
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-            /* for put $ post:
-            httpmethod.put i httpmethod.post
-            message.Content = new StringContent(***object-json-serialized***, 
-                                                System.Text.Encoding.UTF8, "application/json");
-             */
-
-            HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, client.BaseAddress + "guides/");
-            /*
-            var dog = new DogModel
-            {
-                //DogId = 1,
-                Name = addedDog.Name,
-                DateOfBirth = addedDog.DateOfBirth,
-                Level = addedDog.Level,
-                Workmodes = addedDog.Workmodes,
-                Notes = addedDog.Notes,
-                //change -> add field in form 
-                GuideId = 1 //IT DOESNT WORK, IT SHOULD BE A REAL GUIDE, NOW SERVER JUST IGNORES GUIDE AND LEAVES THE OLD ONE UNCHANGED!
-            };*/
-
-            var guideSerialized = JsonConvert.SerializeObject(addedGuide);
-
-            message.Content = new StringContent(guideSerialized, System.Text.Encoding.UTF8, "application/json");
-
-            HttpResponseMessage responseMessage = client.SendAsync(message).Result;
-            if (responseMessage.IsSuccessStatusCode)    //200 OK
-            {
-                //display info
-                message.Dispose();
-                return RedirectToAction("Guide", new { id = Int32.Parse(responseMessage.Content.ReadAsStringAsync().Result) });
-                //return View("Dog", responseMessage.Content);
-            }
-            else    // msg why not ok
-            {
-                message.Dispose();
-                return View(/*error*/);
-            }
-
-        }
+        } 
 
         public JsonResult DeleteGuide(int? id)
         {
+            if (!LoginHelper.IsAuthenticated())
+                return Json(new { success = false, errorCode = 403 });
+            else if (!LoginHelper.IsCurrentUserAdmin() && LoginHelper.GetCurrentUserId() != id)
+                return Json(new { success = false, errorCode = 403 });
+
             //client.BaseAddress = new Uri(url);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -150,6 +88,12 @@ namespace kgtwebClient.Controllers
         [HttpGet]
         public async Task<ActionResult> UpdateGuide(int id)
         {
+            if (!LoginHelper.IsAuthenticated())
+                return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
+            
+            else if (!LoginHelper.IsCurrentUserAdmin() && LoginHelper.GetCurrentUserId() != id )
+                return RedirectToAction("Error", "Home", new { error = "Nie masz wystarczających uprawnień by zmieniać te dane" });
+
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -169,6 +113,12 @@ namespace kgtwebClient.Controllers
         [HttpPost]
         public async Task<ActionResult> UpdateGuide(GuideModel updatedGuide)    //? -> może być null
         {
+            if (!LoginHelper.IsAuthenticated())
+                return RedirectToAction("Login", "Account");
+
+            else if (!LoginHelper.IsCurrentUserAdmin() && LoginHelper.GetCurrentUserId() != updatedGuide.GuideId)
+                return RedirectToAction("Error", "Home", new { error = "Nie masz wystarczających uprawnień by zmieniać te dane" });
+
             // add validation function
             /*
             if (!DogHelpers.ValidateUpdateGuide(updatedGuide))
@@ -216,40 +166,6 @@ namespace kgtwebClient.Controllers
             }
 
         }
-
-        //public class SelectListItem
-        //{
-        //    public int id;
-        //    public string text;
-        //}
-
-        //public List<SelectListItem> GetAllGuidesIdAndName()
-        //{
-        //    var guides = GetAllGuides().Result;
-        //    return guides.ListOfGuides
-        //                 .Select(x => new SelectListItem { id = x.GuideID, text = $"{x.FirstName} {x.LastName}" }).ToList();
-        //}
-
-        //private async Task<GuideListModel> GetAllGuides()
-        //{
-        //    client.DefaultRequestHeaders.Accept.Clear();
-        //    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-        //    HttpResponseMessage responseMessage =  client.GetAsync("guides/").Result;
-        //    if (responseMessage.IsSuccessStatusCode)
-        //    {
-        //        var responseData = responseMessage.Content.ReadAsStringAsync().Result;
-        //        var guides = JsonConvert.DeserializeObject<List<GuideModel>>(responseData);
-
-        //        var guidesList = new GuideListModel
-        //        {
-        //            ListOfGuides = guides
-        //        };
-
-        //        return guidesList;
-        //    }
-        //    return new GuideListModel { ListOfGuides = new List<GuideModel>()};
-        //}
 
     }
 }
