@@ -57,7 +57,7 @@
         else
         {
             @Html.ActionLink("Zarejestruj", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })
-            @Html.ActionLink("Zaloguj", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
+            @Html.ActionLink("Zaloguj", "Login", "Account", routeValues: new { returnUrl = @Request.Url.AbsoluteUri }, htmlAttributes: new { id = "loginLink" })
         }
     </div>
     @*<div id="mySidenav" class="sidenav">   *@

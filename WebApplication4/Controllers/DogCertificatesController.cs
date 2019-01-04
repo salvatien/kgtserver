@@ -7,9 +7,11 @@ using DogsServer.Models;
 using Microsoft.EntityFrameworkCore;
 using DogsServer.Repositories;
 using Dogs.ViewModels.Data.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DogsServer.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     public class DogCertificatesController : BaseController
     {
@@ -58,7 +60,7 @@ namespace DogsServer.Controllers
                     Description = dogCert.Certificate.Description,
                     Name = dogCert.Certificate.Name,
                     Level = dogCert.Certificate.Level,
-                    ValidThrough = dogCert.Certificate.ValidThrough
+                    ValidThroughMonths = dogCert.Certificate.ValidThroughMonths
                 },
                 AcquiredOn = dogCert.AcquiredOn
             };
@@ -89,7 +91,7 @@ namespace DogsServer.Controllers
                         Description = dogCert.Certificate.Description,
                         Name = dogCert.Certificate.Name,
                         Level = dogCert.Certificate.Level,
-                        ValidThrough = dogCert.Certificate.ValidThrough
+                        ValidThroughMonths = dogCert.Certificate.ValidThroughMonths
                     },
                     AcquiredOn = dogCert.AcquiredOn
                 });
@@ -124,7 +126,7 @@ namespace DogsServer.Controllers
                         Description = dogCert.Certificate.Description,
                         Name = dogCert.Certificate.Name,
                         Level = dogCert.Certificate.Level,
-                        ValidThrough = dogCert.Certificate.ValidThrough
+                        ValidThroughMonths = dogCert.Certificate.ValidThroughMonths
                     },
                     AcquiredOn = dogCert.AcquiredOn
                 });
@@ -135,6 +137,8 @@ namespace DogsServer.Controllers
         [HttpPost]
         public IActionResult Post([FromBody]DogCertificateModel obj)
         {
+            if (!IsCurrentUserAdmin())
+                return Forbid();
             var dogCert = new DogCertificate
             {
                 DogId = obj.DogId,
@@ -149,6 +153,8 @@ namespace DogsServer.Controllers
         [HttpPut]
         public IActionResult Put(int dogId, int certificateId, [FromBody]DogCertificateModel obj)
         {
+            if (!IsCurrentUserAdmin())
+                return Forbid();
             var dogCertificate = unitOfWork.DogCertificateRepository.GetByIds(dogId, certificateId);
             dogCertificate.AcquiredOn = obj.AcquiredOn;
             unitOfWork.Commit();
@@ -158,6 +164,8 @@ namespace DogsServer.Controllers
         [HttpDelete("dogcertificate")]
         public IActionResult Delete(int dogId, int certificateId)
         {
+            if (!IsCurrentUserAdmin())
+                return Forbid();
             unitOfWork.DogCertificateRepository.Delete(unitOfWork.DogCertificateRepository.GetByIds(dogId, certificateId));
             unitOfWork.Commit();
             return new ObjectResult("DogCertificate deleted successfully!");

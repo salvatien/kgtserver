@@ -41,9 +41,9 @@
                 </div>
             </div>
             <div class="form-group">
-                @Html.LabelFor(m => m.ValidThrough, new { @class = "col-md-2 control-label  form-field" })
+                @Html.LabelFor(m => m.ValidThroughMonths, new { @class = "col-md-2 control-label  form-field" })
                 <div class="col-md-10 form-field">
-                    @Html.TextBoxFor(m => m.ValidThrough, new { @type = "number", @Value = Model.ValidThrough, @class = "form-control" })
+                    @Html.TextBoxFor(m => m.ValidThroughMonths, new { @type = "number", @Value = Model.ValidThroughMonths, @class = "form-control", @min = "0" })
                 </div>
             </div>
             <div class="form-group">

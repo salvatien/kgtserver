@@ -9,7 +9,9 @@ using System.Threading.Tasks;
 using Dogs.ViewModels.Data.Models;
 using DogsServer.Models;
 using DogsServer.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.FileProviders;
@@ -22,6 +24,7 @@ namespace DogsServer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class DogEventsController : BaseController
     {
         private UnitOfWork unitOfWork = new UnitOfWork(new AppDbContext());
@@ -37,6 +40,8 @@ namespace DogsServer.Controllers
         [HttpPost]
         public IActionResult Add([FromBody]DogEventModel obj)
         {
+            if (!IsCurrentUserAdmin() && !IsCurrentUserMember())
+                return Forbid();
             //dogs will be added to the event later
             var dogEvent = new DogEvent
             {
@@ -161,6 +166,8 @@ namespace DogsServer.Controllers
         [HttpDelete("DogEvent")]
         public IActionResult Delete(int dogId, int eventId)
         {
+            if (!IsCurrentUserAdmin() && !IsCurrentUserMember())
+                return Forbid();
             unitOfWork.DogEventRepository.Delete(unitOfWork.DogEventRepository.GetByIds(dogId, eventId));
             unitOfWork.Commit();
             return new ObjectResult("event deleted successfully!");
@@ -170,6 +177,7 @@ namespace DogsServer.Controllers
         [DisableRequestSizeLimit]
         public async Task<IActionResult> Upload()
         {
+            Request.EnableRewind();
             var uploadSuccess = false;
             if (Request.Form.Files.Count > 0)
             {

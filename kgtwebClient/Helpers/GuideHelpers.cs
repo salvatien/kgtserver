@@ -28,6 +28,9 @@ namespace kgtwebClient.Helpers
         {
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            //not necessary as get all guides is not blocked on the server, but added here just in case we want to change it
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
             //client.DefaultRequestHeaders.ExpectContinue = false;
             //client.DefaultRequestHeaders.Add("Connection", "close");

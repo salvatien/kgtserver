@@ -20,10 +20,16 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Strathweb.AspNetCore.AzureBlobFileProvider;
+using Microsoft.AspNetCore.Http.Internal;
+using System.Diagnostics;
+using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.ApplicationInsights;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DogsServer.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     public class DogsController : BaseController
     {
         private UnitOfWork unitOfWork = new UnitOfWork(new AppDbContext());
@@ -36,6 +42,7 @@ namespace DogsServer.Controllers
 
 
         [HttpGet]
+        [AllowAnonymous]
         public List<DogModel> Get()
         {
             var dogs = unitOfWork.DogRepository.GetAll().ToList();
@@ -67,6 +74,7 @@ namespace DogsServer.Controllers
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public DogModel Get(int id)
         {
             var dog = unitOfWork.DogRepository.GetById(id);
@@ -150,6 +158,12 @@ namespace DogsServer.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
+            var dog = unitOfWork.DogRepository.GetById(id);
+            if (!IsCurrentUserAdmin() && GetCurrentUserId() != dog.Guide.GuideId)
+            {
+                return Forbid();
+            }
+                
             unitOfWork.DogRepository.Delete(unitOfWork.DogRepository.GetById(id));
             unitOfWork.Commit();
             return new ObjectResult("Dog deleted successfully!");
@@ -160,31 +174,37 @@ namespace DogsServer.Controllers
         [DisableRequestSizeLimit]
         public async Task<IActionResult> Upload()
         {
-            var uploadSuccess = false;
-            if (Request.Form.Files.Count > 0)
-            {
-                foreach (var formFile in Request.Form.Files)
+            try {
+                Request.EnableRewind();
+                var uploadSuccess = false;
+                if (Request.Form.Files.Count > 0)
                 {
-                    if (formFile.Length <= 0)
+                    foreach (var formFile in Request.Form.Files)
                     {
-                        continue;
-                    }
-
-
-
-                    //read directly from stream for blob upload      
-                    using (var stream = formFile.OpenReadStream())
-                    {
-                        uploadSuccess = await UploadToBlob(formFile.FileName, stream);
+                        if (formFile.Length <= 0)
+                        {
+                            continue;
+                        }
+                        //read directly from stream for blob upload      
+                        using (var stream = formFile.OpenReadStream())
+                        {
+                            uploadSuccess = await UploadToBlob(formFile.FileName, stream);
+                        }
                     }
                 }
+            
 
+                if (uploadSuccess)
+                {
+                    return Ok("UploadSuccess");
+                }
+                else
+                    return BadRequest("UploadError");
             }
-
-            if (uploadSuccess)
-                return Ok("UploadSuccess");
-            else
-                return BadRequest("UploadError");
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         private async Task<bool> UploadToBlob(string filename, Stream stream)

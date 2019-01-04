@@ -167,6 +167,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CertificatesController.cs" />
+    <Compile Include="Controllers\CommentsController.cs" />
     <Compile Include="Controllers\DogCertificatesController.cs" />
     <Compile Include="Controllers\DogEventsController.cs" />
     <Compile Include="Controllers\DogsController.cs" />
@@ -329,7 +330,6 @@
     <Content Include="Views\Guides\Index.cshtml" />
     <Content Include="Views\Guides\UpdateGuide.cshtml" />
     <Content Include="Views\Guides\Guide.cshtml" />
-    <Content Include="Views\Guides\AddGuide.cshtml" />
     <Content Include="Views\DogTrainings\Index.cshtml" />
     <Content Include="Views\DogTrainings\Add.cshtml" />
     <Content Include="Views\DogTrainings\Training.cshtml" />
@@ -354,9 +354,14 @@
     <Content Include="Views\DogEvents\AddDogEvent.cshtml" />
     <Content Include="Views\DogEvents\AddDogToEvent.cshtml" />
     <Content Include="Views\DogCertificates\AddDogToCertificate.cshtml" />
+    <Content Include="Views\Account\ForgotPassword.cshtml" />
+    <Content Include="Views\Account\ResetPassword.cshtml" />
+    <Content Include="Views\Account\ResetPasswordSuccessful.cshtml" />
+    <Content Include="Views\Account\ResetPasswordEmailSent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Comments\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

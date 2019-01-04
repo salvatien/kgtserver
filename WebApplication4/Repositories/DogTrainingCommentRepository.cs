@@ -38,5 +38,10 @@ namespace DogsServer.Repositories
             var comment = DbSet.Where(x => x.DogTrainingCommentId == id).Include(x => x.Author).Include(x => x.DogTraining).FirstOrDefault();
             return comment;
         }
+
+        public IQueryable<DogTrainingComment> GetAllByDogIdAndTrainingId(int dogId, int trainingId)
+        {
+            return DbSet.Where(x => x.DogId == dogId && x.TrainingId == trainingId).Include(x => x.Author).Include(x => x.DogTraining);
+        }
     }
 }

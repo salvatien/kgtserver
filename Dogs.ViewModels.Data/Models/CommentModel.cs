@@ -11,5 +11,8 @@ namespace Dogs.ViewModels.Data.Models
         public string AuthorName { get; set; }
         public DateTime Date { get; set; }
         public string Content { get; set; }
+        public int TrainingId { get; set; }
+        //set if its a dog training comment, not set for training comment
+        public int? DogId { get; set; }
     }
 }

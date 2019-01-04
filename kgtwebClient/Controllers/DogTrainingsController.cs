@@ -1,4 +1,5 @@
 ﻿using Dogs.ViewModels.Data.Models;
+using kgtwebClient.Helpers;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -28,10 +29,15 @@ namespace kgtwebClient.Controllers
        // [HttpGet("{dogId}")]
         public async Task<ActionResult> Index(int dogId)
         {
+            if (!LoginHelper.IsAuthenticated())
+                return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
+            else if (!LoginHelper.IsCurrentUserAdmin() && !LoginHelper.IsCurrentUserMember())
+                return RedirectToAction("Error", "Home", new { error = "Nie masz wystarczających uprawnień by przeglądać tę sekcję" });
             //client.BaseAddress = new Uri(url);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             HttpResponseMessage responseMessage = await client.GetAsync($"dogtrainings/GetAllByDogId?dogId={dogId}");
             if (responseMessage.IsSuccessStatusCode)
             {
@@ -40,45 +46,25 @@ namespace kgtwebClient.Controllers
                 
 
                 ViewBag.RawData = responseData;
-
+                ViewBag.Id = dogId;
                 return View(dogTrainings);
             }
-            return View();
+            ViewBag.Message = "Kod błędu: " + responseMessage.StatusCode;
+            return View("Error");
         }
 
-        //public ActionResult Training()
-        //{
-        //    DogTrainingViewModel trainingTracepoints = new DogTrainingViewModel();
-
-        //    var dogTrack = "~/Images/Ślad_Pok8-12-08-090130.gpx";
-        //    var personTrack = "~/Images/Ślad_Pok8-12-08-084457.gpx";
-
-        //    TextReader textReader = new StreamReader(Server.MapPath(dogTrack));
-
-        //    //System.Xml.XmlDocument xmlDoc = new System.Xml.XmlDocument();
-        //    XDocument gpxDoc = XDocument.Load(textReader);
-        //    var serializer = new XmlSerializer(typeof(Gpx));
-        //    var gpx = (Gpx)serializer.Deserialize(gpxDoc.Root.CreateReader());
-        //    var t = gpx.Trk.Trkseg.Trkpt;
-
-        //    trainingTracepoints.DogTrackPoints = t;
-
-
-        //    TextReader textReader2 = new StreamReader(Server.MapPath(personTrack));
-        //    XDocument gpxDoc2 = XDocument.Load(textReader2);
-        //    var serializer2 = new XmlSerializer(typeof(Gpx));
-        //    var gpx2 = (Gpx)serializer2.Deserialize(gpxDoc2.Root.CreateReader());
-        //    var t2 = gpx2.Trk.Trkseg.Trkpt;
-
-        //    trainingTracepoints.LostPersonTrackPoints = t2;
-
-        //    return View(trainingTracepoints);
-        //}
+        
 
         public async Task<ActionResult> Training(int dogId, int trainingId)
         {
+            if (!LoginHelper.IsAuthenticated())
+                return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
+            else if (!LoginHelper.IsCurrentUserAdmin() && !LoginHelper.IsCurrentUserMember())
+                return RedirectToAction("Error", "Home", new { error = "Nie masz wystarczających uprawnień by przeglądać tę sekcję" });
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             var blobTrackLinkBase = @"https://kgtstorage.blob.core.windows.net/tracks/";
             HttpResponseMessage responseMessage =
                 await client.GetAsync($"dogtrainings/training?trainingId={trainingId}&dogId={dogId}");
@@ -161,6 +147,11 @@ namespace kgtwebClient.Controllers
         [HttpPost]
         public ActionResult UpdateTracks(int dogId, int trainingId, string lostPersonTrackFileName, string dogTrackFileName, Trkseg lostPersonTrackPoints, Trkseg dogTrackPoints)
         {
+            if (!LoginHelper.IsAuthenticated())
+                return RedirectToAction("Login", "Account");
+            else if (!LoginHelper.IsCurrentUserAdmin() && !LoginHelper.IsCurrentUserMember())
+                return RedirectToAction("Error", "Home", new { error = "Nie masz wystarczających uprawnień by zmieniać te dane" });
+
             var updatedLostPersonTrackStream = new MemoryStream();
             var lostPersonFileSerializer = new XmlSerializer(typeof(Trkseg));
             lostPersonFileSerializer.Serialize(updatedLostPersonTrackStream, lostPersonTrackPoints);
@@ -183,6 +174,10 @@ namespace kgtwebClient.Controllers
             var dogImageContent = new ByteArrayContent(dogStreamContent.ReadAsByteArrayAsync().Result);
             dogImageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
             form.Add(dogImageContent, dogTrackFileName, Path.GetFileName(dogTrackFileName));
+
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
+
             var responseMessage = client.PostAsync("DogTrainings/Upload", form).Result;
 
             if (responseMessage.IsSuccessStatusCode)    //200 OK
@@ -200,6 +195,10 @@ namespace kgtwebClient.Controllers
         [HttpPost]
         public ActionResult Update(DogTrainingViewModel model)
         {
+            if (!LoginHelper.IsAuthenticated())
+                return RedirectToAction("Login", "Account");
+            else if (!LoginHelper.IsCurrentUserAdmin() && !LoginHelper.IsCurrentUserMember())
+                return RedirectToAction("Error", "Home", new { error = "Nie masz wystarczających uprawnień by zmieniać te dane" });
             var lostPersonTrackPoints = new Trkseg { Trkpt = model.LostPersonTrackPoints };
             var dogTrackPoints = new Trkseg { Trkpt = model.DogTrackPoints };
             UpdateTracks(model.DogId, model.TrainingId, model.LostPersonTrackFilename, model.DogTrackFilename, lostPersonTrackPoints, dogTrackPoints);
@@ -216,6 +215,8 @@ namespace kgtwebClient.Controllers
             
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
             
             HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Put, client.BaseAddress + $"dogtrainings/training?dogId={model.DogId}&trainingId={model.TrainingId}");
@@ -245,6 +246,10 @@ namespace kgtwebClient.Controllers
         [HttpPost]
         public ActionResult Add(DogTrainingModel model, HttpPostedFileBase lostPersonTrackFile, HttpPostedFileBase dogTrackFile)
         {
+            if (!LoginHelper.IsAuthenticated())
+                return RedirectToAction("Login", "Account");
+            else if (!LoginHelper.IsCurrentUserAdmin() && !LoginHelper.IsCurrentUserMember())
+                return RedirectToAction("Error", "Home", new { error = "Nie masz wystarczających uprawnień by zmieniać te dane" });
             var originalLostPersonTrackStream = lostPersonTrackFile.InputStream;
             var cleanedLostPersonTrackStream = new MemoryStream();
             using (var reader = new StreamReader(originalLostPersonTrackStream))
@@ -286,6 +291,10 @@ namespace kgtwebClient.Controllers
             dogImageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
             var dogFileName = dogTrackFile.FileName + Guid.NewGuid().ToString();
             form.Add(dogImageContent, dogFileName, Path.GetFileName(dogFileName));
+
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
+
             var response = client.PostAsync("DogTrainings/Upload", form).Result;
 
             if (response.IsSuccessStatusCode)
@@ -301,6 +310,8 @@ namespace kgtwebClient.Controllers
                 //add dogtraining
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
                 HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, client.BaseAddress + "dogtrainings/");
 
                 var dogTrainingSerialized = JsonConvert.SerializeObject(model);
@@ -334,21 +345,34 @@ namespace kgtwebClient.Controllers
         [HttpGet]
         public ActionResult Add(int trainingId)
         {
+            if (!LoginHelper.IsAuthenticated())
+                return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
+            else if (!LoginHelper.IsCurrentUserAdmin() && !LoginHelper.IsCurrentUserMember())
+                return RedirectToAction("Error", "Home", new { error = "Nie masz wystarczających uprawnień by przeglądać tę sekcję" });
             return View(new DogTrainingModel { TrainingId = trainingId});
         }
 
         [HttpGet]
         public ActionResult AddTrainingToDog(int dogId)
         {
+            if (!LoginHelper.IsAuthenticated())
+                return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
+            else if (!LoginHelper.IsCurrentUserAdmin() && !LoginHelper.IsCurrentUserMember())
+                return RedirectToAction("Error", "Home", new { error = "Nie masz wystarczających uprawnień by przeglądać tę sekcję" });
             return View(new DogTrainingModel { DogId = dogId });
         }
 
         public JsonResult DeleteDogTraining(int? dogId, int? trainingId)
         {
+            if (!LoginHelper.IsAuthenticated())
+                return Json(new { success = false, errorCode = 403});
+            else if (!LoginHelper.IsCurrentUserAdmin() && !LoginHelper.IsCurrentUserMember())
+                return Json(new { success = false, errorCode = 403 });
             //client.BaseAddress = new Uri(url);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             /* dla put i post:
             httpmethod.put i httpmethod.post
             message.Content = new StringContent(***object-json-serialized***, 

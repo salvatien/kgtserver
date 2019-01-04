@@ -117,31 +117,6 @@ namespace DogsServer
                 FileProvider = compositeFileProvider,
                 RequestPath = "",
             });
-            //var azureBlobFileProviderTracks = app.ApplicationServices.GetRequiredService<AzureBlobFileProvider>();
-            //app.UseStaticFiles(new StaticFileOptions()
-            //{
-            //    FileProvider = azureBlobFileProviderTracks,
-            //    RequestPath = "/tracks"
-            //});
-
-            //app.UseDirectoryBrowser(new DirectoryBrowserOptions
-            //{
-            //    FileProvider = azureBlobFileProviderTracks,
-            //    RequestPath = "/tracks"
-            //});
-
-            //var azureBlobFileProviderImages = app.ApplicationServices.GetRequiredService<AzureBlobFileProvider>();
-            //app.UseStaticFiles(new StaticFileOptions()
-            //{
-            //    FileProvider = azureBlobFileProviderImages,
-            //    RequestPath = "/images"
-            //});
-
-            //app.UseDirectoryBrowser(new DirectoryBrowserOptions
-            //{
-            //    FileProvider = azureBlobFileProviderImages,
-            //    RequestPath = "/images"
-            //});
 
             app.UseMvc();
             app.UseHttpsRedirection();

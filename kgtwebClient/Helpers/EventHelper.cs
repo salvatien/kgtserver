@@ -38,7 +38,7 @@ namespace kgtwebClient.Helpers
 
         public static List<SelectListItem> GetAllEventsExceptOneDog(int dogId)
         {
-            var allDogEvents = GetAllEvents().Result;
+            var allDogEvents = GetAllEvents();
             var dogEvents = GetEventsByDogId(dogId).Result;
             var remainingEvents = allDogEvents.Except(dogEvents, new EventEqualityComparer());
 
@@ -59,6 +59,8 @@ namespace kgtwebClient.Helpers
 
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
 
             HttpResponseMessage responseMessage = client.GetAsync($"dogEvents/GetAllByDogId?dogId={dogId}").Result;
@@ -73,10 +75,12 @@ namespace kgtwebClient.Helpers
             return new List<EventModel>();
         }
 
-        public static async Task<List<EventModel>> GetAllEvents()
+        public static List<EventModel> GetAllEvents()
         {
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
 
             HttpResponseMessage responseMessage = client.GetAsync("Events/").Result;

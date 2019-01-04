@@ -15,11 +15,13 @@ using Microsoft.AspNetCore.Authentication;
 namespace DogsServer.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     public class GuidesController : BaseController
     {
         private UnitOfWork unitOfWork = new UnitOfWork(new AppDbContext());
 
         [HttpGet]
+        [AllowAnonymous]
         public List<GuideModel> Get()
         {
             var guides =  unitOfWork.GuideRepository.GetAll().ToList();
@@ -75,6 +77,8 @@ namespace DogsServer.Controllers
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody]GuideModel obj)
         {
+            if (!IsCurrentUserAdmin() && id != GetCurrentUserId())
+                return Forbid();
             var guide = unitOfWork.GuideRepository.GetById(id);
             var guideModel = obj;
 
@@ -100,6 +104,8 @@ namespace DogsServer.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
+            if (!IsCurrentUserAdmin())
+                return Forbid();
             unitOfWork.GuideRepository.Delete(unitOfWork.GuideRepository.GetById(id));
             unitOfWork.Commit();
             return new ObjectResult("Guide deleted successfully!");

@@ -29,7 +29,7 @@ namespace kgtwebClient.Controllers
         public ActionResult Index()
         {
             if(!LoginHelper.IsAuthenticated())
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
             return RedirectToAction("Guide", "Guides", new { id = 
                 System.Web.HttpContext.Current.Session["CurrentUserId"]});
         }
@@ -45,6 +45,79 @@ namespace kgtwebClient.Controllers
             return View();
         }
 
+        [AllowAnonymous]
+        public ActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        //[ValidateAntiForgeryToken]
+        public ActionResult ForgotPassword(string userNameOrEmail)
+        {
+            if (LoginHelper.IsAuthenticated())
+                return RedirectToAction("Index", "Home");
+            identityApiHttpClient.DefaultRequestHeaders.Accept.Clear();
+            identityApiHttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            HttpRequestMessage identityApiMessage = 
+                new HttpRequestMessage(HttpMethod.Post, identityApiHttpClient.BaseAddress + "account/sendresetpasswordemail");
+
+            var modelSerialized = JsonConvert.SerializeObject(userNameOrEmail);
+            identityApiMessage.Content = new StringContent(modelSerialized, System.Text.Encoding.UTF8, "application/json");
+            HttpResponseMessage identityApiResponseMessage = identityApiHttpClient.SendAsync(identityApiMessage).Result;
+            if (identityApiResponseMessage.IsSuccessStatusCode)    //200 OK
+            {
+                return View("ResetPasswordEmailSent");
+            }
+            else
+            {
+                ViewBag.Message = "Kod błędu: " + identityApiResponseMessage.StatusCode;
+                return View("Error");
+            }
+        }
+
+        public ActionResult ResetPassword(string token)
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        //[ValidateAntiForgeryToken]
+        public ActionResult ResetPassword(ResetPasswordModel model)
+        {
+            if (LoginHelper.IsAuthenticated())
+                return RedirectToAction("Index", "Home");
+            if (model.Password != model.ConfirmPassword)
+            {
+                ViewBag.Message = "Hasła nie są takie same";
+                return View("Error");
+            }
+            if (model.Password.Length < 6 || !model.Password.Any(char.IsDigit))
+            {
+                ViewBag.Message = "Hasło musi mieć minimum 6 znaków, w tym 1 cyfrę.";
+                return View("Error");
+            }
+            identityApiHttpClient.DefaultRequestHeaders.Accept.Clear();
+            identityApiHttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            HttpRequestMessage identityApiMessage =
+                new HttpRequestMessage(HttpMethod.Post, identityApiHttpClient.BaseAddress + "account/resetpassword");
+
+            var modelSerialized = JsonConvert.SerializeObject(model);
+            identityApiMessage.Content = new StringContent(modelSerialized, System.Text.Encoding.UTF8, "application/json");
+            HttpResponseMessage identityApiResponseMessage = identityApiHttpClient.SendAsync(identityApiMessage).Result;
+            if (identityApiResponseMessage.IsSuccessStatusCode)    //200 OK
+            {
+                return View("ResetPasswordSuccessful");
+            }
+            else
+            {
+                ViewBag.Message = "Kod błędu: " + identityApiResponseMessage.StatusCode;
+                return View("Error");
+            }
+        }
+
         // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]
@@ -58,6 +131,10 @@ namespace kgtwebClient.Controllers
             {
                 return View(model);
             }
+
+            //if user came from error page or reset password page, we shouldnt redirect back to those pages
+            if (returnUrl.Contains("Error") || returnUrl.Contains("ResetPassword"))
+                returnUrl = null;
 
             identityApiHttpClient.DefaultRequestHeaders.Accept.Clear();
             identityApiHttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -91,7 +168,8 @@ namespace kgtwebClient.Controllers
                 var userId = Int32.Parse(principal.Claims.Where(c => c.Type == "KgtId").Select(c => c.Value).FirstOrDefault());
                 serverHttpClient.DefaultRequestHeaders.Accept.Clear();
                 serverHttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+                serverHttpClient.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", token);
                 HttpResponseMessage responseMessage = serverHttpClient.GetAsync("guides/" + userId).Result;
                 if (responseMessage.IsSuccessStatusCode)
                 {
@@ -167,7 +245,7 @@ namespace kgtwebClient.Controllers
                     {
                         var responseServerData = responseServerMessage.Content.ReadAsStringAsync().Result;
                         System.Web.HttpContext.Current.Session.Timeout = 30;
-                        System.Web.HttpContext.Current.Session["CurrentUserId"] = responseServerData;
+                        System.Web.HttpContext.Current.Session["CurrentUserId"] = Int32.Parse(responseServerData);
                         System.Web.HttpContext.Current.Session["token"] = token;
                         System.Web.HttpContext.Current.Session["isMember"] = false;
                         System.Web.HttpContext.Current.Session["isAdmin"] = false;

@@ -1,4 +1,5 @@
 ﻿using Dogs.ViewModels.Data.Models;
+using kgtwebClient.Helpers;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -18,11 +19,13 @@ namespace kgtwebClient.Controllers
         private static readonly HttpClient client = new HttpClient { BaseAddress = new Uri(url) };
 
 
-        // get all dogs from db
+        // get all events from db
         public async Task<ActionResult> Index()
         {
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
 
 
@@ -46,7 +49,8 @@ namespace kgtwebClient.Controllers
             //client.BaseAddress = new Uri(url);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             HttpResponseMessage responseMessage = await client.GetAsync("events/" + id.ToString());
             if (responseMessage.IsSuccessStatusCode)
             {
@@ -60,16 +64,24 @@ namespace kgtwebClient.Controllers
         [HttpGet]
         public async Task<ActionResult> AddEvent()
         {
+            if (!LoginHelper.IsAuthenticated())
+                return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
+            else if (!LoginHelper.IsCurrentUserAdmin() && !LoginHelper.IsCurrentUserMember())
+                return RedirectToAction("Error", "Home", new { error = "Nie masz wystarczających uprawnień by przeglądać tę sekcję" });
             return View();
         }
 
         [HttpPost]
         public async Task<ActionResult> AddEvent(EventModel addedEvent)
         {
+            if (!LoginHelper.IsAuthenticated())
+                return RedirectToAction("Login", "Account");
+            else if (!LoginHelper.IsCurrentUserAdmin() && !LoginHelper.IsCurrentUserMember())
+                return RedirectToAction("Error", "Home", new { error = "Nie masz wystarczających uprawnień by zmieniać te dane" });
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, client.BaseAddress + "events/");
 
 
@@ -95,10 +107,17 @@ namespace kgtwebClient.Controllers
 
         public JsonResult DeleteEvent(int? id)
         {
+            if (!LoginHelper.IsAuthenticated())
+                return Json(new { success = false, errorCode = 401 });
+            else if (!LoginHelper.IsCurrentUserAdmin() && !LoginHelper.IsCurrentUserMember())
+                return Json(new { success = false, errorCode = 403});
+
+
             //client.BaseAddress = new Uri(url);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Delete, client.BaseAddress + "events/" + id.ToString());
             message.Content = new StringContent(id.ToString(), System.Text.Encoding.UTF8, "application/json");
 
@@ -120,9 +139,15 @@ namespace kgtwebClient.Controllers
         [HttpGet]
         public async Task<ActionResult> UpdateEvent(int id)
         {
+            if (!LoginHelper.IsAuthenticated())
+                return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
+            else if (!LoginHelper.IsCurrentUserAdmin() && !LoginHelper.IsCurrentUserMember())
+                return RedirectToAction("Error", "Home", new { error = "Nie masz wystarczających uprawnień by przeglądać tę sekcję" });
+
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             HttpResponseMessage responseMessage = await client.GetAsync("events/" + id.ToString());
             if (responseMessage.IsSuccessStatusCode)
             {
@@ -140,10 +165,15 @@ namespace kgtwebClient.Controllers
         [HttpPost]
         public async Task<ActionResult> UpdateEvent(EventModel updatedEvent)    //? -> może być null
         {
+            if (!LoginHelper.IsAuthenticated())
+                return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
+            else if (!LoginHelper.IsCurrentUserAdmin() && !LoginHelper.IsCurrentUserMember())
+                return RedirectToAction("Error", "Home", new { error = "Nie masz wystarczających uprawnień by zmieniać te dane" });
 
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Put, client.BaseAddress + "events/" + updatedEvent.EventId.ToString());
 
 

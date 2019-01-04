@@ -5,12 +5,13 @@
 
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Wydarzenia psów";
+    var id = ViewBag.Id;
 }
 <div class="tables">
     <input type="text" id="eventsSearch" onkeyup="searchByEventName()" placeholder="Search for names.." title="Type in a name">
     @{ if (LoginHelper.IsAuthenticated()) { 
-            <button class="addButton" onclick="location.href='@Url.Action("AddDogEvent", "DogEvents", new { dogId = Model[0].DogId})'">dodaj wydarzenie</button>
+            <button class="addButton" onclick="location.href='@Url.Action("AddDogEvent", "DogEvents", new { dogId = id})'">dodaj wydarzenie</button>
     }}
     <div>
         <table id="eventsTable">

@@ -41,6 +41,7 @@ namespace Dogs.Identity.Api
                 options.Password.RequireUppercase = false;
                 options.Password.RequireNonAlphanumeric = false;
             })
+                .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<ApplicationUserDbContext>();
 
             #endregion

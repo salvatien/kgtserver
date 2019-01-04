@@ -15,7 +15,7 @@ namespace Dogs.ViewModels.Data.Models
         [Display(Name = "Opis")]
         public string Description { get; set; }
         [Display(Name = "Ważny przez (w miesiącach)")]
-        public TimeSpan ValidThrough { get; set; }              // dopisać do tłumczenia - (w miesiącach)
+        public int ValidThroughMonths { get; set; }
         public virtual List<int> DogIds { get; set; }
     }
 }

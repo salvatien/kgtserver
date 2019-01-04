@@ -6,10 +6,7 @@
 @*TODO: get in different way dog id to AddTrainingToDog !!!!!!*@
 @{
     ViewBag.Title = "Home Page";
-    if (Model != null)
-    {
-        var id = Model[0].DogId;
-    }
+    var id = ViewBag.Id;
 }
 
 
@@ -18,7 +15,7 @@
 <div class="tables">
     <input type="text" id="dogTrainingsSearch" onkeyup="searchByTrainingLocalization()" placeholder="Search for names.." title="Type in a name">
     @{ if (LoginHelper.IsAuthenticated()) { 
-            <button type="button" class="addButton" onclick="location.href='@Url.Action("AddTrainingToDog", "DogTrainings", new { dogId = Model[0].DogId })'">dodaj trening</button>
+            <button type="button" class="addButton" onclick="location.href='@Url.Action("AddTrainingToDog", "DogTrainings", new { dogId = id})'">dodaj trening</button>
     }}
     <div>
         <table id="dogTrainingsTable">
