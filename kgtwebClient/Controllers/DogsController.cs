@@ -62,11 +62,11 @@ namespace kgtwebClient.Controllers
             return View();
         }
         [HttpGet]
-        public  ActionResult AddDog()
+        public ActionResult AddDog()
         {
             if (!LoginHelper.IsAuthenticated())
                 return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
-           // var guides = GuideHelpers.GetAllGuidesIdAndName();
+            // var guides = GuideHelpers.GetAllGuidesIdAndName();
             return View();
         }
 
@@ -75,6 +75,7 @@ namespace kgtwebClient.Controllers
         {
             if (!LoginHelper.IsAuthenticated())
                 return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
+
             MultipartFormDataContent form = new MultipartFormDataContent();
             var imageStreamContent = new StreamContent(imageFile.InputStream);
             var byteArrayImageContent = new ByteArrayContent(imageStreamContent.ReadAsByteArrayAsync().Result);
@@ -135,7 +136,7 @@ namespace kgtwebClient.Controllers
             message.Content = new StringContent(***object-json-serialized***, 
                                                 System.Text.Encoding.UTF8, "application/json");
              */
-            HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Delete, client.BaseAddress +"dogs/" + id.ToString());
+            HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Delete, client.BaseAddress + "dogs/" + id.ToString());
             message.Content = new StringContent(id.ToString(), System.Text.Encoding.UTF8, "application/json");
 
             HttpResponseMessage responseMessage = client.SendAsync(message).Result;
@@ -143,7 +144,7 @@ namespace kgtwebClient.Controllers
             {
                 //wyswietlić informację
                 message.Dispose();
-                return Json(new { success = true, id = id.ToString() } );
+                return Json(new { success = true, id = id.ToString() });
             }
             else    // wiadomosc czego się nie udałos
             {
@@ -155,7 +156,8 @@ namespace kgtwebClient.Controllers
 
         //TODO metody UpdateDog(ta niżej) i Dog robią to samo -> wyrzucić środek do innej metody i wywoływać ją sobie wewnątrz
         [HttpGet]
-        public async Task<ActionResult> UpdateDog(int id) {
+        public async Task<ActionResult> UpdateDog(int id)
+        {
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -165,7 +167,7 @@ namespace kgtwebClient.Controllers
                 var responseData = responseMessage.Content.ReadAsStringAsync().Result;
 
                 var dog = JsonConvert.DeserializeObject<DogModel>(responseData);
-                
+
 
                 return View(dog);
             }
@@ -175,6 +177,11 @@ namespace kgtwebClient.Controllers
         [HttpPost]
         public async Task<ActionResult> UpdateDog(DogModel updatedDog, HttpPostedFileBase imageFile)    //? -> może być null
         {
+            if (!DogHelpers.ValidateUpdateDog(updatedDog))
+            {
+                ViewBag.Message = "Walidacja nie powiodła się.";
+                return View("Error");
+            }
             MultipartFormDataContent form = new MultipartFormDataContent();
             var imageStreamContent = new StreamContent(imageFile.InputStream);
             var byteArrayImageContent = new ByteArrayContent(imageStreamContent.ReadAsByteArrayAsync().Result);
@@ -225,6 +232,6 @@ namespace kgtwebClient.Controllers
                 ViewBag.Message = response.StatusCode;
                 return View("Error");
             }
-        }  
+        }
     }
 }

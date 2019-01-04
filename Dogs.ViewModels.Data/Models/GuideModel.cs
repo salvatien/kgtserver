@@ -24,6 +24,7 @@ namespace Dogs.ViewModels.Data.Models
         public string Phone { get; set; }
         [Display(Name = "Notatki")]
         public string Notes { get; set; }
+        [Display(Name = "Psy")]
         public List<IdNameModel> Dogs { get; set; }
         [Display(Name = "Admin")]
         public bool IsAdmin { get; set; }

@@ -29,8 +29,15 @@
         }
     </style>
 </head>
-<body>
-    <div id="map" style="width:900px; height:500px; margin:60px"></div>
+<body><div style="margin:60px;">
+    <div id="map" style="width:900px; height:500px; float:left"></div>
+    <div>
+        @{ for (int i = 0; i < 20; i++)
+            {
+                <div>some text</div>
+            }
+        }
+    </div>
 
     <script>
 
@@ -424,65 +431,65 @@
         @Html.HiddenFor(m => m.DogTrackLength)
         @Html.HiddenFor(m => m.Goal)
 
-         if (LoginHelper.IsAuthenticated())
-         {
-                <div style="float:left">
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.LostPerson, new { @class = "col-md-2 control-label form-field" })
-                        <div class="col-md-10  form-field">
-                            @Html.TextBoxFor(m => m.LostPerson, new { @class = "form-control" })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.Notes, new { @class = "col-md-2 control-label form-field" })
-                        <div class="col-md-10  form-field">
-                            @Html.TextBoxFor(m => m.Notes, new { @class = "form-control" })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.Weather, new { @class = "col-md-2 control-label form-field" })
-                        <div class="col-md-10  form-field">
-                            @Html.TextBoxFor(m => m.Weather, new { @class = "form-control" })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10">
-                            <input type="submit" class="btn btn-default form-field" value="Prześlij dane" onclick="return validateUpdateTraining()" />
-                        </div>
+        if (LoginHelper.IsAuthenticated())
+        {
+            <div style="float:left">
+                <div class="form-group">
+                    @Html.LabelFor(m => m.LostPerson, new { @class = "col-md-2 control-label form-field" })
+                    <div class="col-md-10  form-field">
+                        @Html.TextBoxFor(m => m.LostPerson, new { @class = "form-control" })
                     </div>
                 </div>
-         }
-         else
-         {
-                <div style="float:left">
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.LostPerson, new { @class = "col-md-2 control-label form-field" })
-                        <div class="col-md-10  form-field">
-                            @Html.TextBoxFor(m => m.LostPerson, new { @class = "form-control", disabled = "true" })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.Notes, new { @class = "col-md-2 control-label form-field" })
-                        <div class="col-md-10  form-field">
-                            @Html.TextBoxFor(m => m.Notes, new { @class = "form-control", disabled = "true" })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.Weather, new { @class = "col-md-2 control-label form-field" })
-                        <div class="col-md-10  form-field">
-                            @Html.TextBoxFor(m => m.Weather, new { @class = "form-control", disabled = "true" })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10">
-                            <input type="submit" class="btn btn-default form-field" value="Prześlij dane" onclick="return validateUpdateTraining()" disabled/>
-                        </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Notes, new { @class = "col-md-2 control-label form-field" })
+                    <div class="col-md-10  form-field">
+                        @Html.TextBoxFor(m => m.Notes, new { @class = "form-control" })
                     </div>
                 </div>
-         }
-        
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Weather, new { @class = "col-md-2 control-label form-field" })
+                    <div class="col-md-10  form-field">
+                        @Html.TextBoxFor(m => m.Weather, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" class="btn btn-default form-field" value="Prześlij dane" onclick="return validateUpdateTraining()" />
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div style="float:left">
+                <div class="form-group">
+                    @Html.LabelFor(m => m.LostPerson, new { @class = "col-md-2 control-label form-field" })
+                    <div class="col-md-10  form-field">
+                        @Html.TextBoxFor(m => m.LostPerson, new { @class = "form-control", disabled = "true" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Notes, new { @class = "col-md-2 control-label form-field" })
+                    <div class="col-md-10  form-field">
+                        @Html.TextBoxFor(m => m.Notes, new { @class = "form-control", disabled = "true" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Weather, new { @class = "col-md-2 control-label form-field" })
+                    <div class="col-md-10  form-field">
+                        @Html.TextBoxFor(m => m.Weather, new { @class = "form-control", disabled = "true" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" class="btn btn-default form-field" value="Prześlij dane" onclick="return validateUpdateTraining()" disabled />
+                    </div>
+                </div>
+            </div>
+        }
+
     }
 
-
+</div>
 </body>
 </html>
