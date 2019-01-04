@@ -144,13 +144,14 @@ namespace DogsServer.Controllers
             }
             return CommentModels;
         }
-
+        //from form instead of form body because there is a problem with AJAX post here. 
+        //This is why ajax post has content type x-www-form-urlencoded
         [HttpPost("TrainingComment")]
-        public IActionResult AddNewTrainingComment([FromBody]CommentModel obj)
+        public IActionResult AddNewTrainingComment([FromForm]CommentModel obj)
         {
             var comment = new TrainingComment
             {
-                TrainingCommentId = obj.CommentId,
+                //TrainingCommentId = obj.CommentId,
                 AuthorId = obj.AuthorId,
                 Content = obj.Content,
                 Date = obj.Date,
@@ -160,13 +161,14 @@ namespace DogsServer.Controllers
             unitOfWork.Commit();
             return new ObjectResult(comment.TrainingCommentId);
         }
-
+        //from form instead of form body because there is a problem with AJAX post here. 
+        //This is why ajax post has content type x-www-form-urlencoded
         [HttpPost("DogTrainingComment")]
-        public IActionResult AddNewDogTrainingComment([FromBody]CommentModel obj)
+        public IActionResult AddNewDogTrainingComment([FromForm]CommentModel obj)
         {
             var comment = new DogTrainingComment
             {
-                DogTrainingCommentId = obj.CommentId,
+                //DogTrainingCommentId = obj.CommentId,
                 AuthorId = obj.AuthorId,
                 Content = obj.Content,
                 Date = obj.Date,

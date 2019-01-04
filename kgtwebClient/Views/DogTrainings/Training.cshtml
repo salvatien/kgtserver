@@ -428,31 +428,70 @@
 
         if (LoginHelper.IsAuthenticated())
         {
-            <div style="float:left">
-                <div class="form-group">
-                    @Html.LabelFor(m => m.LostPerson, new { @class = "col-md-2 control-label form-field" })
-                    <div class="col-md-10  form-field">
-                        @Html.TextBoxFor(m => m.LostPerson, new { @class = "form-control" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(m => m.Notes, new { @class = "col-md-2 control-label form-field" })
-                    <div class="col-md-10  form-field">
-                        @Html.TextBoxFor(m => m.Notes, new { @class = "form-control" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(m => m.Weather, new { @class = "col-md-2 control-label form-field" })
-                    <div class="col-md-10  form-field">
-                        @Html.TextBoxFor(m => m.Weather, new { @class = "form-control" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" class="btn btn-default form-field" value="Prześlij dane" onclick="return validateUpdateTraining()" />
-                    </div>
-                </div>
+    <div style="float:left">
+        <div class="form-group">
+            @Html.LabelFor(m => m.LostPerson, new { @class = "col-md-2 control-label form-field" })
+            <div class="col-md-10  form-field">
+                @Html.TextBoxFor(m => m.LostPerson, new { @class = "form-control" })
             </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Notes, new { @class = "col-md-2 control-label form-field" })
+            <div class="col-md-10  form-field">
+                @Html.TextBoxFor(m => m.Notes, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Weather, new { @class = "col-md-2 control-label form-field" })
+            <div class="col-md-10  form-field">
+                @Html.TextBoxFor(m => m.Weather, new { @class = "form-control" })
+            </div>
+        </div>
+
+
+        @if (Model.Comments != null && Model.Comments.Any())
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.Comments)
+            </dt>
+            <dd>
+                <table id="commentsTable">
+                    @{
+                        foreach (var comment in Model.Comments)
+                        {
+                            <tr class="comment">
+                                @if (comment.AuthorId == LoginHelper.GetCurrentUserId())
+                                {
+                                    <td>Ja</td>
+                                }
+                                else
+                                {
+                                    <td>@Html.DisplayFor(m => comment.AuthorName)</td>
+                                }
+                                <td>@Html.DisplayFor(m => comment.Date)</td>
+                                <td>@Html.DisplayFor(m => comment.Content)</td>
+                                @if (comment.Date > mostRecentCommentDate)
+                                {
+                                    mostRecentCommentDate = comment.Date;
+                                }
+                            </tr>
+
+                        }
+                    }
+                </table>
+                @Html.TextArea("Message", new { id = "newCommentMessage", rows = 8, columns = 40 })
+                <button class="displayButton" type="button" id="addNewComment">Dodaj komentarz</button>
+                <p id="newCommentWasAdded" hidden style="color:red"> Dodano nowy komentarz lub zmieniono istniejący! Odśwież stronę, aby zobaczyć najnowsze dane </p>
+
+            </dd>
+        }
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" class="btn btn-default form-field" value="Prześlij dane" onclick="return validateUpdateTraining()" />
+            </div>
+        </div>
+    </div>
         }
         else
         {
@@ -486,15 +525,15 @@
                             @{
                                 foreach (var comment in Model.Comments)
                                 {
-                                    <tr>
-                                        <td>@Html.DisplayFor(m => comment.AuthorName)</td>
-                                        <td>@Html.DisplayFor(m => comment.Date)</td>
-                                        <td>@Html.DisplayFor(m => comment.Content)</td>
-                                        @if (comment.Date > mostRecentCommentDate)
-                                        {
-                                            mostRecentCommentDate = comment.Date;
-                                        }
-                                    </tr>
+                                <tr class="comment">
+                                    <td>@Html.DisplayFor(m => comment.AuthorName)</td>
+                                    <td>@Html.DisplayFor(m => comment.Date)</td>
+                                    <td>@Html.DisplayFor(m => comment.Content)</td>
+                                    @if (comment.Date > mostRecentCommentDate)
+                                    {
+                                        mostRecentCommentDate = comment.Date;
+                                    }
+                                </tr>
 
                                 }
                             }
@@ -543,6 +582,44 @@
 
         //check every 2 minutes for updates in comments
     setInterval(function () { showNewCommentMessage(); }, 120000);
+
+    //Add New Comment  
+    $('#addNewComment').on('click', function (e) {  
+  
+        var trainingId = @Model.TrainingId; 
+        var commentMsg = $('#newCommentMessage').val();  
+        var dateTimeNow = new Date();  
+                  
+        var comment = {  
+            AuthorId: @LoginHelper.GetCurrentUserId(),  
+            Date: dateTimeNow.toLocaleString(),
+            Content: commentMsg,
+            TrainingId: @Model.TrainingId,
+            DogId: @Model.DogId
+        };  
+
+        console.log(comment);
+  
+        $.ajax({  
+            type: 'POST',  
+            url: 'http://localhost:12321/api/Comments/DogTrainingComment',
+            data: comment,  
+            dataType: 'json',
+            contentType: "application/x-www-form-urlencoded",
+            success: function (response) {  
+                var itemIndex = $(".comment").length;
+                e.preventDefault();
+                var html = $('<tr class="comment" id="comment-"' + itemIndex + '><td>' + "Ja" + '</td><td>' + comment.Date + '</td><td>' + comment.Content + '</td></tr>');
+                $("#commentsTable").append(html);
+                $('#newCommentMessage').val("");  
+            },  
+            error: function (response) {  
+                alert('Sorry: Something Wrong');  
+            }  
+  
+        });  
+  
+        });  
 
     </script>
 

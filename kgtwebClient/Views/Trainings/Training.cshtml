@@ -37,9 +37,9 @@
             <dd>
                 @Html.DisplayFor(model => model.Notes)
             </dd>
-            <dt style="color:red; font-size:large">
+            @*<dt style="color:red; font-size:large">
                 COMMENTS HERE SOMETIME
-            </dt>
+            </dt>*@
 
             @if (Model.Comments != null && Model.Comments.Any())
             {
@@ -51,20 +51,29 @@
                         @{
                             foreach (var comment in Model.Comments)
                             {
-                                <tr>
-                                    <td>@Html.DisplayFor(m => comment.AuthorName)</td>
-                                    <td>@Html.DisplayFor(m => comment.Date)</td>
-                                    <td>@Html.DisplayFor(m => comment.Content)</td>
-                                    @if (comment.Date > mostRecentCommentDate)
-                                    {
-                                        mostRecentCommentDate = comment.Date;
-                                    }
-                                </tr>
+                        <tr class="comment">
+                            @if (comment.AuthorId == LoginHelper.GetCurrentUserId())
+                            {
+                                <td>Ja</td>
+                            }
+                            else
+                            {
+                                <td>@Html.DisplayFor(m => comment.AuthorName)</td>
+                            }
+                            <td>@Html.DisplayFor(m => comment.Date)</td>
+                            <td>@Html.DisplayFor(m => comment.Content)</td>
+                            @if (comment.Date > mostRecentCommentDate)
+                            {
+                                mostRecentCommentDate = comment.Date;
+                            }
+                        </tr>
                             }
 
                         }
                     </table>
-                    <p id="newCommentWasAdded" hidden style="color:red"> Dodano nowy komentarz lub zmieniono istniejący! Odśwież stronę, aby zobaczyć najnowsze dane </p>
+                    @Html.TextArea("Message", new { id = "newCommentMessage", rows = 8, columns = 40 })
+                    <button class="displayButton" type="button" id="addNewComment">Dodaj komentarz</button>
+                    <p id="newCommentWasAdded" hidden style="color:red"> Ktoś dodał nowy komentarz lub zmienił istniejący! Odśwież stronę, aby zobaczyć najnowsze dane </p>
                 </dd>
             }
 
@@ -102,8 +111,8 @@
     function showNewCommentMessage() {
         var ticks = @mostRecentCommentDate.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
         var time = new Date(ticks);
-            $.ajax({
-                url: 'http://localhost:12321/api/Comments/TrainingCommentsByTrainingId/@Model.TrainingId',
+        $.ajax({
+            url: 'http://localhost:12321/api/Comments/TrainingCommentsByTrainingId/@Model.TrainingId',
             type: 'GET',
             dataType: 'json',
                 success: function (data, textStatus, xhr) {
@@ -119,9 +128,47 @@
 
             }
         });
-        }
+    }
 
     //check every 2 minutes for updates in comments
     setInterval(function () { showNewCommentMessage(); }, 60000);
+
+    //Add New Comment  
+    $('#addNewComment').on('click', function (e) {  
+  
+        var trainingId = @Model.TrainingId; 
+        var commentMsg = $('#newCommentMessage').val();  
+        var dateTimeNow = new Date();  
+                  
+        var comment = {  
+            AuthorId: @LoginHelper.GetCurrentUserId(),  
+            Date: dateTimeNow.toLocaleString(),
+            Content: commentMsg,
+            TrainingId: @Model.TrainingId
+        };  
+
+        console.log(comment);
+  
+        $.ajax({  
+            type: 'POST',  
+            url: 'http://localhost:12321/api/Comments/TrainingComment',
+            data: comment,  
+            dataType: 'json',
+            contentType: "application/x-www-form-urlencoded",
+            success: function (response) {  
+                var itemIndex = $(".comment").length;
+                e.preventDefault();
+                var html = $('<tr class="comment" id="comment-"' + itemIndex + '><td>' + "Ja" + '</td><td>' + comment.Date + '</td><td>' + comment.Content + '</td></tr>');
+                $("#commentsTable").append(html);
+                $('#newCommentMessage').val("");  
+                         
+            },  
+            error: function (response) {  
+                alert('Sorry: Something Wrong');  
+            }  
+  
+        });  
+  
+    });  
 
 </script>
