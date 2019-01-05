@@ -35,7 +35,12 @@ namespace kgtwebClient.Controllers
             {
                 var responseData = responseMessage.Content.ReadAsStringAsync().Result;
                 var comments = JsonConvert.DeserializeObject<List<CommentModel>>(responseData);
-                return Json(new { success = true, data = comments });
+                return new JsonResult
+                {
+                    Data = new { success = true, data = comments },
+                    MaxJsonLength = Int32.MaxValue,
+                    JsonRequestBehavior = JsonRequestBehavior.AllowGet
+                };
             }
             return Json(new { success = false, errorCode = responseMessage.StatusCode });
         }
@@ -130,7 +135,13 @@ namespace kgtwebClient.Controllers
             {
                 var responseData = responseMessage.Content.ReadAsStringAsync().Result;
                 var comments = JsonConvert.DeserializeObject<List<CommentModel>>(responseData);
-                return Json(new { success = true, data = comments });
+                return new JsonResult
+                {
+                    Data = new { success = true, data = comments },
+                    MaxJsonLength = Int32.MaxValue,
+                    JsonRequestBehavior = JsonRequestBehavior.AllowGet
+                };
+                
             }
             return Json(new { success = false, errorCode = responseMessage.StatusCode });
         }
