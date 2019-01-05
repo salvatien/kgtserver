@@ -23,5 +23,9 @@ namespace Dogs.ViewModels.Data.Models
         public List<CommentModel> Comments { get; set; }
         [Display(Name = "Pogoda")]
         public string Weather { get; set; }
+        [Display(Name = "Długość śladu")]
+        public double LostPersonTrackLength { get; set; }
+        [Display(Name = "Czas odłożenia")]
+        public TimeSpan DelayTime { get; set; }
     }
 }
