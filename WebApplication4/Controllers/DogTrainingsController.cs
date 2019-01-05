@@ -52,7 +52,9 @@ namespace DogsServer.Controllers
                 LostPerson = obj.LostPerson,
                 LostPersonTrackBlobUrl = obj.LostPersonTrackBlobUrl,
                 Notes = obj.Notes,
-                Weather = obj.Weather
+                Weather = obj.Weather,
+                DelayTime = obj.DelayTime,
+                LostPersonTrackLength = obj.LostPersonTrackLength
             };
 
             unitOfWork.DogTrainingRepository.Insert(training);
@@ -78,6 +80,8 @@ namespace DogsServer.Controllers
                 LostPersonTrackBlobUrl = t.LostPersonTrackBlobUrl,
                 Notes = t.Notes,
                 Weather = t.Weather,
+                DelayTime = t.DelayTime,
+                LostPersonTrackLength = t.LostPersonTrackLength,
                 Comments = t.Comments.Select(c => new CommentModel
                 {
                     AuthorId = c.AuthorId,
@@ -106,6 +110,8 @@ namespace DogsServer.Controllers
                 dogTraining.LostPerson = updatedTraining.LostPerson;
                 dogTraining.Weather = updatedTraining.Weather;
                 dogTraining.Notes = updatedTraining.Notes;
+                dogTraining.LostPersonTrackLength = updatedTraining.LostPersonTrackLength;
+                dogTraining.DelayTime = updatedTraining.DelayTime;
                 //TODO not sure if it should be updated here or not
                 //dogTraining.Comments = updatedTraining.Comments.Select(c => new DogTrainingComment
                 //{
@@ -267,8 +273,8 @@ namespace DogsServer.Controllers
                     Dog = new DogModel
                     {
                         Name = t.Dog.Name,
-                        GuideIdAndName = new IdNameModel{ Id = t.Dog.Guide.GuideId,
-                                                          Name = t.Dog.Guide.FirstName + " " + t.Dog.Guide.LastName } 
+                        GuideIdAndName = new IdNameModel { Id = t.Dog.Guide.GuideId,
+                            Name = t.Dog.Guide.FirstName + " " + t.Dog.Guide.LastName }
                     },
                     TrainingId = t.TrainingId,
                     Training = new TrainingModel
@@ -283,7 +289,10 @@ namespace DogsServer.Controllers
                     LostPerson = t.LostPerson,
                     LostPersonTrackBlobUrl = t.LostPersonTrackBlobUrl,
                     Notes = t.Notes,
-                    Weather = t.Weather//,
+                    Weather = t.Weather,
+                    DelayTime = t.DelayTime,
+                    LostPersonTrackLength = t.LostPersonTrackLength
+                    //,
                     //Comments = t.Comments.Select(c => new CommentModel
                     //{
                     //    AuthorId = c.AuthorId,
@@ -333,7 +342,10 @@ namespace DogsServer.Controllers
                     LostPerson = t.LostPerson,
                     LostPersonTrackBlobUrl = t.LostPersonTrackBlobUrl,
                     Notes = t.Notes,
-                    Weather = t.Weather//,
+                    Weather = t.Weather,
+                    DelayTime = t.DelayTime,
+                    LostPersonTrackLength = t.LostPersonTrackLength
+                    //,
                     //Comments = t.Comments.Select(c => new CommentModel
                     //{
                     //    AuthorId = c.AuthorId,

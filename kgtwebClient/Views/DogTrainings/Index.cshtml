@@ -13,28 +13,30 @@
 
 @*<div class="jumbotron"> *@
 <div class="tables">
-    <input type="text" id="dogTrainingsSearch" onkeyup="searchByTrainingLocalization()" placeholder="Search for names.." title="Type in a name">
+    <input type="text" id="dogTrainingsSearch" onkeyup="searchByTrainingLocalization()" placeholder="Szukaj po miejscu/dacie" title="Type in a name">
     @{ if (LoginHelper.IsAuthenticated()) { 
             <button type="button" class="addButton" onclick="location.href='@Url.Action("AddTrainingToDog", "DogTrainings", new { dogId = id})'">dodaj trening</button>
     }}
-    <div>
-        <table id="dogTrainingsTable">
-            <tr>
-                <th>ID</th>
-                <th>Lokalizacja</th>
-                <th>Adres</th>
-                @*<th>Data urodzenia</th>
-                    <th>Poziom</th>
-                    <th>Tryb pracy</th>
-                    <th>Notatki</th>
-                *@
-                <th>Data</th>
+        <div>
 
+            <h5> Kliknij na nazwę kolumny, aby posortować względem niej.</h5>
+            <h6> Kliknij kolejny raz, aby zmienić porządek sortowania.</h6>
 
-            </tr>
-            @foreach (var item in Model)
+            <h1 style="color:red">DODAC DLUGOSC SLADU (w metrach) I CZAS ODLOZENIA DO TEJ TABELKI + sortowanie po nich????? </h1>
 
-            {
+            <table id="dogTrainingsTable">
+                <tr>
+                        
+                    <th onclick="sortTable(0, false)">ID</th>
+                    <th onclick="sortTable(1, false)">Lokacja</th>
+                    <th onclick="sortTable(2, false)">Adres</th>
+                    <th onclick="sortTable(3, true)">Data</th>
+                    <th onclick="sortTable(4, false)">Długość śladu</th>
+                    <th onclick="sortTable(5, false)">Czas odłożenia</th>
+                </tr>
+                @foreach (var item in Model)
+
+                {
                 <tr @*onclick="document.location = 'http://kgtwebclient.azurewebsites.net/Dogs/Dog/' + @item.DogId;"  *@>
                     <td class="tdOnclick">
                         @item.TrainingId
@@ -43,17 +45,17 @@
                         @item.Training.GeneralLocation
                     </td>
                     @*<td class="tdOnclick">
-                            @item.DateOfBirth
-                        </td>
-                        <td class="tdOnclick">
-                            @item.Level
-                        </td>
-                        <td class="tdOnclick">
-                            @item.Workmode
-                        </td>
-                        <td class="tdOnclick">
-                            @item.Notes
-                        </td>
+            @item.DateOfBirth
+        </td>
+        <td class="tdOnclick">
+            @item.Level
+        </td>
+        <td class="tdOnclick">
+            @item.Workmode
+        </td>
+        <td class="tdOnclick">
+            @item.Notes
+        </td>
                     *@
 
 
@@ -63,6 +65,14 @@
 
                     <td class="tdOnclick">
                         @item.Training.Date
+                    </td>
+
+                    <td class="tdOnclick">
+                        @item.LostPersonTrackLength
+                    </td>
+
+                    <td class="tdOnclick">
+                        @item.DelayTime
                     </td>
 
                     @*buttons *@
@@ -77,17 +87,17 @@
                                 <button class="deleteButton" onclick="deleteDogTraining(@item.DogId, @item.TrainingId)" id="@($"deleteDog{item.DogId}Training{item.TrainingId}Button")">usuń</button>
                             </td>
                             @*<td style="background-color:white">
-                                    <button class="updateButton" onclick="location.href='@Url.Action("UpdateTraining", "Trainings", new { id = @item.TrainingId })'">zmień</button>
-                                </td>*@
+                    <button class="updateButton" onclick="location.href='@Url.Action("UpdateTraining", "Trainings", new { id = @item.TrainingId })'">zmień</button>
+                </td>*@
                         } }
 
                 </tr>
 
 
 
-            }
+                }
 
-        </table>
+            </table>
     </div>
 </div>
 <script>
@@ -147,6 +157,79 @@
             }
 
         });
+    }
+
+    function sortTable(n, isDate) {
+        var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+        table = document.getElementById("dogTrainingsTable");
+        switching = true;
+        // Set the sorting direction to ascending:
+        dir = "asc";
+        /* Make a loop that will continue until
+        no switching has been done: */
+        while (switching) {
+            // Start by saying: no switching is done:
+            switching = false;
+            rows = table.rows;
+            /* Loop through all table rows (except the
+            first, which contains table headers): */
+            for (i = 1; i < (rows.length - 1); i++) {
+                // Start by saying there should be no switching:
+                shouldSwitch = false;
+                /* Get the two elements you want to compare,
+                one from current row and one from the next: */
+                x = rows[i].getElementsByTagName("TD")[n];
+                y = rows[i + 1].getElementsByTagName("TD")[n];
+                /* Check if the two rows should switch place,
+                based on the direction, asc or desc: */
+                if (dir == "asc") {
+                    if (isDate == true) {
+                        var date1 = new Date(x.innerHTML);
+                        var date2 = new Date(y.innerHTML);
+                        if (date1 < date2) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                    else if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        // If so, mark as a switch and break the loop:
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+                else if (dir == "desc") {
+                    if (isDate == true) {
+                        var date1 = new Date(x.innerHTML);
+                        var date2 = new Date(y.innerHTML);
+                        if (date1 > date2) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                    else if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        // If so, mark as a switch and break the loop:
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+            if (shouldSwitch) {
+                /* If a switch has been marked, make the switch
+                and mark that a switch has been done: */
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                // Each time a switch is done, increase this count by 1:
+                switchcount++;
+            }
+            else {
+                /* If no switching has been done AND the direction is "asc",
+                set the direction to "desc" and run the while loop again. */
+                if (switchcount == 0 && dir == "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
+            }
+        }
     }
 
     //$(document).ready(function () {

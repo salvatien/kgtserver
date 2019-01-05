@@ -84,7 +84,7 @@ namespace kgtwebClient.Controllers
                     Notes = dogTraining.Notes,
                     Training = dogTraining.Training,
                     TrainingId = dogTraining.TrainingId,
-                    Weather = dogTraining.Weather
+                    Weather = dogTraining.Weather                    
                 };
                 if (!String.IsNullOrEmpty(dogTraining.DogTrackBlobUrl))
                 {
@@ -98,10 +98,14 @@ namespace kgtwebClient.Controllers
                             XDocument gpxDoc = XDocument.Load(reader);
                             var serializer = new XmlSerializer(typeof(Trkseg));
                             var trkseg = (Trkseg)serializer.Deserialize(gpxDoc.Root.CreateReader());
-                            var t = trkseg.Trkpt;
-
-                            dogTrainingViewModel.DogTrackPoints = t;
-                            //TODO: fill other fields DogTrainingViewModel class (dog part)
+                            if (trkseg != null && trkseg.Trkpt.Any())
+                            {
+                                var t = trkseg.Trkpt;
+                                dogTrainingViewModel.DogTrackPoints = t;
+                                dogTrainingViewModel.DogTrackLength = DogTrainingHelper.CalculateGPSTrackLength(trkseg);
+                                dogTrainingViewModel.Duration = DogTrainingHelper.CalculateDuration(trkseg);
+                                dogTrainingViewModel.TimeOfDogStart = DogTrainingHelper.CalculateGPSTrackStartTime(trkseg);
+                            }
                         }
                     }
                     catch (Exception e)
@@ -122,11 +126,14 @@ namespace kgtwebClient.Controllers
                             XDocument gpxDoc = XDocument.Load(reader);
                             var serializer = new XmlSerializer(typeof(Trkseg));
                             var trkseg = (Trkseg)serializer.Deserialize(gpxDoc.Root.CreateReader());
-                            var t = trkseg.Trkpt;
 
-                            dogTrainingViewModel.LostPersonTrackPoints = t;
-                            //TODO: fill other fields DogTrainingViewModel class (person part)
-
+                            if (trkseg != null && trkseg.Trkpt.Any())
+                            {
+                                var t = trkseg.Trkpt;
+                                dogTrainingViewModel.LostPersonTrackPoints = t;
+                                dogTrainingViewModel.LostPersonTrackLength = DogTrainingHelper.CalculateGPSTrackLength(trkseg);
+                                dogTrainingViewModel.TimeOfLostPersonStart = DogTrainingHelper.CalculateGPSTrackStartTime(trkseg);
+                            }
                         }
                     }
                     catch (Exception e)
@@ -210,7 +217,9 @@ namespace kgtwebClient.Controllers
                 Weather = model.Weather,
                 Comments = model.Comments,
                 DogId = model.DogId,
-                TrainingId = model.TrainingId
+                TrainingId = model.TrainingId,
+                LostPersonTrackLength = model.LostPersonTrackLength,
+                DelayTime = model.TimeOfDogStart - model.TimeOfLostPersonStart
             };
             
             client.DefaultRequestHeaders.Accept.Clear();
@@ -252,12 +261,20 @@ namespace kgtwebClient.Controllers
                 return RedirectToAction("Error", "Home", new { error = "Nie masz wystarczających uprawnień by zmieniać te dane" });
             var originalLostPersonTrackStream = lostPersonTrackFile.InputStream;
             var cleanedLostPersonTrackStream = new MemoryStream();
+            DateTime lostPersonStartTime = new DateTime();
+            double lostPersonTrackLength = 0.0;
+            DateTime dogStartTime = new DateTime();
             using (var reader = new StreamReader(originalLostPersonTrackStream))
             {
                 XDocument gpxDoc = XDocument.Load(reader);
                 var originalFileSerializer = new XmlSerializer(typeof(Gpx));
                 var gpx = (Gpx)originalFileSerializer.Deserialize(gpxDoc.Root.CreateReader());
                 var trkSeg = gpx.Trk.Trkseg;
+
+                //calculate lost person track length and time of lost person start
+                lostPersonStartTime = DogTrainingHelper.CalculateGPSTrackStartTime(trkSeg);
+                lostPersonTrackLength = DogTrainingHelper.CalculateGPSTrackLength(trkSeg);
+
                 var cleanedFileSerializer = new XmlSerializer(typeof(Trkseg));
                 cleanedFileSerializer.Serialize(cleanedLostPersonTrackStream, trkSeg);
                 cleanedLostPersonTrackStream.Position = 0;
@@ -272,6 +289,10 @@ namespace kgtwebClient.Controllers
                 var originalFileSerializer = new XmlSerializer(typeof(Gpx));
                 var gpx = (Gpx)originalFileSerializer.Deserialize(gpxDoc.Root.CreateReader());
                 var trkSeg = gpx.Trk.Trkseg;
+
+                //calculate time of dog start
+                dogStartTime = DogTrainingHelper.CalculateGPSTrackStartTime(trkSeg);
+
                 var cleanedFileSerializer = new XmlSerializer(typeof(Trkseg));
                 cleanedFileSerializer.Serialize(cleanedDogTrackStream, trkSeg);
                 cleanedDogTrackStream.Position = 0;
@@ -307,6 +328,11 @@ namespace kgtwebClient.Controllers
                 //add blob urls to model 
                 model.LostPersonTrackBlobUrl = lostPersonTrackBlobUrl;
                 model.DogTrackBlobUrl = dogTrackBlobUrl;
+
+                //add lost person track length and delay time to model
+                model.DelayTime = dogStartTime - lostPersonStartTime;
+                model.LostPersonTrackLength = lostPersonTrackLength;
+
                 //add dogtraining
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
