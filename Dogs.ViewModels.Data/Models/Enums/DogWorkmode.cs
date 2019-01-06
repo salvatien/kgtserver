@@ -8,10 +8,10 @@ namespace Dogs.ViewModels.Data.Models.Enums
     [Flags]
     public enum DogWorkmode : int
     {
-        Tracking = 1, //tropiacy
-        Terrain = 2, //terenowy
-        Rescue = 4, //ratowniczy
-        Rubble = 8, //gruzowy
-        Water = 16 //wodny
+        Tropiący = 1, //tropiacy
+        Terenowy = 2, //terenowy
+        Ratowniczy = 4, //ratowniczy
+        Gruzowy = 8, //gruzowy
+        Wodny = 16 //wodny
     }
 }

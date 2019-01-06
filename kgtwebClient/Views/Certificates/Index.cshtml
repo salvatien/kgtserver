@@ -9,7 +9,7 @@
 }
 <div class="tables">
     <input type="text" id="certificatesSearch" onkeyup="searchByCertificateName()" placeholder="Search for names.." title="Type in a name">
-   @{  if (LoginHelper.IsAuthenticated())
+   @{  if (LoginHelper.IsCurrentUserAdmin())
         {
             <button class="addButton" onclick="location.href='@Url.Action("AddCertificate", "Certificates")'">dodaj Certyfikat</button>
         } 

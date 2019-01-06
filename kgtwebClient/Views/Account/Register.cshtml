@@ -6,7 +6,6 @@
 @model RegisterModel
 
 <div style="margin:60px">
-    <h2>@ViewBag.Title.</h2>
 
     @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
     {
@@ -55,26 +54,27 @@
             <div class="col-md-10">
                 @Html.PasswordFor(m => m.Password, new { @id = "newUserPassword", @class = "form-control" })
             </div>
+            <div> Hasło powinno zawierać minimum 6 znaków, w tym co najmniej 1 cyfrę.</div>
             <div class="formValidation" id="newUserPasswordValidationInfo">
                 To pole musi być uzupełnione.
             </div>
         </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.PasswordConfirmation, new { @class = "col-md-2 control-label" })
-            <div class="col-md-10">
-                @Html.PasswordFor(m => m.PasswordConfirmation, new { @id = "newUserPasswordConfirmation", @class = "form-control" })
+            <div class="form-group">
+                @Html.LabelFor(m => m.PasswordConfirmation, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.PasswordFor(m => m.PasswordConfirmation, new { @id = "newUserPasswordConfirmation", @class = "form-control" })
+                </div>
+                <div class="formValidation" id="newUserPasswordConfirmationValidationInfo">
+                    To pole musi być uzupełnione.
+                </div>
             </div>
-            <div class="formValidation" id="newUserPasswordConfirmationValidationInfo">
-                To pole musi być uzupełnione.
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" class="btn btn-default" value="Zarejestruj" onclick="return validateRegistration()" />
+                </div>
             </div>
+            }
         </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" class="btn btn-default" value="Zarejestruj" onclick="return validateRegistration()" />
-            </div>
-        </div>
-    }
-</div>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }

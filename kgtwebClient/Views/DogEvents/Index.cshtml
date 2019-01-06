@@ -9,8 +9,8 @@
     var id = ViewBag.Id;
 }
 <div class="tables">
-    <input type="text" id="eventsSearch" onkeyup="searchByEventName()" placeholder="Search for names.." title="Type in a name">
-    @{ if (LoginHelper.IsAuthenticated()) { 
+    <input type="text" id="eventsSearch" onkeyup="searchByEventName()" placeholder="Szukaj po nazwie..." title="Type in a name">
+    @{ if (LoginHelper.IsCurrentUserMember() || LoginHelper.IsCurrentUserAdmin()) { 
             <button class="addButton" onclick="location.href='@Url.Action("AddDogEvent", "DogEvents", new { dogId = id})'">dodaj wydarzenie</button>
     }}
     <div>

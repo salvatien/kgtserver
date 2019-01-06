@@ -7,7 +7,7 @@ namespace Dogs.ViewModels.Data.Models.Account
     {
         [Display(Name = "Login")]
         public String Username { get; set; }
-        [Display(Name = "Hasło - minimum 6 znaków, w tym co najmniej 1 cyfra")]
+        [Display(Name = "Hasło")]
         public String Password { get; set; }
     }
 }

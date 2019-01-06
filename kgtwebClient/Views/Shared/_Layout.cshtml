@@ -9,41 +9,21 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
-    @*<style>
-        @media screen and (max-height: 450px) {
-          .menu {padding-top: 15px;}
-          .menu a {font-size: 50px;}
-        }</style>*@
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.1/css/all.css">
+    @*<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">*@
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 
 </head>
 <body>
 
-    @*<div class="navbar navbar-inverse navbar-fixed-top">
-
-            <div class="container">
-                   <div class="navbar-header">
-                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                        @Html.ActionLink("Nazwa aplikacji", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-                    </div>
-                    <div class="navbar-collapse collapse">
-                        <ul class="nav navbar-nav">
-                            <li>@Html.ActionLink("Strona główna", "Index", "Home")</li>
-                            <li>@Html.ActionLink("Informacje", "About", "Home")</li>
-                            <li>@Html.ActionLink("Kontakt", "Contact", "Home")</li>
-                            <li>@Html.ActionLink("Ziemniak", "Ziemniak", "Home")</li>
-                        </ul>
-                    </div>
-
-                </div>
-        </div>*@
     <div id="navbar">
         <span id="openMenu" onclick="openMenu()">&#9776; Menu</span>
         <div style="float:right;">
+
+            <a href="http://kgt.org.pl" class="linkIcon fa fa-paw"></a>
+            <a href="https://www.facebook.com/KGTKrakow/" class="linkIcon fa fa-facebook"></a>
+            <a href="https://www.instagram.com/krakowskagrupatropiaca/" class="linkIcon fa fa-instagram"></a>
+            <a href="https://plus.google.com/109000329789218540395"class="linkIcon fa fa-google-plus"></a>
+
             @if (LoginHelper.IsAuthenticated())
             {
                 @*<button class="loginButton" type="button" onclick="location.href='@Url.Action("Index", "Account", new { id = "myAccountLink"  })'">Moje konto</button>*@
@@ -70,11 +50,7 @@
     <div id="menu" class="menu">
         <a href="javascript:void(0)" class="menuCloseButton" onclick="closeMenu()">&times;</a>
         <ul>
-            Info
-            <li><a href="http://kgt.org.pl">Strona KGT</a></li>
-        </ul>
-        <ul>
-            Dane
+            Informacje
             <li> @Html.ActionLink("Psy", "Index", "Dogs")</li>      @*nazwa widoczna w aplikacji - metoda - kontroler*@
             <li>@Html.ActionLink("Przewodnicy", "Index", "Guides")</li>
             @if (LoginHelper.IsCurrentUserAdmin() || LoginHelper.IsCurrentUserMember())
@@ -92,9 +68,9 @@
 
         @RenderBody()
         @*<hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year — moja aplikacja platformy ASP.NET</p>
-        </footer>*@
+            <footer>
+                <p>&copy; @DateTime.Now.Year — moja aplikacja platformy ASP.NET</p>
+            </footer>*@
     </div>
 
 
@@ -113,6 +89,7 @@
             document.getElementById("content").style.marginLeft = "0";
         }
     </script>
+    @*<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>*@
 
 </body>
 </html>

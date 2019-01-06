@@ -7,10 +7,10 @@ namespace Dogs.ViewModels.Data.Models.Enums
 {
     public enum DogLevel
     {
-        NewRecruit,
-        Beginner,
-        Intermediate,
-        Advanced,
-        Expert
+        Nowy,
+        Początkujący,
+        Średniozaawanowany,
+        Zaawansowany,
+        Ekspert
     }
 }

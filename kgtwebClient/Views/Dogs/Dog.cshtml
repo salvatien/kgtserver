@@ -68,14 +68,22 @@
 </div>
 <p style="margin:60px">
     @{
-        if (LoginHelper.IsCurrentUserAdmin() || LoginHelper.GetCurrentUserId() == Model.GuideIdAndName.Id)
+        if ( LoginHelper.IsAuthenticated())
         {
-            <button class="updateButton" onclick="location.href='@Url.Action("UpdateDog", "Dogs", new { id = Model.DogId })'">Zmień dane</button>
-        
-            <button class="displayButton" onclick="location.href='@Url.Action("Index", "DogTrainings", new { dogId = Model.DogId })'">Pokaż treningi psa</button>
 
             <button class="displayButton" onclick="location.href='@Url.Action("Index", "DogCertificates", new { dogId = Model.DogId })'">Pokaż certyfikaty psa</button>
             <button class="displayButton" onclick="location.href='@Url.Action("Index", "DogEvents", new { dogId = Model.DogId })'">Pokaż wydarzenia psa</button>
+        }
+
+        if (LoginHelper.IsCurrentUserAdmin() || LoginHelper.IsCurrentUserMember())
+        {
+            <button class="displayButton" onclick="location.href='@Url.Action("Index", "DogTrainings", new { dogId = Model.DogId })'">Pokaż treningi psa</button>
+
+        }
+
+        if (LoginHelper.IsCurrentUserAdmin() || LoginHelper.GetCurrentUserId() == Model.GuideIdAndName.Id)
+        {
+            <button class="updateButton" onclick="location.href='@Url.Action("UpdateDog", "Dogs", new { id = Model.DogId })'">Zmień dane</button>
         }
     }
 
