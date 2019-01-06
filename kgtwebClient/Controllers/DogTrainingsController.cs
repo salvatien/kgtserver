@@ -435,10 +435,45 @@ namespace kgtwebClient.Controllers
 
             var trkptList = DogTrainingHelper.ConvertTrkptModelListToTrkptList(trkpts);
             var length = DogTrainingHelper.CalculateGPSTrackLength(new Trkseg() { Trkpt = trkptList });
-            return Json(new { success = true, trackLength = length });
+            return Json(new { success = true, result = length });
+        }
+        ///?
+        //public JsonResult CalculateDelayTime(List<TrkptModel> personTrkpts, List<TrkptModel> dogTrkpts)
+        //{
+        //    if (!LoginHelper.IsAuthenticated())
+        //        return Json(new { success = false, errorCode = 403 });
+        //    else if (!LoginHelper.IsCurrentUserAdmin() && !LoginHelper.IsCurrentUserMember())
+        //        return Json(new { success = false, errorCode = 403 });
+
+        //    var dogTrkptList = DogTrainingHelper.ConvertTrkptModelListToTrkptList(dogTrkpts);
+        //    var personTrkptList = DogTrainingHelper.ConvertTrkptModelListToTrkptList(personTrkpts);
+
+        //    var delay = DogTrainingHelper.CalculateDelayTime(new Trkseg() { Trkpt = dogTrkptList }, new Trkseg() { Trkpt = personTrkptList});
+        //    return Json(new { success = true, result = delay });
+        //}
+
+        public JsonResult CalculateDuration(List<TrkptModel> trkpts)
+        {
+            if (!LoginHelper.IsAuthenticated())
+                return Json(new { success = false, errorCode = 403 });
+            else if (!LoginHelper.IsCurrentUserAdmin() && !LoginHelper.IsCurrentUserMember())
+                return Json(new { success = false, errorCode = 403 });
+
+            var trkptList = DogTrainingHelper.ConvertTrkptModelListToTrkptList(trkpts);
+            var duration = DogTrainingHelper.CalculateDuration(new Trkseg() { Trkpt = trkptList });
+            return Json(new { success = true, result = duration.ToString() });
         }
 
+        public JsonResult CalculateGPSTrackStartTime(List<TrkptModel> trkpts)
+        {
+            if (!LoginHelper.IsAuthenticated())
+                return Json(new { success = false, errorCode = 403 });
+            else if (!LoginHelper.IsCurrentUserAdmin() && !LoginHelper.IsCurrentUserMember())
+                return Json(new { success = false, errorCode = 403 });
 
-
+            var trkptList = DogTrainingHelper.ConvertTrkptModelListToTrkptList(trkpts);
+            var startTime = DogTrainingHelper.CalculateGPSTrackStartTime(new Trkseg() { Trkpt = trkptList });
+            return Json(new { success = true, result = startTime.ToString() });
+        }
     }
 }

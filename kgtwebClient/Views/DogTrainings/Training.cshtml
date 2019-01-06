@@ -32,8 +32,8 @@
     </style>
 </head>
 <body><div style="margin:60px; position:static">
-    <div id="map" style="width:900px; height:500px; display:inline-block;"></div>
-    <div style="display:inline-block; width:25%; margin:20px;">
+    <div id="map" style="width:50%; height:500px; display:inline-block;"></div>
+    <div style="display:inline-block; width:20%; margin:20px;">
         <div class="form-group">
             @Html.LabelFor(m => m.DogTrackLength, new { @class = "control-label form-field" })
             <div class="col-md-10  form-field">
@@ -277,37 +277,17 @@
                     console.log(personTraceData);
                     console.log("personTraceData: " + personTraceData[0].time);
 
-                    // TODO: ajax here?
-                        @*@{var personTrkseg = new Trkseg(); }
-                    for (int j = 0; j < personTraceData.length; j++) {
-                    @{ 
-                        personTrkseg.Trkpt.Add(new Trkpt {
-                            Lat = perso
-                        });
-                    }
-                    }*@
+                    // change values in data div dynamically
+                    updateDataInTextBox(personTraceData, "CalculateGPSTrackLength", "DogTrainings", "lostPersonTrackLength");
+                    updateDataInTextBox(personTraceData, "CalculateGPSTrackStartTime", "DogTrainings", "timeOfLostPersonStart");
 
-                    var trkpts = JSON.stringify({ 'trkpts': personTraceData });
+                    var newDelayTimeMiliSec = new Date($('#timeOfDogStart').val()) - new Date($('#timeOfLostPersonStart').val());
+                    var newDelayTime = new Date(newDelayTimeMiliSec);
+                    var utc = new Date(newDelayTime.getTime() + newDelayTime.getTimezoneOffset() * 60000);
 
-                    $.ajax({
-                        url: "@Url.Action("CalculateGPSTrackLength", "DogTrainings")",
-                        type: 'POST',
-                        contentType: 'application/json; charset=utf-8',
-                        dataType: 'json',
-                        data: trkpts,
-                        traditional: true,
-                        success: function (data, textStatus, xhr) {
-                            if (data.success) {
-                                alert(data.trackLength);
-                                // set person track length field to data.trackLength with jquery or getelementbyid
-                                $('#lostPersonTrackLength').val(data.trackLength);
-                            }
-                        },
-                        error: function (xhr, textStatus, errorThrown) {
-                            alert('Error in Calculating Track Length');
-
-                        }
-                    });
+                    $('#delayTime').val(handleOneDigitTimeString(utc.getHours()) + ":"
+                        + handleOneDigitTimeString(utc.getMinutes()) + ":"
+                        + handleOneDigitTimeString(utc.getSeconds()));
 
                     break;
                 }
@@ -322,16 +302,26 @@
             console.log("setSartPoint");
             console.log("marker " + startMarker);
             for (let i = 0; i < dogMarkers.length; i++) {
-                //console.log("i: " + i);
-                //console.log(dogMarkers[i].label.text);
-
                 if (dogMarkers[i].label.text == startMarker) {
-                    console.log("if");
-
                     dogMarkers.splice(0, i);
                     dogTraceData.splice(0, i);
                     console.log("dogTraceData: " + dogTraceData[0].time);
 
+                    // change values in data div dynamically
+                    updateDataInTextBox(dogTraceData, "CalculateGPSTrackLength", "DogTrainings", "dogTrackLength");
+                    updateDataInTextBox(dogTraceData, "CalculateGPSTrackStartTime", "DogTrainings", "timeOfDogStart");
+                    updateDataInTextBox(dogTraceData, "CalculateDuration", "DogTrainings", "duration");
+
+                    //delay time
+                    var newDelayTimeMiliSec = new Date($('#timeOfDogStart').val()) - new Date($('#timeOfLostPersonStart').val());
+                    var newDelayTime = new Date(newDelayTimeMiliSec);
+                    var utc = new Date(newDelayTime.getTime() + newDelayTime.getTimezoneOffset() * 60000);
+
+                    $('#delayTime').val(handleOneDigitTimeString(utc.getHours()) + ":"
+                        + handleOneDigitTimeString(utc.getMinutes()) + ":"
+                        + handleOneDigitTimeString(utc.getSeconds()));
+
+                  
 
                     break;
                 }
@@ -356,7 +346,10 @@
                     personMarkers.splice(i + 1, personMarkers.length - i);
                     personTraceData.splice(i + 1, personTraceData.length - i);
                     for (var j = 0; j < personTraceData.length; j++)
-                    console.log("personTraceData, time: " + personTraceData[j].time);
+                        console.log("personTraceData, time: " + personTraceData[j].time);
+
+                    updateDataInTextBox(personTraceData, "CalculateGPSTrackLength", "DogTrainings", "lostPersonTrackLength");
+
                     break;
                 }
 
@@ -388,6 +381,9 @@
                     }
 
                     console.log("length " + dogMarkers.length);
+                    updateDataInTextBox(dogTraceData, "CalculateGPSTrackLength", "DogTrainings", "dogTrackLength");
+                    updateDataInTextBox(dogTraceData, "CalculateDuration", "DogTrainings", "duration");
+
                     break;
                 }
 
@@ -398,6 +394,35 @@
             }
 
         }
+
+            function handleOneDigitTimeString(n) { return n > 9 ? "" + n : "0" + n;}
+
+        function updateDataInTextBox(data, method, controller, fieldId) {
+            var trkpts = JSON.stringify({ 'trkpts': data });
+            $.ajax({
+                url: "/" + controller + "/" + method,
+                type: 'POST',
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                data: trkpts,
+                traditional: true,
+                async: false,
+                success: function (data, textStatus, xhr) {
+                    if (data.success) {
+                        alert(data.result);
+                        // set person track length field to data.trackLength with jquery or getelementbyid
+                        console.log(typeof data.result);
+                            
+                        $("#" + fieldId).val(data.result);
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    alert('Error in ' + method);
+
+                }
+            });
+        }
+
         function setUpdatedDogTracepoints(i, lat, lon, tim) {
             $('#dogLatitude' + i).val(lat);
             $('#dogLongitude' + i).val(lon);
@@ -446,7 +471,7 @@
         <script async defer
                 src="@googleMapsLinkWithApiKey">
         </script>
-        <div style="display:inline-block;">
+        <div style="display:inline-block; width:20%">
             @using (Html.BeginForm("Update", "DogTrainings", FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
                 @Html.ValidationSummary(true)
@@ -518,7 +543,7 @@
                         <div class="form-group">
                             @Html.LabelFor(m => m.Weather, new { @class = "col-md-2 control-label form-field" })
                             <div class="col-md-10  form-field">
-                                @Html.TextBoxFor(m => m.Weather, new { @class = "form-control" })
+                                @Html.TextAreaFor(m => m.Weather, new { @class = "form-control" })
                             </div>
                         </div>
 
@@ -553,7 +578,7 @@
                         <div class="form-group">
                             @Html.LabelFor(m => m.Weather, new { @class = "col-md-2 control-label form-field" })
                             <div class="col-md-10  form-field">
-                                @Html.TextBoxFor(m => m.Weather, new { @class = "form-control", disabled = "true" })
+                                @Html.TextAreaFor(m => m.Weather, new { @class = "form-control", disabled = "true" })
                             </div>
                         </div>
 
