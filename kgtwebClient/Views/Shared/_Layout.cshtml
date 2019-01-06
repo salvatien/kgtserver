@@ -43,22 +43,28 @@
         </div>*@
     <div id="navbar">
         <span id="openMenu" onclick="openMenu()">&#9776; Menu</span>
-        @if (LoginHelper.IsAuthenticated())
-        {
-            @Html.ActionLink("Moje konto", "Index", "Account", routeValues: null, htmlAttributes: new { id = "myAccountLink" })
-            using (Html.BeginForm("Logout", "Account", FormMethod.Post, new { style = "display:inline;", id = "logoutForm" }))
+        <div style="float:right;">
+            @if (LoginHelper.IsAuthenticated())
             {
-                <button type="submit">wyloguj</button>
-                @*<a href="javascript:document.getElementById('logoutForm').submit()">
+                @*<button class="loginButton" type="button" onclick="location.href='@Url.Action("Index", "Account", new { id = "myAccountLink"  })'">Moje konto</button>*@
+                @Html.ActionLink("Moje konto", "Index", "Account", routeValues: null, htmlAttributes: new { @class = "loginButton", id = "myAccountLink" })
+                using (Html.BeginForm("Logout", "Account", FormMethod.Post, new { style = "display:inline;", id = "logoutForm" }))
+                {
+                    <button type="submit" class="loginButton">Wyloguj</button>
+                    @*<a href="javascript:document.getElementById('logoutForm').submit()">
                     <span>Wyloguj</span>
                 </a>*@
+                }
             }
-        }
-        else
-        {
-            @Html.ActionLink("Zarejestruj", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })
-            @Html.ActionLink("Zaloguj", "Login", "Account", routeValues: new { returnUrl = @Request.Url.AbsoluteUri }, htmlAttributes: new { id = "loginLink" })
-        }
+            else
+            {
+                @*<button class="loginButton" type="button" onclick="location.href='@Url.Action("Register", "Account", new { id = "registerLink"  })'">Zarejestruj się</button>
+            <button class="loginButton" type="button" onclick="location.href='@Url.Action("Login", "Account", new { id = "loginLink"  })'">Zaloguj się</button>*@
+
+                @Html.ActionLink("Zarejestruj", "Register", "Account", routeValues: null, htmlAttributes: new { @class = "loginButton", id = "registerLink" })
+                @Html.ActionLink("Zaloguj", "Login", "Account", routeValues: new { returnUrl = @Request.Url.AbsoluteUri }, htmlAttributes: new { @class = "loginButton", id = "loginLink" })
+            }
+        </div>
     </div>
     @*<div id="mySidenav" class="sidenav">   *@
     <div id="menu" class="menu">

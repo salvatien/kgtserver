@@ -27,6 +27,8 @@ namespace Dogs.ViewModels.Data.Models
         public DateTime TimeOfDogStart { get; set; }
         [Display(Name = "Czas pracy psa")]
         public TimeSpan Duration { get; set; }
+        [Display(Name = "Czas odłożenia śladu")]
+        public TimeSpan DelayTime { get; set; }
         [Display(Name = "Długość śladu pozoranta")]
         public double LostPersonTrackLength { get; set; }
         [Display(Name = "Długość śladu psa")]
