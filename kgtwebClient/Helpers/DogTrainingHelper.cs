@@ -89,5 +89,21 @@ namespace kgtwebClient.Helpers
             var dy = dlat * oneLatitudeDegreeInKilometers;
             return Math.Sqrt(dx * dx + dy * dy) * 1000.0;
         }
+
+        public static List<Trkpt> ConvertTrkptModelListToTrkptList(List<TrkptModel> trkptModels)
+        {
+            var trkptList = new List<Trkpt>();
+            foreach (var trkptModel in trkptModels)
+            {
+                var trkpt = new Trkpt
+                {
+                    Lat = trkptModel.Latitude.ToString(CultureInfo.InvariantCulture),
+                    Lon = trkptModel.Longitude.ToString(CultureInfo.InvariantCulture),
+                    Time = trkptModel.Time.ToString()
+                };
+                trkptList.Add(trkpt);
+            }
+            return trkptList;
+        }
     }
 }

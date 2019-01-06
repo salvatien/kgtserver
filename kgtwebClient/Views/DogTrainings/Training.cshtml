@@ -274,6 +274,7 @@
 
                     personMarkers.splice(0, i);
                     personTraceData.splice(0, i);
+                    console.log(personTraceData);
                     console.log("personTraceData: " + personTraceData[0].time);
 
                     // TODO: ajax here?
@@ -285,6 +286,29 @@
                         });
                     }
                     }*@
+
+                    var trkpts = JSON.stringify({ 'trkpts': personTraceData });
+
+                    $.ajax({
+                        url: "@Url.Action("CalculateGPSTrackLength", "DogTrainings")",
+                        type: 'POST',
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        data: trkpts,
+                        traditional: true,
+                        success: function (data, textStatus, xhr) {
+                            if (data.success) {
+                                alert(data.trackLength);
+                                // set person track length field to data.trackLength with jquery or getelementbyid
+                                $('#lostPersonTrackLength').val(data.trackLength);
+                            }
+                        },
+                        error: function (xhr, textStatus, errorThrown) {
+                            alert('Error in Calculating Track Length');
+
+                        }
+                    });
+
                     break;
                 }
 

@@ -3,6 +3,7 @@ using kgtwebClient.Helpers;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -56,7 +57,7 @@ namespace kgtwebClient.Controllers
         
 
         public async Task<ActionResult> Training(int dogId, int trainingId)
-        {
+       {
             if (!LoginHelper.IsAuthenticated())
                 return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
             else if (!LoginHelper.IsCurrentUserAdmin() && !LoginHelper.IsCurrentUserMember())
@@ -423,5 +424,21 @@ namespace kgtwebClient.Controllers
             }
 
         }
+
+        //[HttpPost]
+        public JsonResult CalculateGPSTrackLength(List<TrkptModel> trkpts)
+        {
+            if (!LoginHelper.IsAuthenticated())
+                return Json(new { success = false, errorCode = 403 });
+            else if (!LoginHelper.IsCurrentUserAdmin() && !LoginHelper.IsCurrentUserMember())
+                return Json(new { success = false, errorCode = 403 });
+
+            var trkptList = DogTrainingHelper.ConvertTrkptModelListToTrkptList(trkpts);
+            var length = DogTrainingHelper.CalculateGPSTrackLength(new Trkseg() { Trkpt = trkptList });
+            return Json(new { success = true, trackLength = length });
+        }
+
+
+
     }
 }
