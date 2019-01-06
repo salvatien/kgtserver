@@ -67,7 +67,6 @@ namespace kgtwebClient.Controllers
         {
             if (!LoginHelper.IsAuthenticated())
                 return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
-
             // var guides = GuideHelpers.GetAllGuidesIdAndName();
             return View();
         }
@@ -187,6 +186,13 @@ namespace kgtwebClient.Controllers
         {
             if (!LoginHelper.IsAuthenticated())
                 return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
+
+            if (!DogHelpers.ValidateUpdateDog(updatedDog))
+            {
+                ViewBag.Message = "Walidacja nie powiodła się.";
+                return View("Error");
+            }
+
             if (imageFile != null)
             {
                 MultipartFormDataContent form = new MultipartFormDataContent();
@@ -245,6 +251,5 @@ namespace kgtwebClient.Controllers
                 return View("Error");
             }
         }
-
     }
 }

@@ -133,6 +133,7 @@ namespace kgtwebClient.Controllers
                                 dogTrainingViewModel.LostPersonTrackPoints = t;
                                 dogTrainingViewModel.LostPersonTrackLength = DogTrainingHelper.CalculateGPSTrackLength(trkseg);
                                 dogTrainingViewModel.TimeOfLostPersonStart = DogTrainingHelper.CalculateGPSTrackStartTime(trkseg);
+                                dogTrainingViewModel.DelayTime = dogTrainingViewModel.TimeOfDogStart - dogTrainingViewModel.TimeOfLostPersonStart;
                             }
                         }
                     }
@@ -219,7 +220,7 @@ namespace kgtwebClient.Controllers
                 DogId = model.DogId,
                 TrainingId = model.TrainingId,
                 LostPersonTrackLength = model.LostPersonTrackLength,
-                DelayTime = model.TimeOfDogStart - model.TimeOfLostPersonStart
+                DelayTime = model.DelayTime
             };
             
             client.DefaultRequestHeaders.Accept.Clear();

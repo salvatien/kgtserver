@@ -109,11 +109,13 @@
         tr = table.getElementsByTagName("tr");
         for (i = 0; i < tr.length; i++) {
              /* search by dog's name*/
-            tdDogTrainingsName = tr[i].getElementsByTagName("td")[1];
+            tdDogTrainings = tr[i].getElementsByTagName("td")[1];
             /* search by guide's  name*/
-            //tdGuideName = tr[i].getElementsByTagName("td")[2];
-            if (tdDogName) {
-                if (tdDogTrainingsName.innerHTML.toUpperCase().indexOf(filter) > -1) {
+            tdLocalization = tr[i].getElementsByTagName("td")[2];
+            tdDate = tr[i].getElementsByTagName("td")[3];
+            if (tdDogTrainings || tdLocalization || tdDate) {
+                if (tdDogTrainings.innerHTML.toUpperCase().indexOf(filter) > -1 || tdLocalization.innerHTML.toUpperCase().indexOf(filter) > -1
+                    || tdDate.innerHTML.toUpperCase().indexOf(filter) > -1) {
                     tr[i].style.display = "";
                 } else {
                     tr[i].style.display = "none";
