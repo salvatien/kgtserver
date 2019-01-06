@@ -66,13 +66,16 @@
             <dd>
                 @Html.DisplayFor(model => model.GuideIds)
             </dd>
-            <dt>
-                @Html.DisplayNameFor(model => model.IsCommercialTraining)
-            </dt>
+            @if (LoginHelper.IsCurrentUserAdmin() || LoginHelper.IsCurrentUserMember())
+            { 
+                <dt>
+                    @Html.DisplayNameFor(model => model.IsCommercialTraining)
+                </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.IsCommercialTraining)
-            </dd>
+                <dd>
+                    @Html.DisplayFor(model => model.IsCommercialTraining)
+                </dd>
+            }
 
             @if (dogsInDogEvent != null && dogsInDogEvent.Any())
             {
@@ -89,8 +92,8 @@
                                     <td>@dog.Breed</td>
                                     <td>@dog.GuideIdAndName.Name</td>
                                     @if (LoginHelper.IsCurrentUserAdmin()
-                                        || LoginHelper.IsCurrentUserMember() 
-                                        ||LoginHelper.GetCurrentUserId() == dog.GuideIdAndName.Id)
+                                        || LoginHelper.IsCurrentUserMember()
+                                        || LoginHelper.GetCurrentUserId() == dog.GuideIdAndName.Id)
                                     {
                                         <td>
                                             <button class="displayButton" onclick="location.href='@Url.Action("DogEvent", "DogEvents", new { dogId = @dog.DogId, eventId = Model.EventId })'">wyświetl szczegóły</button>

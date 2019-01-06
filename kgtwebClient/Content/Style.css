@@ -80,7 +80,8 @@ body, html {
 }
 
 #dogsTable th {
-    background-color: crimson
+    background-color: #34495e;
+    color: white
 }
 
 #dogsTable tr:nth-child(even) {
@@ -88,7 +89,8 @@ body, html {
 }
 
 #dogsTable tr:nth-child(odd) {
-    background-color: #0094ff
+    background-color: #555e93;
+    color: white
 }
 
 #dogsSearch {

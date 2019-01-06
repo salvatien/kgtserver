@@ -76,13 +76,13 @@
         <ul>
             Dane
             <li> @Html.ActionLink("Psy", "Index", "Dogs")</li>      @*nazwa widoczna w aplikacji - metoda - kontroler*@
-            @* <li><a href="#">Psy</a></li>*@
             <li>@Html.ActionLink("Przewodnicy", "Index", "Guides")</li>
-            <li>@Html.ActionLink("Treningi", "Index", "Trainings")</li>
-            @*<li><a href="#">Akcje</a></li>*@
+            @if (LoginHelper.IsCurrentUserAdmin() || LoginHelper.IsCurrentUserMember())
+            {
+                <li>@Html.ActionLink("Treningi", "Index", "Trainings")</li>
+            }
             <li>@Html.ActionLink("Wydarzenia", "Index", "Events")</li>
             <li>@Html.ActionLink("Certyfikaty", "Index", "Certificates")</li>
-            @*<li><a href="#">Pozoranci</a></li>*@
         </ul>
     </div>
 
