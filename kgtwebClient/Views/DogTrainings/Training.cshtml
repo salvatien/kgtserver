@@ -666,6 +666,14 @@
 
                         </dd>
                     }
+                    else {
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Comments)
+                        </dt>
+                        <dd>
+                            <table id="commentsTable" style="width:100%; table-layout:fixed"></table>
+                        </dd>
+                    }
                 </dl>
                 @Html.TextArea("Message", new { id = "newCommentMessage", rows = 8, columns = 40 })<br />
                 <button class="displayButton" type="button" id="addNewComment">Dodaj komentarz</button>

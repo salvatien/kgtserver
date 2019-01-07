@@ -64,6 +64,7 @@
                             {
                                 <tr>
                                     <td>@Html.DisplayFor(m => dogTraining.Dog.Name)</td>
+                                    <td>@Html.DisplayFor(m => dogTraining.Dog.GuideIdAndName.Name)</td>
                                     <td>
                                         <button type="button" class="displayButton" onclick="location.href='@Url.Action("Training", "DogTrainings", new { dogId = @dogTraining.DogId, trainingId=dogTraining.TrainingId  })'">wyświetl trening psa</button>
                                     </td>

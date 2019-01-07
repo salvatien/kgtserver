@@ -45,10 +45,11 @@
                     @item.LastName
                 </td>
 
+                @{ if (LoginHelper.IsAuthenticated()) {
                 <td style="background-color:white">
                     <button class="displayButton" onclick="location.href='@Url.Action("Guide", "Guides", new { id = @item.GuideId })'">wyświetl</button>
                 </td>
-
+                }}
                 @{ if (LoginHelper.IsCurrentUserAdmin() || LoginHelper.GetCurrentUserId() == item.GuideId)
                     {
 

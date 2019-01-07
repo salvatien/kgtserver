@@ -49,10 +49,6 @@ body, html {
     transition: 0.3s;
 }
 
-    .menu a:hover {
-        color: #f1f1f1;
-    }
-
 .menu .menuCloseButton {
     position: absolute;
     top: 0;
@@ -164,13 +160,14 @@ body, html {
 }
 
 .picture {
-    padding-left: 50%
+    padding-left: 50%;
+    max-height:1000px
 }
 
 img {
-    width: 100%;
+    /*width: 100%;*/
     max-width: 500px;
-    max-height: 500px;
+    /*max-height: 500px;*/
 }
 
 .form-field {
@@ -226,6 +223,6 @@ img {
     margin-left:10px
 }
 
-.linkIcon:hover{
-    color:red
-}
+    .linkIcon:hover, #openMenu:hover, .menuCloseButton:hover, .menu ul li:hover {
+        color: red
+    }

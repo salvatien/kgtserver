@@ -64,11 +64,14 @@
                             {
                                 <tr>
                                     <td>@dog.Name</td>
-                                    <td>@dog.Breed</td>
+                                    @*<td>@dog.Breed</td>*@
                                     <td>@dog.GuideIdAndName.Name</td>
+                                    @if (LoginHelper.GetCurrentUserId() == dog.GuideIdAndName.Id)
+                                    {
                                     <td>
-                                        <button class="displayButton" onclick="location.href='@Url.Action("DogCertificate", "DogCertificates", new { dogId = @dog.DogId, certificateId=Model.CertificateId  })'">wyświetl szczegóły</button>
+                                        <button class="displayButton" onclick="location.href='@Url.Action("DogCertificate", "DogCertificates", new { dogId = @dog.DogId, certificateId = Model.CertificateId })'">wyświetl szczegóły</button>
                                     </td>
+                                    }
                                 </tr>
                             }
                         }

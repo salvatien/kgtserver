@@ -63,7 +63,19 @@
         </dl>
     </div>
     <div class="picture">
-        <img src="@Model.PhotoBlobUrl" height="400" width="400">
+        @if (!String.IsNullOrWhiteSpace(Model.PhotoBlobUrl))
+        {
+            <img src="@Model.PhotoBlobUrl" @*height="400" width="400"*@>
+        }
+        else
+        {
+            Random rnd = new Random();
+            int dogNumber = rnd.Next(1, 13); // creates a number between 1 and 12
+            var path = $"../../Images/dogsPicture/dogFlatIcon{dogNumber}.png";
+            
+            <img src=@path @*height="400" width="400"*@>
+            <div>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
+        }
     </div>
 </div>
 <p style="margin:60px">

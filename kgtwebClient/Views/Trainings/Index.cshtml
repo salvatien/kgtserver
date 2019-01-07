@@ -60,12 +60,17 @@
                                     <button class="displayButton" onclick="location.href='@Url.Action("Training", "Trainings", new { id = @item.TrainingId })'">wyświetl</button>
                                 </td>
 
-                                @{ if (LoginHelper.IsAuthenticated())
-                                    {
-                                        <td style="background-color:white">
+
+                                @if (LoginHelper.IsCurrentUserAdmin() )
+                                {
+                                    <td style="background-color:white">
                                             @*location.href='@Url.Action("DeleteDog", "Dogs", new { id = @item.DogId })'*@
                                             <button class="deleteButton" onclick="deleteTraining(@item.TrainingId)" id="@("deleteTrainingButton" + item.TrainingId)">usuń</button>
                                         </td>
+                                }
+                                @{ if (LoginHelper.IsAuthenticated())
+                                    {
+
                                         <td style="background-color:white">
                                             <button class="updateButton" onclick="location.href='@Url.Action("UpdateTraining", "Trainings", new { id = @item.TrainingId })'">zmień</button>
                                         </td>

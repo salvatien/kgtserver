@@ -124,6 +124,12 @@ namespace kgtwebClient.Controllers
             else if (!LoginHelper.IsCurrentUserAdmin() && LoginHelper.GetCurrentUserId() != updatedGuide.GuideId)
                 return RedirectToAction("Error", "Home", new { error = "Nie masz wystarczających uprawnień by zmieniać te dane" });
 
+            else if (!LoginHelper.IsCurrentUserAdmin() && updatedGuide.IsAdmin == true)
+                return RedirectToAction("Error", "Home", new { error = "Nie masz wystarczających uprawnień by nadawać prawa administratora" });
+
+            else if(!LoginHelper.IsCurrentUserAdmin() && updatedGuide.IsMember == true 
+                    && !LoginHelper.IsCurrentUserMember())
+                return RedirectToAction("Error", "Home", new { error = "Nie masz wystarczających uprawnień by nadawać prawa członkowskie do grupy" });
             // add validation function
             /*
             if (!DogHelpers.ValidateUpdateGuide(updatedGuide))

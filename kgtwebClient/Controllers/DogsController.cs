@@ -76,56 +76,59 @@ namespace kgtwebClient.Controllers
         {
             if (!LoginHelper.IsAuthenticated())
                 return RedirectToAction("Login", "Account", new { returnUrl = this.Request.Url.AbsoluteUri });
-
-            MultipartFormDataContent form = new MultipartFormDataContent();
-            var imageStreamContent = new StreamContent(imageFile.InputStream);
-            var byteArrayImageContent = new ByteArrayContent(imageStreamContent.ReadAsByteArrayAsync().Result);
-            byteArrayImageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
-            var imageFileName = imageFile.FileName + Guid.NewGuid().ToString();
-            form.Add(byteArrayImageContent, imageFileName, Path.GetFileName(imageFileName));
-
-            var response = client.PostAsync("Dogs/Upload", form).Result;
-
-            if (response.IsSuccessStatusCode)
+            if (imageFile != null)
             {
-                //get blob urls - is it that simple or it has to be returned?
+                MultipartFormDataContent form = new MultipartFormDataContent();
+                var imageStreamContent = new StreamContent(imageFile.InputStream);
+                var byteArrayImageContent = new ByteArrayContent(imageStreamContent.ReadAsByteArrayAsync().Result);
+                byteArrayImageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
+                var imageFileName = imageFile.FileName + Guid.NewGuid().ToString();
+                form.Add(byteArrayImageContent, imageFileName, Path.GetFileName(imageFileName));
 
-                var imageBlobUrl = @"https://kgtstorage.blob.core.windows.net/images/" + imageFileName;
+                var response = client.PostAsync("Dogs/Upload", form).Result;
 
-                //add blob urls to model 
-                addedDog.PhotoBlobUrl = imageBlobUrl;
-
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                client.DefaultRequestHeaders.Authorization =
-                    new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
-                HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, client.BaseAddress + "dogs/");
-
-                var dogSerialized = JsonConvert.SerializeObject(addedDog);
-
-                message.Content = new StringContent(dogSerialized, System.Text.Encoding.UTF8, "application/json");
-
-                HttpResponseMessage responseMessage = client.SendAsync(message).Result; // await client.SendAsync(message)
-                if (responseMessage.IsSuccessStatusCode)    //200 OK
+                if (response.IsSuccessStatusCode)
                 {
-                    //display info
-                    message.Dispose();
-                    return RedirectToAction("Dog", new { id = Int32.Parse(responseMessage.Content.ReadAsStringAsync().Result) });
-                    //return View("Dog", responseMessage.Content);
+                    //get blob urls - is it that simple or it has to be returned?
+
+                    var imageBlobUrl = @"https://kgtstorage.blob.core.windows.net/images/" + imageFileName;
+
+                    //add blob urls to model 
+                    addedDog.PhotoBlobUrl = imageBlobUrl;
                 }
-                else    // msg why not ok
+                else
                 {
-                    message.Dispose();
                     ViewBag.Message = response.StatusCode;
                     return View("Error");
                 }
             }
-            else
+
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
+            HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, client.BaseAddress + "dogs/");
+
+            var dogSerialized = JsonConvert.SerializeObject(addedDog);
+
+            message.Content = new StringContent(dogSerialized, System.Text.Encoding.UTF8, "application/json");
+
+            HttpResponseMessage responseMessage = client.SendAsync(message).Result; // await client.SendAsync(message)
+            if (responseMessage.IsSuccessStatusCode)    //200 OK
             {
-                ViewBag.Message = response.StatusCode;
+                //display info
+                message.Dispose();
+                return RedirectToAction("Dog", new { id = Int32.Parse(responseMessage.Content.ReadAsStringAsync().Result) });
+                //return View("Dog", responseMessage.Content);
+            }
+            else    // msg why not ok
+            {
+                message.Dispose();
+                ViewBag.Message = responseMessage.StatusCode;
                 return View("Error");
             }
         }
+
 
         public JsonResult DeleteDog(int? id)
         {

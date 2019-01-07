@@ -82,11 +82,14 @@
                                     <td style="background-color:white">
                                         <button class="updateButton" onclick="location.href='@Url.Action("UpdateEvent", "Events", new { id = @item.EventId })'">zmień</button>
                                     </td>
-                                    <td>
-                                        <button type="button" class="displayButton" onclick="location.href='@Url.Action("AddDogToEvent", "DogEvents", new { eventId = @item.EventId })'">Dodaj psa do wydarzenia</button>
-
-                                    </td>
-                                } }
+                                    if (item.IsCommercialTraining == true)
+                                    {
+                                        <td>
+                                            <button type="button" class="displayButton" onclick="location.href='@Url.Action("AddDogToEvent", "DogEvents", new { eventId = @item.EventId })'">Dodaj psa do wydarzenia</button>
+                                        </td>
+                                    }
+                                } 
+                              }
 
                         </tr>
 

@@ -19,16 +19,9 @@
         @Html.ActionLink("Back to List", "Index")
     </p>
     <div class="data">
-        <h4>@Html.DisplayFor(model => model.GeneralLocation) @Html.DisplayFor(model => model.Date)</h4>
+        <h4>@Html.DisplayFor(model => model.GeneralLocation), @Html.DisplayFor(model => model.LocationDetails), @Html.DisplayFor(model => model.Date)</h4>
         <hr />
         <dl class="dl-horizontal" style="float:left">
-            <dt>
-                @Html.DisplayNameFor(model => model.LocationDetails)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.LocationDetails)
-            </dd>
 
             <dt>
                 @Html.DisplayNameFor(model => model.Notes)
@@ -80,7 +73,11 @@
                     </table>
 
                 </dd>
-            }
+              }
+              else
+              {
+                    <table id="commentsTable"></table>
+              }
 
             @Html.TextArea("Message", new { id = "newCommentMessage", rows = 8, columns = 40 })
             <button class="displayButton" type="button" id="addNewComment">Dodaj komentarz</button>

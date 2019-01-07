@@ -31,7 +31,8 @@
                 @Html.DisplayFor(model => model.City)
             </dd>
 
-            @{  if (LoginHelper.IsAuthenticated()) {
+            @{ if (LoginHelper.IsCurrentUserMember() || LoginHelper.IsCurrentUserAdmin())
+                {
                     <dt>
                         @Html.DisplayNameFor(model => model.Address)
                     </dt>
@@ -46,20 +47,7 @@
                     <dd>
                         @Html.DisplayFor(model => model.Phone)
                     </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.IsAdmin)
-                    </dt>
 
-                    <dd>
-                        @Html.DisplayFor(model => model.IsAdmin)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.IsMember)
-                    </dt>
-
-                    <dd>
-                        @Html.DisplayFor(model => model.IsMember)
-                    </dd>
                     <dt>
                         @Html.DisplayNameFor(model => model.Notes)
                     </dt>
@@ -68,7 +56,20 @@
                     </dd>
                 }
             }
+            <dt>
+                @Html.DisplayNameFor(model => model.IsAdmin)
+            </dt>
 
+            <dd>
+                @Html.DisplayFor(model => model.IsAdmin)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.IsMember)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.IsMember)
+            </dd>
             <dt>
                 @Html.DisplayNameFor(model => model.Email)
             </dt>

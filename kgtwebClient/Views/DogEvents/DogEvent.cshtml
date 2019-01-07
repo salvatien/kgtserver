@@ -405,7 +405,7 @@
         @Html.HiddenFor(m => m.DogTrackLength)
         @Html.HiddenFor(m => m.Goal)
 
-         if (LoginHelper.IsAuthenticated()) {
+         if (LoginHelper.IsCurrentUserAdmin()) {
         <div style="float:left">
             <div class="form-group">
                 @Html.LabelFor(m => m.LostPerson, new { @class = "col-md-2 control-label form-field" })

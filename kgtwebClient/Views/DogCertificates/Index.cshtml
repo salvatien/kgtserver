@@ -11,7 +11,7 @@
 <div class="tables">
     <input type="text" id="certificatesSearch" onkeyup="searchByCertificateName()" placeholder="Search for names.." title="Type in a name">
     @*  dodaj certyfikat dla psa - certifikat jjuż istnieje, wybieramy który ma być przypisany dla danego psa*@
-    @{ if (LoginHelper.IsAuthenticated()) { 
+    @{ if (LoginHelper.IsCurrentUserAdmin()) { 
             <button class="addButton" onclick="location.href='@Url.Action("AddDogCertificate", "DogCertificates", new { dogId = id})'">dodaj Certyfikat</button>
     }}
     <div>
