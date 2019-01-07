@@ -96,16 +96,16 @@ body, html {
     color: white
 }
 
-#dogsSearch {
+#dogsSearch, #guidesSearch, #trainingsSearch, #eventsSearch, #certificatesSearch {
     /*background-image: url('/css/searchicon.png');
     background-position: 10px 10px;
     background-repeat: no-repeat; */
-   /* position: relative;*/
+    /* position: relative;*/
     width: 100%;
     font-size: 16px;
     padding: 12px 20px 12px 40px;
     border: 1px solid #ddd;
-    margin-bottom: 12px;
+    margin-bottom: 12px
     /*z-index: -1;*/
 }
 

@@ -8,7 +8,7 @@
     ViewBag.Title = "Index";
 }
 <div class="tables">
-    <input type="text" id="eventsSearch" onkeyup="searchByEventName()" placeholder="Search for names.." title="Type in a name">
+    <input type="text" id="eventsSearch" onkeyup="searchByEventName()" placeholder="Szukaj po nazwie..." title="Type in a name">
     @{ if (LoginHelper.IsCurrentUserAdmin() || LoginHelper.IsCurrentUserMember())
         {
             <button class="addButton" onclick="location.href='@Url.Action("AddEvent", "Events")'">dodaj Wydarzenie</button>

@@ -8,7 +8,7 @@
     ViewBag.Title = "Index";
 }
 <div class="tables">
-    <input type="text" id="certificatesSearch" onkeyup="searchByCertificateName()" placeholder="Search for names.." title="Type in a name">
+    <input type="text" id="certificatesSearch" onkeyup="searchByCertificateName()" placeholder="Szukaj po nazwie.." title="Type in a name">
    @{  if (LoginHelper.IsCurrentUserAdmin())
         {
             <button class="addButton" onclick="location.href='@Url.Action("AddCertificate", "Certificates")'">dodaj Certyfikat</button>
@@ -27,7 +27,7 @@
                     <th>Tryb pracy</th>
                     <th>Notatki</th>
                 *@
-                <th>Czas obowiązywania</th>
+                <th>Czas obowiązywania (w miesiącach)</th>
 
 
             </tr>

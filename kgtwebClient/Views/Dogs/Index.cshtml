@@ -11,7 +11,7 @@
 
 @*<div class="jumbotron"> *@
 <div class="tables">
-    <input type="text" id="dogsSearch" onkeyup="searchByDogOrGuideName()" placeholder="Search for names.." title="Type in a name">
+    <input type="text" id="dogsSearch" onkeyup="searchByDogOrGuideName()" placeholder="Szukaj po imieniu psa/przewodniku.." title="Type in a name">
     @{  if (LoginHelper.IsAuthenticated()) {
             <button class="addButton" onclick="location.href='@Url.Action("AddDog", "Dogs")'">dodaj Psa</button> }
     }
@@ -21,13 +21,13 @@
             <tr>
                 <th>ID</th>
                 <th>Imię</th>
-                <th>Rasa</th>
+                <th>Przewodnik</th>
                 @*<th>Data urodzenia</th>
                 <th>Poziom</th>
                 <th>Tryb pracy</th>
                 <th>Notatki</th>
                 *@
-                <th>Przewodnik</th>
+                <th>Rasa</th>
 
 
             </tr>

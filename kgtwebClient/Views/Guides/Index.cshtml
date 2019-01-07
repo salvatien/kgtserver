@@ -14,7 +14,7 @@
 
 @*<div class="jumbotron"> *@
 <div class="tables">
-    <input type="text" id="dogsSearch" onkeyup="searchByDogOrGuideName()" placeholder="Search for names.." title="Type in a name">
+    <input type="text" id="guidesSearch" onkeyup="searchByGuideName()" placeholder="Szukaj po imieniu/nazwisku..." title="Type in a name">
     @*<button class="addButton" onclick="location.href='@Url.Action("AddGuide", "Guides")'">dodaj przewodnika</button>*@
     @*<button id="button1" onclick="location.href='@Url.Action("DeleteDog","Dogs",new { id=7})'">delete</button> *@
     <div>
@@ -70,19 +70,19 @@
     </div>
 </div>
 <script>
-    function searchByDogOrGuideName() {
+    function searchByGuideName() {
         var input, filter, table, tr, td, i;
-        input = document.getElementById("dogsSearch");
+        input = document.getElementById("guidesSearch");
         filter = input.value.toUpperCase();
-        table = document.getElementById("dogsTable");
+        table = document.getElementById("guidesTable");
         tr = table.getElementsByTagName("tr");
         for (i = 0; i < tr.length; i++) {
              /* search by dog's name*/
-            tdDogName = tr[i].getElementsByTagName("td")[1];
+            tdFirstName = tr[i].getElementsByTagName("td")[1];
             /* search by guide's  name*/
-            tdGuideName = tr[i].getElementsByTagName("td")[2];
-            if (tdDogName || tdGuideName) {
-                if (tdDogName.innerHTML.toUpperCase().indexOf(filter) > -1 || tdGuideName.innerHTML.toUpperCase().indexOf(filter) > -1) {
+            tdLastName = tr[i].getElementsByTagName("td")[2];
+            if (tdFirstName || tdLastName) {
+                if (tdFirstName.innerHTML.toUpperCase().indexOf(filter) > -1 || tdLastName.innerHTML.toUpperCase().indexOf(filter) > -1) {
                     tr[i].style.display = "";
                 } else {
                     tr[i].style.display = "none";
