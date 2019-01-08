@@ -9,14 +9,14 @@
 @model Dogs.ViewModels.Data.Models.TrainingModel
 
 <div style="margin:60px">
-    <p style="margin:60px">
+    <p>
         @{ if (LoginHelper.IsAuthenticated())
             {
-                @Html.ActionLink("--Update Training--", "UpdateTraining", "Trainings", new { id = Model.TrainingId }, null)
+                @Html.ActionLink("Zmień dane o treningu", "UpdateTraining", "Trainings", new { id = Model.TrainingId }, null)
             }
         }
 
-        @Html.ActionLink("Back to List", "Index")
+        @Html.ActionLink("Wróć do listy", "Index")
     </p>
     <div class="data">
         <h4>@Html.DisplayFor(model => model.GeneralLocation), @Html.DisplayFor(model => model.LocationDetails), @Html.DisplayFor(model => model.Date)</h4>
@@ -79,7 +79,7 @@
                     <table id="commentsTable"></table>
               }
 
-            @Html.TextArea("Message", new { id = "newCommentMessage", rows = 8, columns = 40 })
+            @Html.TextArea("Message", new { id = "newCommentMessage", rows = 8, columns = 40 }) <br />
             <button class="displayButton" type="button" id="addNewComment">Dodaj komentarz</button>
             <p id="newCommentWasAdded" hidden style="color:red"> Ktoś dodał nowy komentarz lub zmienił istniejący! Odśwież stronę, aby zobaczyć najnowsze dane </p>
 

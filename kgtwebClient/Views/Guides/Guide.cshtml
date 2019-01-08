@@ -10,14 +10,14 @@
 
 
 <div style="margin:60px">
-    <p style="margin:60px">
+    <p>
         @{
             if (LoginHelper.IsCurrentUserAdmin() || LoginHelper.GetCurrentUserId() == Model.GuideId)
             {
-                @Html.ActionLink("--Update Guide--", "UpdateGuide", "Guides", new { id = Model.GuideId }, null)
+                @Html.ActionLink("Zmień dane o przewodniku", "UpdateGuide", "Guides", new { id = Model.GuideId }, null)
             }
         }
-        @Html.ActionLink("Back to List", "Index")
+        @Html.ActionLink("Wróć do listy", "Index")
     </p>
     <div class="data">
         <h4>@Html.DisplayFor(model => model.FirstName) @Html.DisplayFor(model => model.LastName)</h4>
@@ -57,19 +57,13 @@
                 }
             }
             <dt>
-                @Html.DisplayNameFor(model => model.IsAdmin)
+                @Html.DisplayFor(model => model.IsAdmin)  @Html.DisplayNameFor(model => model.IsAdmin)
             </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.IsAdmin)
-            </dd>
             <dt>
-                @Html.DisplayNameFor(model => model.IsMember)
+                @Html.DisplayFor(model => model.IsMember)  @Html.DisplayNameFor(model => model.IsMember)
             </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.IsMember)
-            </dd>
             <dt>
                 @Html.DisplayNameFor(model => model.Email)
             </dt>

@@ -9,8 +9,8 @@
     console.log("end date: " + @certificateEndDate);
 </script>
 <div style="margin:60px">
-    <p style="margin:60px">
-        @Html.ActionLink("Back to List", "Index", new { dogId = Model.DogId})
+    <p>
+        @Html.ActionLink("Wróć do listy", "Index", new { dogId = Model.DogId})
     </p>
     <div class="data">
         <h4>@Html.DisplayFor(model => model.Certificate.Name)</h4>

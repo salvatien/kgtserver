@@ -13,11 +13,11 @@
     @{
         if (LoginHelper.IsCurrentUserAdmin())
         {
-            @Html.ActionLink("--Update Event--", "UpdateEvent", "Events", new { id = Model.EventId }, null)
+            @Html.ActionLink("Zmień dane o wydarzeniu", "UpdateEvent", "Events", new { id = Model.EventId }, null)
         }
     }
 
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Wróć do listy", "Index")
     <div class="data">
         <h4>@Html.DisplayFor(model => model.Title)</h4>
         <hr />
@@ -27,7 +27,7 @@
             </dt>
 
             <dd>
-                @Html.DisplayFor(model => model.Date)
+                @Model.Date.ToString("dd/MM/yyyy")
             </dd>
 
             <dt>
@@ -52,20 +52,7 @@
             <dd>
                 @Html.DisplayFor(model => model.StreetOrLocation)
             </dd>
-            <dt>
-                @Html.DisplayNameFor(model => model.DogIds)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.DogIds)
-            </dd>
-            <dt>
-                @Html.DisplayNameFor(model => model.GuideIds)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.GuideIds)
-            </dd>
+            
             @if (LoginHelper.IsCurrentUserAdmin() || LoginHelper.IsCurrentUserMember())
             { 
                 <dt>

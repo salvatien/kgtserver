@@ -19,7 +19,10 @@
             <div class="form-group">
                 @Html.LabelFor(m => m.Name, new { @class = "col-md-2 control-label form-field" })
                 <div class="col-md-10  form-field">
-                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                    @Html.TextBoxFor(m => m.Name, new { @id="name", @class = "form-control" })
+                </div>
+                <div class="formValidation" id="nameValidationInfo">
+                To pole musi być uzupełnione.
                 </div>
             </div>
             <div class="form-group">
@@ -35,7 +38,7 @@
                 </div>
             </div>
             <div class="form-group">
-                @Html.LabelFor(m => m.ValidThroughMonths, new { @class = "col-md-2 control-label form-field" })
+                @Html.LabelFor(m => m.ValidThroughMonths, new { @class = "control-label form-field" })
                 <div class="col-md-10 form-field">
                     @Html.TextAreaFor(m => m.ValidThroughMonths, new { @class = "form-control" })
                 </div>
@@ -44,7 +47,7 @@
 
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" class="btn btn-default form-field" value="Prześlij dane" />
+                    <input type="submit" class="btn btn-default form-field" value="Prześlij dane" onclick="return validateAddCertificate()"/>
                 </div>
             </div>
 
@@ -53,8 +56,16 @@
     }
 </div>
 
-@*
-    </body>
-    </html>
-*@
+<script>
+    function validateAddCertificate() {
+        if ($('#name').val() == "") {
+            document.getElementById("nameValidationInfo").style.display = "block";
+            return false;
+        }
+        else {
+            document.getElementById("nameValidationInfo").style.display = "none";
+            return true;
+        }
+    }
+</script>
 

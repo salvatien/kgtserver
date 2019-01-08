@@ -51,6 +51,7 @@
 {
 @Html.ValidationSummary(true)
 @Html.HiddenFor(m => m.DogId)
+@Html.HiddenFor(m => m.PhotoBlobUrl)
 @* <fieldset>*@
     <div style="float:left">
         <div class="form-group">
@@ -174,7 +175,6 @@
     }
 
     function validateUpdateDog() {
-        alert("walidacja start");
         caculateWorkmodeSum();
         var dogName = document.getElementById("updateDogName").value;
         //alert(typeof $('#addDogDateOfBirth').val());

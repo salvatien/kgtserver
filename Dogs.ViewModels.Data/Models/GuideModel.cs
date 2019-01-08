@@ -11,10 +11,13 @@ namespace Dogs.ViewModels.Data.Models
         public int GuideId { get; set; }
         public string IdentityId { get; set; }
         [Display(Name = "Imię")]
+        [Required]
         public string FirstName { get; set; }
         [Display(Name = "Nazwisko")]
+        [Required]
         public string LastName { get; set; }
         [Display(Name = "Email")]
+        [Required]
         public string Email { get; set; }
         [Display(Name = "Miasto")]
         public string City { get; set; }
