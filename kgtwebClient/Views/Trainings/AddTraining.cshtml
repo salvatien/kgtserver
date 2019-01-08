@@ -18,7 +18,10 @@
         <div class="form-group">
             @Html.LabelFor(m => m.GeneralLocation, new { @class = "col-md-2 control-label form-field" })
             <div class="col-md-10  form-field">
-                @Html.TextBoxFor(m => m.GeneralLocation, new { @class = "form-control" })
+                @Html.TextBoxFor(m => m.GeneralLocation, new { @id = "localization", @class = "form-control" })
+            </div>
+            <div id="localizationValidationInfo" class="formValidation">
+                To pole musi być uzupełnione.
             </div>
         </div>
         <div class="form-group">
@@ -32,6 +35,9 @@
             <div class="col-md-10  form-field">
                 @Html.TextBoxFor(m => m.Date, new { type = "datetime-local", @id = "addDate", @class = "form-control" })
             </div>
+            <div id="dateValidationInfo" class="formValidation">
+                To pole musi być uzupełnione.
+            </div>
         </div>
 
         <div class="form-group">
@@ -43,15 +49,28 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" class="btn btn-default form-field" value="Prześlij dane" />
+                <input type="submit" class="btn btn-default form-field" value="Prześlij dane" onclick="return validateAddTraining()" />
             </div>
         </div>
         @*/////////////////////////////////////////////////////*@
     </div>
     }
 </div>
+<script>
+    function validateAddTraining() {
+        if ($('#localization').val() == "" || $('#addDate').val() == "") {
+            if ($('#localization').val() == "")
+                document.getElementById("localizationValidationInfo").style.display = "block";
+            else
+                document.getElementById("localizationValidationInfo").style.display = "none";
 
-@*
-    </body>
-    </html>
-*@
+            if ($('#addDate').val() == "")
+                document.getElementById("dateValidationInfo").style.display = "block";
+            else
+                document.getElementById("dateValidationInfo").style.display = "none";
+
+
+            return false;
+        }
+    }
+</script>

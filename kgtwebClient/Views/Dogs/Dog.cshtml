@@ -8,11 +8,11 @@
 }
 
 
-<div style="margin:60px">
-    <div class="data">
+<div style="margin:60px; overflow:auto">
+    <div class="data" style="float:left; max-width:50%">
         <h4>@Html.DisplayFor(model => model.Name)</h4>
-        <hr />
-        <dl class="dl-horizontal" style="float:left">
+        
+        <dl class="dl-horizontal">
             <dt>
                 @Html.DisplayNameFor(model => model.GuideIdAndName.Name)
             </dt>
@@ -23,7 +23,7 @@
 
             <dt>
                 @Html.DisplayNameFor(model => model.Breed)
-            </dt
+            </dt>
 
             <dd>
                 @Html.DisplayFor(model => model.Breed)
@@ -61,7 +61,10 @@
             </dd>
 
         </dl>
+
+
     </div>
+
     <div class="picture">
         @if (!String.IsNullOrWhiteSpace(Model.PhotoBlobUrl))
         {
@@ -72,15 +75,18 @@
             Random rnd = new Random();
             int dogNumber = rnd.Next(1, 13); // creates a number between 1 and 12
             var path = $"../../Images/dogsPicture/dogFlatIcon{dogNumber}.png";
-            
+
             <img src=@path @*height="400" width="400"*@>
             <div>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
         }
     </div>
+
+    
 </div>
-<p style="margin:60px">
+
+<div class="buttons">
     @{
-        if ( LoginHelper.IsAuthenticated())
+        if (LoginHelper.IsAuthenticated())
         {
 
             <button class="displayButton" onclick="location.href='@Url.Action("Index", "DogCertificates", new { dogId = Model.DogId })'">Pokaż certyfikaty psa</button>
@@ -100,4 +106,5 @@
     }
 
     @Html.ActionLink("Back to List", "Index")
-</p>
+</div>
+

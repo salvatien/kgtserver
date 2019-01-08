@@ -126,8 +126,8 @@
                 @:        },
                 @:        icon: {
                 @:          path: google.maps.SymbolPath.CIRCLE,
-                @:          strokeColor: "blue",
-                @:          scale: 1.5
+                @:          strokeColor: "red",
+                @:          scale: 2
                 @:        },
                 @:        title: 'czas: ' + time    @*'\'   @pt.Time\''*@,
                 @:        map: map
@@ -169,7 +169,7 @@
 
             polyPerson = new google.maps.Polyline({
                 path: personPoints,
-                strokeColor: '#0000FF',
+                strokeColor: '#FF0000',
                 strokeOpacity: 1.0,
                 strokeWeight: 3
             });
@@ -191,8 +191,8 @@
                 @:        },
                 @:        icon: {
                 @:          path: google.maps.SymbolPath.CIRCLE,
-                @:          strokeColor: "red",
-                @:          scale: 1.5
+                @:          strokeColor: "blue",
+                @:          scale: 2
                 @:        },
                 @:        title: 'czas: ' + time    @*'\'   @pt.Time\''*@,
                 @:        map: map
@@ -232,7 +232,7 @@
             }
             poly = new google.maps.Polyline({
                 path: dogPoints,
-                strokeColor: '#FF0000',
+                strokeColor: '#0000FF',
                 strokeOpacity: 1.0,
                 strokeWeight: 3
             });
@@ -253,10 +253,11 @@
 
             // person trace - draw lines
             createPersonTrace();
-            //person trace - draw markers
-            createPersonMarkers();
+            
             //dog trace - draw markers
             createDogMarkers();
+            //person trace - draw markers
+            createPersonMarkers();
 
             console.log("dogMarkers:" + dogMarkers.length + " personMarkers: " + personMarkers.length);
 

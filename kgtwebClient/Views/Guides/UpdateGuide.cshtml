@@ -16,7 +16,7 @@
 @{
     var checkboxAdmin = Model.IsAdmin ?
         (object)new { @checked = "checked" } :
-        (object)new {  };
+        (object)new { };
 
     var checkboxMember = Model.IsMember ?
         (object)new { @checked = "checked" } :
@@ -36,13 +36,19 @@
             <div class="form-group">
                 @Html.LabelFor(m => m.FirstName, new { @class = "col-md-2 control-label form-field" })
                 <div class="col-md-10  form-field">
-                    @Html.TextBoxFor(m => m.FirstName, new { @Value = Model.FirstName, @class = "form-control" })
+                    @Html.TextBoxFor(m => m.FirstName, new { @id = "firstName", @Value = Model.FirstName, @class = "form-control" })
+                </div>
+                <div id="firstNameValidationInfo" class="formValidation">
+                    To pole musi być uzupełnione.
                 </div>
             </div>
             <div class="form-group">
                 @Html.LabelFor(m => m.LastName, new { @class = "col-md-2 control-label form-field" })
                 <div class="col-md-10  form-field">
-                    @Html.TextBoxFor(m => m.LastName, new { @Value = Model.LastName, @class = "form-control" })
+                    @Html.TextBoxFor(m => m.LastName, new { @id = "lastName", @Value = Model.LastName, @class = "form-control" })
+                </div>
+                <div id="lastNameValidationInfo" class="formValidation">
+                    To pole musi być uzupełnione.
                 </div>
             </div>
             @* property not to update?
@@ -69,7 +75,10 @@
             <div class="form-group">
                 @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label form-field" })
                 <div class="col-md-10  form-field">
-                    @Html.TextBoxFor(m => m.Email, new { @Value = Model.Email, @class = "form-control" })
+                    @Html.TextBoxFor(m => m.Email, new { @id = "email", @Value = Model.Email, @class = "form-control" })
+                </div>
+                <div id="emailValidationInfo" class="formValidation">
+                    To pole musi być uzupełnione.
                 </div>
             </div>
             <div class="form-group">
@@ -90,7 +99,7 @@
                     @Html.TextBoxFor(m => m.Phone, new { @Value = Model.Phone, @class = "form-control" })
                 </div>
             </div>
-            @{  if (LoginHelper.IsCurrentUserAdmin())
+            @{ if (LoginHelper.IsCurrentUserAdmin())
                 {
                     <div class="form-group">
                         @Html.CheckBox("IsAdmin", checkboxAdmin)
@@ -101,7 +110,7 @@
                         @Html.LabelFor(m => m.IsMember, new { @class = "col-md-2 control-label form-field" })
                     </div>
                 }
-                }
+            }
             <div class="form-group">
                 @Html.LabelFor(m => m.Notes, new { @class = "col-md-2 control-label form-field" })
                 <div class="col-md-10 form-field">
@@ -111,12 +120,12 @@
 
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" class="btn btn-default form-field" value="Prześlij dane" />
+                    <input type="submit" class="btn btn-default form-field" value="Prześlij dane" onclick="return validateUpdateGuide()" />
                 </div>
             </div>
             @*/////////////////////////////////////////////////////*@
         </div>
-        
+
         @*</fieldset>*@
     }
 </div>
@@ -125,3 +134,26 @@
     </body>
     </html>
 *@
+<script>
+    
+    function validateUpdateGuide() {
+        if ($('#firstName').val() == "" || $('#lastName').val() == "" || $('#email').val() == "") {
+            if ($('#firstName').val() == "")
+                document.getElementById("firstNameValidationInfo").style.display = "block";
+            else
+                document.getElementById("firstNameValidationInfo").style.display = "none";
+
+            if ($('#lastName').val() == "")
+                document.getElementById("lastNameValidationInfo").style.display = "block";
+            else
+                document.getElementById("lastNameValidationInfo").style.display = "none";
+
+            if ($('#email').val() == "")
+                document.getElementById("emailValidationInfo").style.display = "block";
+            else
+                document.getElementById("emailValidationInfo").style.display = "none";
+
+            return false;
+        }
+    }
+</script>

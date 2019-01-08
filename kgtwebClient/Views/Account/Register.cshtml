@@ -59,22 +59,28 @@
                 To pole musi być uzupełnione.
             </div>
         </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.PasswordConfirmation, new { @class = "col-md-2 control-label" })
-                <div class="col-md-10">
-                    @Html.PasswordFor(m => m.PasswordConfirmation, new { @id = "newUserPasswordConfirmation", @class = "form-control" })
-                </div>
-                <div class="formValidation" id="newUserPasswordConfirmationValidationInfo">
-                    To pole musi być uzupełnione.
-                </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.PasswordConfirmation, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.PasswordFor(m => m.PasswordConfirmation, new { @id = "newUserPasswordConfirmation", @class = "form-control" })
             </div>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" class="btn btn-default" value="Zarejestruj" onclick="return validateRegistration()" />
-                </div>
+            <div class="formValidation" id="newUserPasswordConfirmationValidationInfo">
+                To pole musi być uzupełnione.
             </div>
-            }
         </div>
+
+        <div class="formValidation" id="passwordsDoNotMatch">
+            Podane hasła nie są identyczne!
+        </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <br />
+            <input type="submit" class="btn btn-default" value="Zarejestruj" onclick="return validateRegistration()" />
+        </div>
+     </div>
+    }
+</div>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
@@ -116,6 +122,10 @@
             else
                 document.getElementById("newUserPasswordConfirmationValidationInfo").style.display = "none";
 
+            if ($('#newUserPassword').val() != $('#newUserPasswordConfirmation').val())
+                document.getElementById("passwordsDoNotMatch").style.display = "block";
+            else
+                document.getElementById("passwordsDoNotMatch").style.display = "none";
 
             return false;
         }

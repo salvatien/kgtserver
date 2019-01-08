@@ -9,11 +9,14 @@ namespace Dogs.ViewModels.Data.Models
     public class EventModel
     {
         public int EventId { get; set; }
+        [Required]
         [Display(Name = "Nazwa")]
         public string Title { get; set; }
+        [Required]
         [Display(Name = "Data")]
         public DateTime Date { get; set; }
         [Display(Name = "Miasto")]
+        [Required]
         public string City { get; set; }
         [Display(Name = "Lokalizacja")]
         public string StreetOrLocation { get; set; }

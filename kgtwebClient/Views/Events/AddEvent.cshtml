@@ -19,13 +19,19 @@
         <div class="form-group">
             @Html.LabelFor(m => m.Title, new { @class = "col-md-2 control-label form-field" })
             <div class="col-md-10  form-field">
-                @Html.TextBoxFor(m => m.Title, new { @class = "form-control" })
+                @Html.TextBoxFor(m => m.Title, new { @id = "title",  @class = "form-control" })
+            </div>
+            <div id="titleValidationInfo" class="formValidation">
+                To pole musi być uzupełnione.
             </div>
         </div>
         <div class="form-group">
             @Html.LabelFor(m => m.Date, new { @class = "col-md-2 control-label form-field" })
             <div class="col-md-10  form-field">
-                @Html.TextBoxFor(m => m.Date, new { @type = "date", @class = "form-control" })
+                @Html.TextBoxFor(m => m.Date, new { @id= "date", @type = "date", @class = "form-control" })
+            </div>
+            <div id="dateValidationInfo" class="formValidation">
+                To pole musi być uzupełnione.
             </div>
         </div>
         <div class="form-group">
@@ -37,7 +43,10 @@
         <div class="form-group">
             @Html.LabelFor(m => m.City, new { @class = "col-md-2 control-label form-field" })
             <div class="col-md-10 form-field">
-                @Html.TextAreaFor(m => m.City, new { @class = "form-control" })
+                @Html.TextAreaFor(m => m.City, new {@id = "city",  @class = "form-control" })
+            </div>
+            <div id="cityValidationInfo" class="formValidation">
+                To pole musi być uzupełnione.
             </div>
         </div>
         <div class="form-group">
@@ -60,7 +69,7 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" class="btn btn-default form-field" value="Prześlij dane" />
+                <input type="submit" class="btn btn-default form-field" value="Prześlij dane" onclick="return validateAddEvent()"/>
             </div>
         </div>
 
@@ -68,8 +77,25 @@
     </div>
     }
 </div>
+<script>
+    function validateAddEvent() {
+        if ($('#title').val() == "" || $('#date').val() == "" || $('#city').val() == "") {
+            if ($('#title').val() == "")
+                document.getElementById("titleValidationInfo").style.display = "block";
+            else
+                document.getElementById("titleValidationInfo").style.display = "none";
 
-@*
-    </body>
-    </html>
-*@
+            if ($('#date').val() == "")
+                document.getElementById("dateValidationInfo").style.display = "block";
+            else
+                document.getElementById("dateValidationInfo").style.display = "none";
+
+            if ($('#city').val() == "")
+                document.getElementById("cityValidationInfo").style.display = "block";
+            else
+                document.getElementById("cityValidationInfo").style.display = "none";
+
+            return false;
+        }
+    }
+</script>

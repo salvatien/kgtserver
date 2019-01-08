@@ -184,7 +184,7 @@ namespace kgtwebClient.Controllers
             }
             else if (identityApiResponseMessage.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
-                return RedirectToAction("Error", "Home", new { error = "Błędny login lub hasło (lub inny błąd ale raczej to :D)." });
+                return RedirectToAction("Error", "Home", new { error = "Błędny login lub hasło." });
             }
             else
             {
