@@ -20,9 +20,7 @@ namespace DogsServer.Models
         public DateTime Date { get; set; }
         [Required]
         public string City { get; set; }
-        [Required]
         public string StreetOrLocation { get; set; }
-        [Required]
         public string Description { get; set; }
         public string Notes { get; set; }
         public bool IsCommercialTraining { get; set; }
