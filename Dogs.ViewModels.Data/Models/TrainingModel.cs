@@ -10,6 +10,7 @@ namespace Dogs.ViewModels.Data.Models
         public int TrainingId { get; set; }
         [Display(Name = "Data")]
         public DateTime Date { get; set; }
+        [Display(Name = "Treningi psa")]
         public List<DogTrainingModel> DogTrainings { get; set; }
         [Display(Name = "Lokalizacja ogólna")]
         public string GeneralLocation { get; set; }

@@ -21,6 +21,5 @@ namespace DogsServer.Models
         public string Notes { get; set; }
         public virtual IList<DogTraining> DogTrainings { get; set; }
         public virtual IList<TrainingComment> Comments { get; set; }
-
     }
 }

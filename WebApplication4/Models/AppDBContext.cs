@@ -33,12 +33,13 @@ namespace DogsServer.Models
             modelBuilder.Entity<DogCertificate>().HasKey(dc => new { dc.DogId, dc.CertificateId });
 
             modelBuilder.Entity<TrainingComment>().HasKey(m => m.TrainingCommentId);
+            modelBuilder.Entity<DogTrainingComment>().HasKey(m => m.DogTrainingCommentId);
+
             modelBuilder.Entity<TrainingComment>().HasOne(m => m.Training)
                 .WithMany(m => m.Comments)
                 .HasForeignKey(m => m.TrainingId)
-                .OnDelete(DeleteBehavior.Restrict); // added OnDelete to avoid sercular reference
+                .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<DogTrainingComment>().HasKey(m => m.DogTrainingCommentId);
             modelBuilder.Entity<DogTrainingComment>().HasOne(m => m.DogTraining)
                 .WithMany(m => m.Comments)
                 .HasForeignKey(m => new { m.DogId, m.TrainingId })
@@ -61,6 +62,8 @@ namespace DogsServer.Models
             modelBuilder.Entity<Dog>().HasMany(d => d.DogTrainings)
                 .WithOne(dt => dt.Dog)
                 .HasForeignKey(dt => dt.DogId);
+
+
             //dog events
             modelBuilder.Entity<Event>().HasMany(t => t.DogEvents)
                 .WithOne(de => de.Event)

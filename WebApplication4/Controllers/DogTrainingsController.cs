@@ -135,6 +135,8 @@ namespace DogsServer.Controllers
         {
             if (!IsCurrentUserAdmin() && !IsCurrentUserMember())
                 return Forbid();
+            foreach (var comment in unitOfWork.DogTrainingCommentRepository.GetAllByDogIdAndTrainingId(dogId, trainingId))
+                unitOfWork.DogTrainingCommentRepository.Delete(comment);
             unitOfWork.DogTrainingRepository.Delete(unitOfWork.DogTrainingRepository.GetByIds(dogId, trainingId));
             unitOfWork.Commit();
             return new ObjectResult("Training deleted successfully!");

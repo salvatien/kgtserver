@@ -8,6 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20190108215418_ChangedTheRelationshipsOfTrainingCommentsToWorkTheOtherWayAround.cs" />
+    <Compile Remove="Migrations\20190108220026_ChangedOnDeleteTrainingForDogTrainingComments.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
