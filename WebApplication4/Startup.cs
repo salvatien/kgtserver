@@ -131,6 +131,7 @@ namespace DogsServer
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Dogs Resource Server API V1");
+                c.RoutePrefix = string.Empty;
             });
 
             app.UseMvc();
