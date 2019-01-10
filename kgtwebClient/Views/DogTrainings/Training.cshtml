@@ -647,7 +647,7 @@
                                                 <td>@Html.DisplayFor(m => comment.AuthorName)</td>
                                             }
                                             <td>@Html.DisplayFor(m => comment.Date)</td>
-                                            <td style="max-width:25%; overflow:auto;">@Html.DisplayFor(m => comment.Content)</td>
+                                            <td style="max-width:25%; word-wrap:break-word; overflow:auto;">@Html.DisplayFor(m => comment.Content)</td>
                                             @if (comment.Date > mostRecentCommentDate)
                                             {
                                                 mostRecentCommentDate = comment.Date;

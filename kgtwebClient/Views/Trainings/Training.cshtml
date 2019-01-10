@@ -40,7 +40,7 @@
                     @Html.DisplayNameFor(model => model.Comments)
                 </dt>
                 <dd>
-                    <table id="commentsTable">
+                    <table id="commentsTable" style="width:100%; table-layout:fixed">
                         @{
                             foreach (var comment in Model.Comments)
                             {
@@ -54,7 +54,7 @@
                                         <td>@Html.DisplayFor(m => comment.AuthorName)</td>
                                     }
                                     <td>@Html.DisplayFor(m => comment.Date)</td>
-                                    <td>@Html.DisplayFor(m => comment.Content)</td>
+                                    <td style="max-width:50%; word-wrap:break-word; overflow:auto;">@Html.DisplayFor(m => comment.Content)</td>
                                     @if (comment.Date > mostRecentCommentDate)
                                     {
                                         mostRecentCommentDate = comment.Date;
