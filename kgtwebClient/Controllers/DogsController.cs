@@ -33,15 +33,7 @@ namespace kgtwebClient.Controllers
             {
                 var responseData = responseMessage.Content.ReadAsStringAsync().Result;
                 var dogs = JsonConvert.DeserializeObject<List<DogModel>>(responseData);
-
-                var dogsList = new DogsListModel
-                {
-                    ListOfDogs = dogs
-                };
-
-                ViewBag.RawData = responseData;
-
-                return View(dogsList);
+                return View(dogs);
             }
             return View();
         }

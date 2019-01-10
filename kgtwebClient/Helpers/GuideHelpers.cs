@@ -20,11 +20,11 @@ namespace kgtwebClient.Helpers
         public static List<SelectListItem> GetAllGuidesIdAndName()
         {
             var guides = GetAllGuides().Result;
-            return guides.ListOfGuides
+            return guides
                          .Select(x => new SelectListItem { Value = x.GuideId.ToString(), Text = $"{x.FirstName} {x.LastName}" }).ToList();
         }
 
-        public static async Task<GuideListModel> GetAllGuides()
+        public static async Task<List<GuideModel>> GetAllGuides()
         {
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -41,15 +41,9 @@ namespace kgtwebClient.Helpers
             {
                 var responseData = responseMessage.Content.ReadAsStringAsync().Result;
                 var guides = JsonConvert.DeserializeObject<List<GuideModel>>(responseData);
-
-                var guidesList = new GuideListModel
-                {
-                    ListOfGuides = guides
-                };
-
-                return guidesList;
+                return guides;
             }
-            return new GuideListModel { ListOfGuides = new List<GuideModel>() };
+            return new List<GuideModel>();
         }
     }
 }
