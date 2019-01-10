@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Strathweb.AspNetCore.AzureBlobFileProvider;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace DogsServer
 {
@@ -92,6 +93,10 @@ namespace DogsServer
             services.AddMvc()
                 .AddJsonOptions(
                     options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -106,16 +111,27 @@ namespace DogsServer
             }
 
             var compositeFileProvider = app.ApplicationServices.GetRequiredService<CompositeFileProvider>();
-            app.UseStaticFiles(new StaticFileOptions()
-            {
-                FileProvider = compositeFileProvider,
-                RequestPath = "",
-            });
+            //app.UseStaticFiles(new StaticFileOptions()
+            //{
+            //    FileProvider = compositeFileProvider,
+            //    RequestPath = "",
+            //});
 
-            app.UseDirectoryBrowser(new DirectoryBrowserOptions
+            //app.UseDirectoryBrowser(new DirectoryBrowserOptions
+            //{
+            //    FileProvider = compositeFileProvider,
+            //    RequestPath = "",
+            //});
+
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), 
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
             {
-                FileProvider = compositeFileProvider,
-                RequestPath = "",
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Dogs Resource Server API V1");
+                c.RoutePrefix = string.Empty;
             });
 
             app.UseMvc();

@@ -11,6 +11,7 @@ namespace Dogs.ViewModels.Data.Models
         [Display(Name = "Data")]
         [Required]
         public DateTime Date { get; set; }
+        [Display(Name = "Treningi psa")]
         public List<DogTrainingModel> DogTrainings { get; set; }
         [Display(Name = "Lokalizacja ogólna")]
         [Required]

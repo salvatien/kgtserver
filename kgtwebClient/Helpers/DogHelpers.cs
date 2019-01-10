@@ -180,17 +180,18 @@ namespace kgtwebClient.Helpers
         
         static public bool ValidateUpdateDog(DogModel updatedDog)
         {
-            if (!ValidateDogName(updatedDog.Name) || !ValidateDogDateOfBirth(updatedDog.DateOfBirth))
+            if (!ValidateDogDateOfBirth(updatedDog.DateOfBirth))
                 return false;           
             return true;
         }
         
-        static private bool ValidateDogName(string name)
-        {
-            if (!Regex.IsMatch(name, @"^[a-zA-Z]+$"))
-                return false;
-            return true;
-        }
+        //static private bool ValidateDogName(string name)
+        //{
+        //    //this regex wont let polish diacretics like ł so it is not good
+        //    if (!Regex.IsMatch(name, @"^[a-zA-Z]+$"))
+        //        return false;
+        //    return true;
+        //}
 
         static private bool ValidateDogDateOfBirth(DateTime date)
         {

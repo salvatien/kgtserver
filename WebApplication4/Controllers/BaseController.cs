@@ -15,35 +15,35 @@ namespace DogsServer.Controllers
     {
         private UnitOfWork unitOfWork = new UnitOfWork(new AppDbContext());
 
-        public bool IsCurrentUserMember()
+        protected bool IsCurrentUserMember()
         {
             var currentGuide = GetCurrentUser();
             if (currentGuide == null)
                 return false;
             return currentGuide.IsMember;
         }
-        public bool IsCurrentUserAdmin()
+        protected bool IsCurrentUserAdmin()
         {
             var currentGuide = GetCurrentUser();
             if (currentGuide == null)
                 return false;
             return currentGuide.IsAdmin;
         }
-        public int GetCurrentUserId()
+        protected int GetCurrentUserId()
         {
             if (User == null)
                 return -1;
             var identity = ((System.Security.Claims.ClaimsIdentity)User.Identity);
             return Int32.Parse(identity.FindFirst("KgtId").Value);
         }
-        public Guide GetCurrentUser()
+        protected Guide GetCurrentUser()
         {
             var id = GetCurrentUserId();
             if (id == -1)
                 return null;
             return unitOfWork.GuideRepository.GetById(id);
         }
-        public string GetCurrentUserIdentityId()
+        protected string GetCurrentUserIdentityId()
         {
             if (User == null)
                 return null;

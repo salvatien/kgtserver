@@ -8,6 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20190108215418_ChangedTheRelationshipsOfTrainingCommentsToWorkTheOtherWayAround.cs" />
+    <Compile Remove="Migrations\20190108220026_ChangedOnDeleteTrainingForDogTrainingComments.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
@@ -25,6 +30,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.1.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.6" />
     <PackageReference Include="Strathweb.AspNetCore.AzureBlobFileProvider" Version="0.2.0-preview" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.5.0" />
   </ItemGroup>
 

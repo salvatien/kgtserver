@@ -9,6 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Dogs.Identity.Data.DbContexts;
 using Dogs.Identity.Data.Entities;
+using Swashbuckle.AspNetCore.Swagger;
+
 namespace Dogs.Identity.Api
 {
     public class Startup
@@ -69,7 +71,10 @@ namespace Dogs.Identity.Api
             });
             #endregion
 
-
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
+            });
             services.AddMvc();
         }
 
@@ -85,6 +90,16 @@ namespace Dogs.Identity.Api
                 app.UseDeveloperExceptionPage();
             }
 
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), 
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Dogs Identity API V1");
+                c.RoutePrefix = string.Empty;
+            });
             app.UseMvc();
 
         }

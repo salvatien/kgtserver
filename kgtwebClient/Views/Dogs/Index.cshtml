@@ -1,7 +1,7 @@
 ﻿@using Dogs.ViewModels.Data.Models;
 @using kgtwebClient.Helpers;
-
-@model Dogs.ViewModels.Data.Models.DogsListModel
+@using System.Collections;
+@model List<Dogs.ViewModels.Data.Models.DogModel>
 
 
 @{
@@ -31,7 +31,7 @@
 
 
             </tr>
-            @foreach (var item in Model.ListOfDogs)
+            @foreach (var item in Model)
 
             {
             <tr @*onclick="document.location = 'http://kgtwebclient.azurewebsites.net/Dogs/Dog/' + @item.DogId;"  *@>

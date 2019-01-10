@@ -1,10 +1,11 @@
-﻿ 
+﻿@using System.Collections; 
+
 @{
     ViewBag.Title = "Index";
 }
 @using kgtwebClient.Helpers;
 @using Dogs.ViewModels.Data.Models;
-@model Dogs.ViewModels.Data.Models.GuideListModel
+@model List<Dogs.ViewModels.Data.Models.GuideModel>
 
 
 @{
@@ -31,7 +32,7 @@
 
 
             </tr>
-            @foreach (var item in Model.ListOfGuides)
+            @foreach (var item in Model)
 
             {
             <tr @*onclick="document.location = 'http://kgtwebclient.azurewebsites.net/Dogs/Dog/' + @item.DogId;"  *@>
