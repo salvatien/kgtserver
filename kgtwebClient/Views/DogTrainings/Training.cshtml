@@ -550,7 +550,7 @@
 
                         <div class="form-group">
                             <div class="col-md-offset-2 col-md-10">
-                                <input type="submit" class="btn btn-default form-field" value="Prześlij dane" onclick="return validateUpdateTraining()" />
+                                <input type="submit" class="btn btn-default form-field" value="Zapisz zmiany" onclick="return validateUpdateTraining()" />
                             </div>
                         </div>
                     </div>
@@ -613,7 +613,7 @@
 
                         <div class="form-group">
                             <div class="col-md-offset-2 col-md-10">
-                                <input type="submit" class="btn btn-default form-field" value="Prześlij dane" onclick="return validateUpdateTraining()" disabled />
+                                <input type="submit" class="btn btn-default form-field" value="Zapisz zmiany" onclick="return validateUpdateTraining()" disabled />
                             </div>
                         </div>
                     </div>
@@ -626,13 +626,13 @@
         {
 
             <div style="float:left; clear:left; min-width:50%;">
-                <dl>
+                
                     @if (Model.Comments != null && Model.Comments.Any())
                     {
-                        <dt>
+                        <div style="font-weight:bold; font-size:20px">
                             @Html.DisplayNameFor(model => model.Comments)
-                        </dt>
-                        <dd>
+                        </div>
+                        <div>
                             <table id="commentsTable" style="width:100%; table-layout:fixed">
                                 @{
                                     foreach (var comment in Model.Comments)
@@ -647,7 +647,7 @@
                                                 <td>@Html.DisplayFor(m => comment.AuthorName)</td>
                                             }
                                             <td>@Html.DisplayFor(m => comment.Date)</td>
-                                            <td style="max-width:25%; word-wrap:break-word; overflow:auto;">@Html.DisplayFor(m => comment.Content)</td>
+                                            <td style="max-width:25%; word-wrap:break-word; overflow-x:auto;">@Html.DisplayFor(m => comment.Content)</td>
                                             @if (comment.Date > mostRecentCommentDate)
                                             {
                                                 mostRecentCommentDate = comment.Date;
@@ -665,18 +665,18 @@
                                 }
                             </table>
 
-                        </dd>
+                        </div>
                     }
                     else {
-                        <dt>
+                        <div>
                             @Html.DisplayNameFor(model => model.Comments)
-                        </dt>
-                        <dd>
+                        </div>
+                        <div>
                             <table id="commentsTable" style="width:100%; table-layout:fixed"></table>
-                        </dd>
+                        </div>
                     }
-                </dl>
-                @Html.TextArea("Message", new { id = "newCommentMessage", rows = 8, columns = 40 })<br />
+                
+                @Html.TextArea("Message", new { id = "newCommentMessage", rows = 8, columns = 150 })<br />
                 <button class="displayButton" type="button" id="addNewComment">Dodaj komentarz</button>
                 <p id="newCommentWasAdded" hidden style="color:red"> Dodano nowy komentarz lub zmieniono istniejący! Odśwież stronę, aby zobaczyć najnowsze dane </p>
 

@@ -50,7 +50,6 @@
     <div id="menu" class="menu">
         <a href="javascript:void(0)" class="menuCloseButton" onclick="closeMenu()">&times;</a>
         <ul>
-            Informacje
             <li> @Html.ActionLink("Psy", "Index", "Dogs")</li>      @*nazwa widoczna w aplikacji - metoda - kontroler*@
             <li>@Html.ActionLink("Przewodnicy", "Index", "Guides")</li>
             @if (LoginHelper.IsCurrentUserAdmin() || LoginHelper.IsCurrentUserMember())

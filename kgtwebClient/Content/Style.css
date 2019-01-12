@@ -97,7 +97,7 @@ body, html {
     background-position: 10px 10px;
     background-repeat: no-repeat; */
     /* position: relative;*/
-    width: 100%;
+    min-width: 400px;
     font-size: 16px;
     padding: 12px 20px 12px 40px;
     border: 1px solid #ddd;
@@ -126,15 +126,15 @@ body, html {
 }
 
 .deleteButton {
-    background-color: red;
+    background-color: darkred;
 }
 
 .updateButton {
-    background-color: cornflowerblue;
+    background-color: dimgrey;
 }
 
 .displayButton {
-    background-color: yellowgreen;
+    background-color: #34495e;
 }
 
 .addButton {
@@ -160,20 +160,26 @@ body, html {
 }
 
 .picture {
-    padding: 50px;
-    max-height:1000px
+    padding: 50px 100px 100px 100px;
+    max-height:1000px;
+    float:left
 }
 
 img {
     /*width: 100%;*/
     max-width: 500px;
     /*max-height: 500px;*/
-    margin-left:20%
+    /*margin-left:20%*/
 }
 
+.pictureInfo {
+    /*margin-left: 20%;*/
+    max-width: 500px;
+    align-content:center
+}
 
 .dogInfoWindow {
-    color:blue;
+    color: blue;
     font-weight: bold;
 }
 
@@ -243,4 +249,22 @@ dl {
 .form-field {
     position: static;
     font-size: 18px;
+}
+
+.data {
+    padding:50px;
+    min-width:300px;
+    font-size:20px
+}
+
+dd,dt {
+    min-width:300px
+}
+
+.buttons {
+    margin-left:20px;
+}
+
+#newCommentMessage {
+    min-width:50%
 }

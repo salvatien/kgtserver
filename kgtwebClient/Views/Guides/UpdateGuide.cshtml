@@ -75,7 +75,7 @@
             <div class="form-group">
                 @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label form-field" })
                 <div class="col-md-10  form-field">
-                    @Html.TextBoxFor(m => m.Email, new { @id = "email", @Value = Model.Email, @class = "form-control" })
+                    @Html.TextBoxFor(m => m.Email, new { @type = "email", @id = "email", @Value = Model.Email, @class = "form-control" })
                 </div>
                 <div id="emailValidationInfo" class="formValidation">
                     To pole musi być uzupełnione.

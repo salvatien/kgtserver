@@ -43,7 +43,7 @@
         <div class="form-group">
             @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
             <div class="col-md-10">
-                @Html.TextBoxFor(m => m.Email, new { @id = "newUserEmail", @class = "form-control" })
+                @Html.TextBoxFor(m => m.Email, new { @type = "email", @id = "newUserEmail", @class = "form-control" })
             </div>
             <div class="formValidation" id="newUserEmailValidationInfo">
                 To pole musi być uzupełnione.
@@ -86,8 +86,6 @@
 }
 <script>
     function validateRegistration() {
-        alert("walidacja start");
-        //alert(typeof $('#addDogDateOfBirth').val());
         if ($('#newUserFirstName').val() == "" || $('#newUserLastName').val() == "" || $('#newUserUsername').val() == ""
             || $('#newUserEmail').val() == "" || $('#newUserPassword').val() == "" || $('#newUserPasswordConfirmation').val() == "") {
             if ($('#newUserFirstName').val() == "")
