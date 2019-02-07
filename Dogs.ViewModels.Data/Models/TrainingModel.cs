@@ -20,6 +20,8 @@ namespace Dogs.ViewModels.Data.Models
         public string LocationDetails { get; set; }
         [Display(Name = "Notatki")]
         public string Notes { get; set; }
+        [Display(Name = "Pogoda")]
+        public string Weather { get; set; }
         [Display(Name = "Komentarze")]
         public List<CommentModel> Comments { get; set; }
     }

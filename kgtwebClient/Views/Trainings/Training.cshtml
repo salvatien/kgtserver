@@ -26,19 +26,24 @@
             <dt>
                 @Html.DisplayNameFor(model => model.Notes)
             </dt>
-
             <dd>
                 @Html.DisplayFor(model => model.Notes)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Weather)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Weather)
             </dd>
             @*<dt style="color:red; font-size:large">
             COMMENTS HERE SOMETIME
         </dt>*@
 
+            <dt>
+                @Html.DisplayNameFor(model => model.Comments)
+            </dt>
             @if (Model.Comments != null && Model.Comments.Any())
             {
-                <dt>
-                    @Html.DisplayNameFor(model => model.Comments)
-                </dt>
                 <dd>
                     <table id="commentsTable" style="width:100%; table-layout:fixed">
                         @{
@@ -73,13 +78,14 @@
                     </table>
 
                 </dd>
-              }
-              else
-              {
-                    <table id="commentsTable"></table>
-              }
+            }
+            else
+            {
+                <table id="commentsTable"></table>
+            }
 
-            @Html.TextArea("Message", new { id = "newCommentMessage", rows = 8, columns = 40 }) <br />
+            @Html.TextArea("Message", new { id = "newCommentMessage", rows = 8, columns = 40 })
+            <br />
             <button class="displayButton" type="button" id="addNewComment">Dodaj komentarz</button>
             <p id="newCommentWasAdded" hidden style="color:red"> Ktoś dodał nowy komentarz lub zmienił istniejący! Odśwież stronę, aby zobaczyć najnowsze dane </p>
 

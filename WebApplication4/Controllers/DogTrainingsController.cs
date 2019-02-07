@@ -71,6 +71,11 @@ namespace DogsServer.Controllers
                 return null;
             //return unitOfWork.GuideRepository.GetById(id);
             var t = unitOfWork.DogTrainingRepository.GetByIds(dogId, trainingId);
+            if(String.IsNullOrWhiteSpace(t.Weather))
+            {
+                var training = unitOfWork.TrainingRepository.GetById(trainingId);
+                t.Weather = training.Weather;
+            }
             var dogTrainingModel = new DogTrainingModel()
             {
                 DogId = t.DogId,
@@ -108,7 +113,8 @@ namespace DogsServer.Controllers
                 //dogTraining.LostPersonTrackBlobUrl = updatedTraining.LostPersonTrackBlobUrl;
 
                 dogTraining.LostPerson = updatedTraining.LostPerson;
-                dogTraining.Weather = updatedTraining.Weather;
+                if(updatedTraining.Weather != dogTraining.Training.Weather)
+                    dogTraining.Weather = updatedTraining.Weather;
                 dogTraining.Notes = updatedTraining.Notes;
                 dogTraining.LostPersonTrackLength = updatedTraining.LostPersonTrackLength;
                 dogTraining.DelayTime = updatedTraining.DelayTime;
@@ -285,13 +291,14 @@ namespace DogsServer.Controllers
                         GeneralLocation = t.Training.GeneralLocation,
                         LocationDetails = t.Training.LocationDetails,
                         Notes = t.Training.Notes,
-                        TrainingId = t.TrainingId
+                        TrainingId = t.TrainingId,
+                        Weather = t.Weather
                     },
                     DogTrackBlobUrl = t.DogTrackBlobUrl,
                     LostPerson = t.LostPerson,
                     LostPersonTrackBlobUrl = t.LostPersonTrackBlobUrl,
                     Notes = t.Notes,
-                    Weather = t.Weather,
+                    Weather = t.Weather ?? t.Training.Weather,
                     DelayTime = t.DelayTime,
                     LostPersonTrackLength = t.LostPersonTrackLength
                     //,
@@ -338,13 +345,14 @@ namespace DogsServer.Controllers
                         GeneralLocation = t.Training.GeneralLocation,
                         LocationDetails = t.Training.LocationDetails,
                         Notes = t.Training.Notes,
-                        TrainingId = t.TrainingId
+                        TrainingId = t.TrainingId,
+                        Weather = t.Weather
                     },
                     DogTrackBlobUrl = t.DogTrackBlobUrl,
                     LostPerson = t.LostPerson,
                     LostPersonTrackBlobUrl = t.LostPersonTrackBlobUrl,
                     Notes = t.Notes,
-                    Weather = t.Weather,
+                    Weather = t.Weather ?? t.Training.Weather,
                     DelayTime = t.DelayTime,
                     LostPersonTrackLength = t.LostPersonTrackLength
                     //,
