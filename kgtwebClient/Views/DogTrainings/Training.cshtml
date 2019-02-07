@@ -73,7 +73,7 @@
         </div>
     </div>
 
-        <script>
+    <script>
 
         // This example creates an interactive map which constructs a polyline based on
         // user clicks. Note that the polyline only appears once its path property
@@ -125,9 +125,13 @@
                 @:          fontSize: "0px"
                 @:        },
                 @:        icon: {
+                            if (counter == 0) {
+                @:          url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png'
+                            } else {
                 @:          path: google.maps.SymbolPath.CIRCLE,
                 @:          strokeColor: "red",
-                @:          scale: 2
+                @:          scale: 1
+                            }
                 @:        },
                 @:        title: 'czas: ' + time    @*'\'   @pt.Time\''*@,
                 @:        map: map
@@ -189,10 +193,15 @@
                 @:          text: "@labelCounter",
                 @:          fontSize: "0px"
                 @:        },
+
                 @:        icon: {
+                            if (labelCounter == 0) {
+                @:          url: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+                            } else {
                 @:          path: google.maps.SymbolPath.CIRCLE,
                 @:          strokeColor: "blue",
-                @:          scale: 2
+                @:          scale: 1
+                            }
                 @:        },
                 @:        title: 'czas: ' + time    @*'\'   @pt.Time\''*@,
                 @:        map: map
@@ -253,7 +262,7 @@
 
             // person trace - draw lines
             createPersonTrace();
-            
+
             //dog trace - draw markers
             createDogMarkers();
             //person trace - draw markers
@@ -322,7 +331,7 @@
                         + handleOneDigitTimeString(utc.getMinutes()) + ":"
                         + handleOneDigitTimeString(utc.getSeconds()));
 
-                  
+
 
                     break;
                 }
@@ -413,7 +422,7 @@
                         alert(data.result);
                         // set person track length field to data.trackLength with jquery or getelementbyid
                         console.log(typeof data.result);
-                            
+
                         $("#" + fieldId).val(data.result);
                     }
                 },
@@ -468,7 +477,7 @@
         }
 
 
-        </script>
+    </script>
         <script async defer
                 src="@googleMapsLinkWithApiKey">
         </script>
