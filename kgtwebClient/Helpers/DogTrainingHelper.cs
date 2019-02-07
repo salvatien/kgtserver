@@ -23,7 +23,7 @@ namespace kgtwebClient.Helpers
         //private static double _d2r = (Math.PI / 180D); //D to use double
         private static double oneLongitudeDegreeLengthAtEquatorInKilometers = 111.321;
         private static double oneLatitudeDegreeInKilometers = 110.567;
-        public static double CalculateGPSTrackLength(Trkseg track)
+        public static int CalculateGPSTrackLength(Trkseg track)
         {
             var trackPoints = track.Trkpt;
             double trackLength = 0.0;
@@ -35,7 +35,7 @@ namespace kgtwebClient.Helpers
                 var lon2 = double.Parse(trackPoints[i+1].Lon, CultureInfo.InvariantCulture);
                 trackLength += DistanceBetweenCoordinatesInMeters(lat1, lon1, lat2, lon2);
             }
-            return trackLength;
+            return (int)trackLength;
         }
 
         public static TimeSpan CalculateDelayTime(Trkseg dogTrack, Trkseg lostPersonTrack)
