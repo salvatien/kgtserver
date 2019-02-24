@@ -23,22 +23,50 @@
         <hr />
         <dl class="dl-horizontal" style="float:left">
 
+            @if (Model.DogTrainings != null && Model.DogTrainings.Any())
+            {
+                <dt>
+                    @Html.DisplayNameFor(model => model.DogTrainings)
+                </dt>
+                <dd>
+                    <table id="dogsTable">
+                        @{
+                            foreach (var dogTraining in Model.DogTrainings)
+                            {
+                                <tr>
+                                    <td>@Html.DisplayFor(m => dogTraining.Dog.Name)</td>
+                                    <td>
+                                        <button class="displayButton" type="button" onclick="location.href='@Url.Action("Training", "DogTrainings", new { dogId = @dogTraining.DogId, trainingId=dogTraining.TrainingId  })'">wyświetl trening psa</button>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </table>
+                </dd>
+            }
+
             <dt>
                 @Html.DisplayNameFor(model => model.Notes)
             </dt>
-
             <dd>
-                @Html.DisplayFor(model => model.Notes)
+                @Html.TextAreaFor(model => model.Notes, 8, 40, htmlAttributes: new { @readonly = "readonly" })
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Weather)
+
+            </dt>
+            <dd>
+                @Html.TextAreaFor(model => model.Weather, 8, 40, htmlAttributes: new { @readonly = "readonly" })
             </dd>
             @*<dt style="color:red; font-size:large">
             COMMENTS HERE SOMETIME
         </dt>*@
 
+            <dt>
+                @Html.DisplayNameFor(model => model.Comments)
+            </dt>
             @if (Model.Comments != null && Model.Comments.Any())
             {
-                <dt>
-                    @Html.DisplayNameFor(model => model.Comments)
-                </dt>
                 <dd>
                     <table id="commentsTable" style="width:100%; table-layout:fixed">
                         @{
@@ -73,37 +101,16 @@
                     </table>
 
                 </dd>
-              }
-              else
-              {
-                    <table id="commentsTable"></table>
-              }
+            }
+            else
+            {
+                <table id="commentsTable"></table>
+            }
 
-            @Html.TextArea("Message", new { id = "newCommentMessage", rows = 8, columns = 40 }) <br />
+            @Html.TextArea("Message", new { id = "newCommentMessage", rows = 8, columns = 40 })
+            <br />
             <button class="displayButton" type="button" id="addNewComment">Dodaj komentarz</button>
             <p id="newCommentWasAdded" hidden style="color:red"> Ktoś dodał nowy komentarz lub zmienił istniejący! Odśwież stronę, aby zobaczyć najnowsze dane </p>
-
-            @if (Model.DogTrainings != null && Model.DogTrainings.Any())
-            {
-                <dt>
-                    @Html.DisplayNameFor(model => model.DogTrainings)
-                </dt>
-                <dd>
-                    <table id="dogsTable">
-                        @{
-                            foreach (var dogTraining in Model.DogTrainings)
-                            {
-                                <tr>
-                                    <td>@Html.DisplayFor(m => dogTraining.Dog.Name)</td>
-                                    <td>
-                                        <button class="displayButton" type="button" onclick="location.href='@Url.Action("Training", "DogTrainings", new { dogId = @dogTraining.DogId, trainingId=dogTraining.TrainingId  })'">wyświetl trening psa</button>
-                                    </td>
-                                </tr>
-                            }
-                        }
-                    </table>
-                </dd>
-            }
 
         </dl>
     </div>

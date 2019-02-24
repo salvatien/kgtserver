@@ -42,6 +42,7 @@ namespace DogsServer.Controllers
                 GeneralLocation = obj.GeneralLocation,
                 LocationDetails = obj.LocationDetails,
                 Notes = obj.Notes,
+                Weather = obj.Weather,
                 DogTrainings = new List<DogTraining>()
 
             };
@@ -69,6 +70,7 @@ namespace DogsServer.Controllers
                     GeneralLocation = t.GeneralLocation,
                     LocationDetails = t.LocationDetails,
                     Notes = t.Notes,
+                    Weather = t.Weather,
                     Comments = (t.Comments == null || !t.Comments.Any()) 
                         ? new List <CommentModel> () 
                         : t.Comments.Select(c => new CommentModel
@@ -117,6 +119,7 @@ namespace DogsServer.Controllers
                 GeneralLocation = t.GeneralLocation,
                 LocationDetails = t.LocationDetails,
                 Notes = t.Notes,
+                Weather = t.Weather,
                 Comments = (t.Comments == null || !t.Comments.Any())
                         ? new List<CommentModel>()
                         : t.Comments.Select(c => new CommentModel
@@ -161,6 +164,7 @@ namespace DogsServer.Controllers
                 training.GeneralLocation = updatedTraining.GeneralLocation;
                 training.LocationDetails = updatedTraining.LocationDetails;
                 training.Notes = updatedTraining.Notes;
+                training.Weather = updatedTraining.Weather;
                 //updating comments and dog trainings is not possible through update training
                 unitOfWork.Commit();
                 return new ObjectResult(training.TrainingId);

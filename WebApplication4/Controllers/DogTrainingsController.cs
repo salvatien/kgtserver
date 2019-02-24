@@ -53,6 +53,7 @@ namespace DogsServer.Controllers
                 LostPersonTrackBlobUrl = obj.LostPersonTrackBlobUrl,
                 Notes = obj.Notes,
                 Weather = obj.Weather,
+                GroundType = obj.GroundType,
                 DelayTime = obj.DelayTime,
                 LostPersonTrackLength = obj.LostPersonTrackLength
             };
@@ -71,6 +72,11 @@ namespace DogsServer.Controllers
                 return null;
             //return unitOfWork.GuideRepository.GetById(id);
             var t = unitOfWork.DogTrainingRepository.GetByIds(dogId, trainingId);
+            if(String.IsNullOrWhiteSpace(t.Weather))
+            {
+                var training = unitOfWork.TrainingRepository.GetById(trainingId);
+                t.Weather = training.Weather;
+            }
             var dogTrainingModel = new DogTrainingModel()
             {
                 DogId = t.DogId,
@@ -80,6 +86,7 @@ namespace DogsServer.Controllers
                 LostPersonTrackBlobUrl = t.LostPersonTrackBlobUrl,
                 Notes = t.Notes,
                 Weather = t.Weather,
+                GroundType = t.GroundType,
                 DelayTime = t.DelayTime,
                 LostPersonTrackLength = t.LostPersonTrackLength,
                 Comments = t.Comments.Select(c => new CommentModel
@@ -108,8 +115,10 @@ namespace DogsServer.Controllers
                 //dogTraining.LostPersonTrackBlobUrl = updatedTraining.LostPersonTrackBlobUrl;
 
                 dogTraining.LostPerson = updatedTraining.LostPerson;
-                dogTraining.Weather = updatedTraining.Weather;
+                if(updatedTraining.Weather != dogTraining.Training.Weather)
+                    dogTraining.Weather = updatedTraining.Weather;
                 dogTraining.Notes = updatedTraining.Notes;
+                dogTraining.GroundType = updatedTraining.GroundType;
                 dogTraining.LostPersonTrackLength = updatedTraining.LostPersonTrackLength;
                 dogTraining.DelayTime = updatedTraining.DelayTime;
                 //TODO not sure if it should be updated here or not
@@ -285,13 +294,15 @@ namespace DogsServer.Controllers
                         GeneralLocation = t.Training.GeneralLocation,
                         LocationDetails = t.Training.LocationDetails,
                         Notes = t.Training.Notes,
-                        TrainingId = t.TrainingId
+                        TrainingId = t.TrainingId,
+                        Weather = t.Weather
                     },
                     DogTrackBlobUrl = t.DogTrackBlobUrl,
                     LostPerson = t.LostPerson,
                     LostPersonTrackBlobUrl = t.LostPersonTrackBlobUrl,
                     Notes = t.Notes,
-                    Weather = t.Weather,
+                    GroundType = t.GroundType,
+                    Weather = t.Weather ?? t.Training.Weather,
                     DelayTime = t.DelayTime,
                     LostPersonTrackLength = t.LostPersonTrackLength
                     //,
@@ -338,13 +349,15 @@ namespace DogsServer.Controllers
                         GeneralLocation = t.Training.GeneralLocation,
                         LocationDetails = t.Training.LocationDetails,
                         Notes = t.Training.Notes,
-                        TrainingId = t.TrainingId
+                        TrainingId = t.TrainingId,
+                        Weather = t.Weather
                     },
                     DogTrackBlobUrl = t.DogTrackBlobUrl,
                     LostPerson = t.LostPerson,
                     LostPersonTrackBlobUrl = t.LostPersonTrackBlobUrl,
                     Notes = t.Notes,
-                    Weather = t.Weather,
+                    GroundType = t.GroundType,
+                    Weather = t.Weather ?? t.Training.Weather,
                     DelayTime = t.DelayTime,
                     LostPersonTrackLength = t.LostPersonTrackLength
                     //,

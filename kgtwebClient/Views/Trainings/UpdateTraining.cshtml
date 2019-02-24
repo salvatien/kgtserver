@@ -24,73 +24,80 @@
         @Html.ValidationSummary(true)
         @Html.HiddenFor(m => m.TrainingId)
         @* <fieldset>*@
-        <div style="float:left">
-            <div class="form-group">
-                @Html.LabelFor(m => m.GeneralLocation, new { @class = "col-md-2 control-label form-field" })
-                <div class="col-md-10  form-field">
-                    @Html.TextBoxFor(m => m.GeneralLocation, new { @id="localization", @Value = Model.GeneralLocation, @class = "form-control" })
-                </div>
-                <div id="localizationValidationInfo" class="formValidation">
-                    To pole musi być uzupełnione.
-                </div>
+    <div style="float:left">
+        <div class="form-group">
+            @Html.LabelFor(m => m.GeneralLocation, new { @class = "col-md-2 control-label form-field" })
+            <div class="col-md-10  form-field">
+                @Html.TextBoxFor(m => m.GeneralLocation, new { @id = "localization", @Value = Model.GeneralLocation, @class = "form-control" })
             </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.LocationDetails, new { @class = "col-md-2 control-label form-field" })
-                <div class="col-md-10  form-field">
-                    @Html.TextBoxFor(m => m.LocationDetails, new { @Value = Model.LocationDetails, @class = "form-control" })
-                </div>
+            <div id="localizationValidationInfo" class="formValidation">
+                To pole musi być uzupełnione.
             </div>
-
-            <div class="form-group">
-                @Html.LabelFor(m => m.Date, new { @class = "col-md-2 control-label form-field" })
-                <div class="col-md-10  form-field">
-                    @Html.TextBoxFor(m => m.Date, new { @id = "date", @Value = Model.Date.ToString("yyyy-MM-ddTHH:mm"), type = "datetime-local", @class = "form-control" })
-                </div>
-                <div id="dateValidationInfo" class="formValidation">
-                    To pole musi być uzupełnione.
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(m => m.Notes, new { @class = "col-md-2 control-label form-field" })
-                <div class="col-md-10 form-field">
-                    @Html.TextAreaFor(m => m.Notes, new { @Value = Model.Notes, @class = "form-control" })
-                </div>
-            </div>
-
-            @if (Model.DogTrainings != null && Model.DogTrainings.Any())
-            {
-                <dt>
-                    @Html.DisplayNameFor(model => model.DogTrainings)
-                </dt>
-                <dd>
-                    <table id="dogsTable">
-                        @{
-                            foreach (var dogTraining in Model.DogTrainings)
-                            {
-                                <tr>
-                                    <td>@Html.DisplayFor(m => dogTraining.Dog.Name)</td>
-                                    <td>@Html.DisplayFor(m => dogTraining.Dog.GuideIdAndName.Name)</td>
-                                    <td>
-                                        <button type="button" class="displayButton" onclick="location.href='@Url.Action("Training", "DogTrainings", new { dogId = @dogTraining.DogId, trainingId=dogTraining.TrainingId  })'">wyświetl trening psa</button>
-                                    </td>
-                                    <td>
-                                        <button type="button" class="deleteButton" onclick="deleteDogTraining(@dogTraining.DogId, @dogTraining.TrainingId)" id="@($"deleteDog{dogTraining.DogId}Training{dogTraining.TrainingId}Button")">usuń</button>
-                                    </td>
-                                </tr>
-                            }
-                        }
-                    </table>
-                </dd>
-            }
-
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" class="btn btn-default form-field" value="Prześlij dane" onclick="return validatUpdateTraining()" />
-                </div>
-            </div>
-            @*/////////////////////////////////////////////////////*@
         </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.LocationDetails, new { @class = "col-md-2 control-label form-field" })
+            <div class="col-md-10  form-field">
+                @Html.TextBoxFor(m => m.LocationDetails, new { @Value = Model.LocationDetails, @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Date, new { @class = "col-md-2 control-label form-field" })
+            <div class="col-md-10  form-field">
+                @Html.TextBoxFor(m => m.Date, new { @id = "date", @Value = Model.Date.ToString("yyyy-MM-ddTHH:mm"), type = "datetime-local", @class = "form-control" })
+            </div>
+            <div id="dateValidationInfo" class="formValidation">
+                To pole musi być uzupełnione.
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Notes, new { @class = "col-md-2 control-label form-field" })
+            <div class="col-md-10 form-field">
+                @Html.TextAreaFor(m => m.Notes, 10, 40, new { @Value = Model.Notes, @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Weather, new { @class = "col-md-2 control-label form-field" })
+            <div class="col-md-10 form-field">
+                @Html.TextAreaFor(m => m.Weather, 10, 40, new { @Value = Model.Notes, @class = "form-control" })
+            </div>
+        </div>
+
+        @if (Model.DogTrainings != null && Model.DogTrainings.Any())
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.DogTrainings)
+            </dt>
+            <dd>
+                <table id="dogsTable">
+                    @{
+                        foreach (var dogTraining in Model.DogTrainings)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(m => dogTraining.Dog.Name)</td>
+                                <td>@Html.DisplayFor(m => dogTraining.Dog.GuideIdAndName.Name)</td>
+                                <td>
+                                    <button type="button" class="displayButton" onclick="location.href='@Url.Action("Training", "DogTrainings", new { dogId = @dogTraining.DogId, trainingId=dogTraining.TrainingId  })'">wyświetl trening psa</button>
+                                </td>
+                                <td>
+                                    <button type="button" class="deleteButton" onclick="deleteDogTraining(@dogTraining.DogId, @dogTraining.TrainingId)" id="@($"deleteDog{dogTraining.DogId}Training{dogTraining.TrainingId}Button")">usuń</button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </table>
+            </dd>
+        }
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" class="btn btn-default form-field" value="Prześlij dane" onclick="return validatUpdateTraining()" />
+            </div>
+        </div>
+        @*/////////////////////////////////////////////////////*@
+    </div>
 
     }
 </div>

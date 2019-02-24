@@ -24,7 +24,7 @@ namespace DogsServer.Models
         public virtual IList<DogTrainingComment> Comments { get; set; }
         public string Weather { get; set; }
         public double LostPersonTrackLength { get; set; }
-
+        public string GroundType { get; set; }
         //hack to implement timespan longer than 24 hours as ef core implements timespan as time in db, and time must be <24 hours
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]

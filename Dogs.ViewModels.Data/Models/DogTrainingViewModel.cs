@@ -29,12 +29,15 @@ namespace Dogs.ViewModels.Data.Models
         public TimeSpan Duration { get; set; }
         [Display(Name = "Czas odłożenia śladu")]
         public TimeSpan DelayTime { get; set; }
-        [Display(Name = "Długość śladu pozoranta")]
+        [Display(Name = "Długość śladu pozoranta (w metrach)")]
         public double LostPersonTrackLength { get; set; }
-        [Display(Name = "Długość śladu psa")]
+        [Display(Name = "Długość śladu psa (w metrach)")]
         public double DogTrackLength { get; set; }
-        [Display(Name = "Notatki")]
+        //previously [Display(Name = "Notatki")]
+        [Display(Name = "Uwagi przewodnika")]
         public string Notes { get; set; }
+        [Display(Name = "Rodzaj podłoża")]
+        public string GroundType { get; set; }
         [Display(Name = "Cel")]
         public string Goal { get; set; }
         [Display(Name = "Pogoda")]

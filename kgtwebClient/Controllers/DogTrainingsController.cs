@@ -85,7 +85,8 @@ namespace kgtwebClient.Controllers
                     Notes = dogTraining.Notes,
                     Training = dogTraining.Training,
                     TrainingId = dogTraining.TrainingId,
-                    Weather = dogTraining.Weather                    
+                    Weather = dogTraining.Weather,
+                    GroundType = dogTraining.GroundType
                 };
                 if (!String.IsNullOrEmpty(dogTraining.DogTrackBlobUrl))
                 {
@@ -217,6 +218,7 @@ namespace kgtwebClient.Controllers
                 LostPerson = model.LostPerson,
                 Notes = model.Notes,
                 Weather = model.Weather,
+                GroundType = model.GroundType,
                 Comments = model.Comments,
                 DogId = model.DogId,
                 TrainingId = model.TrainingId,

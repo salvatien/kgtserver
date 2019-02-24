@@ -18,8 +18,11 @@ namespace Dogs.ViewModels.Data.Models
         public string GeneralLocation { get; set; }
         [Display(Name = "Lokalizacja szczegółowa")]
         public string LocationDetails { get; set; }
-        [Display(Name = "Notatki")]
+        //previously [Display(Name = "Notatki")]
+        [Display(Name = "Uwagi")]
         public string Notes { get; set; }
+        [Display(Name = "Pogoda")]
+        public string Weather { get; set; }
         [Display(Name = "Komentarze")]
         public List<CommentModel> Comments { get; set; }
     }
