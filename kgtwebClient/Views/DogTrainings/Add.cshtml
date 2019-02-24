@@ -22,47 +22,53 @@
     {
         @Html.ValidationSummary(true)
         @Html.HiddenFor(m => m.TrainingId)
-        <div style="float:left">
-            <div class="form-group">
-                @Html.LabelFor(m => m.DogId, new { @class = "col-md-2 control-label form-field" })
-                <div class="col-md-10  form-field">
-                    @Html.DropDownListFor(m => m.DogId, remainingDogs, new { @class = "form-control" })
-                </div>
+    <div style="float:left">
+        <div class="form-group">
+            @Html.LabelFor(m => m.DogId, new { @class = "col-md-2 control-label form-field" })
+            <div class="col-md-10  form-field">
+                @Html.DropDownListFor(m => m.DogId, remainingDogs, new { @class = "form-control" })
             </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.LostPerson, new { @class = "col-md-2 control-label form-field" })
-                <div class="col-md-10  form-field">
-                    @Html.TextBoxFor(m => m.LostPerson, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.Weather, new { @class = "col-md-2 control-label form-field" })
-                <div class="col-md-10 form-field">
-                    @Html.TextBoxFor(m => m.Weather, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.Notes, new { @class = "col-md-2 control-label form-field" })
-                <div class="col-md-10 form-field">
-                    @Html.TextAreaFor(m => m.Notes, new { @class = "form-control" })
-                </div>
-            </div>
-            <div>
-                Dodaj plik .GPX ze śladem pozoranta<br />
-                @Html.TextBox("lostPersonTrackFile", "", new { type = "file" }) <br /><br />
-                Dodaj plik .GPX ze śladem psa<br />
-                @Html.TextBox("dogTrackFile", "", new { type = "file" }) <br /><br />
-            </div>
-
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" class="btn btn-default form-field" value="Prześlij dane" />
-                </div>
-            </div>
-
-            Godziny trwania będą wywnioskowane z pliku ze śladem psa.
-
         </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.LostPerson, new { @class = "col-md-2 control-label form-field" })
+            <div class="col-md-10  form-field">
+                @Html.TextBoxFor(m => m.LostPerson, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Weather, new { @class = "col-md-2 control-label form-field" })
+            <div class="col-md-10 form-field">
+                @Html.TextAreaFor(m => m.Weather, 10, 40, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Notes, new { @class = "col-md-2 control-label form-field" })
+            <div class="col-md-10 form-field">
+                @Html.TextAreaFor(m => m.Notes, 10, 40, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.GroundType, new { @class = "col-md-2 control-label form-field" })
+            <div class="col-md-10 form-field">
+                @Html.TextAreaFor(m => m.GroundType, 3, 40, new { @class = "form-control" })
+            </div>
+        </div>
+        <div>
+            Dodaj plik .GPX ze śladem pozoranta<br />
+            @Html.TextBox("lostPersonTrackFile", "", new { type = "file" }) <br /><br />
+            Dodaj plik .GPX ze śladem psa<br />
+            @Html.TextBox("dogTrackFile", "", new { type = "file" }) <br /><br />
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" class="btn btn-default form-field" value="Prześlij dane" />
+            </div>
+        </div>
+
+        Godziny trwania będą wywnioskowane z pliku ze śladem psa.
+
+    </div>
     }
 </div>
 

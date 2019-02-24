@@ -31,7 +31,7 @@
         }
     </style>
 </head>
-<body><div style="margin:60px; position:static">
+<body><div style="margin:60px; position:static;">
     <div id="map" style="width:55%; height:500px; display:inline-block;"></div>
     <div style="display:inline-block; width:20%; margin:20px;">
         <div class="form-group">
@@ -537,32 +537,37 @@
 
                 if (LoginHelper.IsAuthenticated())
                 {
-                    <div @*style="display:inline-block;"*@>
-                        <div class="form-group">
-                            @Html.LabelFor(m => m.LostPerson, new { @class = "col-md-2 control-label form-field" })
-                            <div class="col-md-10  form-field">
-                                @Html.TextBoxFor(m => m.LostPerson, new { @class = "form-control" })
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            @Html.LabelFor(m => m.Notes, new { @class = "col-md-2 control-label form-field" })
-                            <div class="col-md-10  form-field">
-                                @Html.TextAreaFor(m => m.Notes, new { @class = "form-control" })
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            @Html.LabelFor(m => m.Weather, new { @class = "col-md-2 control-label form-field" })
-                            <div class="col-md-10  form-field">
-                                @Html.TextAreaFor(m => m.Weather, new { @class = "form-control" })
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-md-offset-2 col-md-10">
-                                <input type="submit" class="btn btn-default form-field" value="Zapisz zmiany" onclick="return validateUpdateTraining()" />
-                            </div>
-                        </div>
+            <div @*style="display:inline-block;"*@>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.LostPerson, new { @class = "col-md-2 control-label form-field" })
+                    <div class="col-md-10  form-field">
+                        @Html.TextBoxFor(m => m.LostPerson, new { @class = "form-control" })
                     </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Notes, new { @class = "col-md-2 control-label form-field" })
+                    <div class="col-md-10  form-field">
+                        @Html.TextAreaFor(m => m.Notes, 6, 40, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Weather, new { @class = "col-md-2 control-label form-field" })
+                    <div class="col-md-10  form-field">
+                        @Html.TextAreaFor(m => m.Weather, 8, 40, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.GroundType, new { @class = "col-md-2 control-label form-field" })
+                    <div class="col-md-10  form-field">
+                        @Html.TextAreaFor(m => m.GroundType, 3, 40, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" class="btn btn-default form-field" value="Zapisz zmiany" onclick="return validateUpdateTraining()" />
+                    </div>
+                </div>
+            </div>
 
 
 

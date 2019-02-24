@@ -43,14 +43,14 @@
         <div class="form-group">
             @Html.LabelFor(m => m.Notes, new { @class = "col-md-2 control-label form-field" })
             <div class="col-md-10 form-field">
-                @Html.TextAreaFor(m => m.Notes, new { @class = "form-control" })
+                @Html.TextAreaFor(m => m.Notes, 10, 40, new { @class = "form-control" })
             </div>
         </div>
 
         <div class="form-group">
             @Html.LabelFor(m => m.Weather, new { @class = "col-md-2 control-label form-field" })
             <div class="col-md-10 form-field">
-                @Html.TextAreaFor(m => m.Weather, new { @class = "form-control" })
+                @Html.TextAreaFor(m => m.Weather, 10, 40, new { @class = "form-control" })
             </div>
         </div>
 

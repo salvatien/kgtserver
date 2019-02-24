@@ -53,6 +53,7 @@ namespace DogsServer.Controllers
                 LostPersonTrackBlobUrl = obj.LostPersonTrackBlobUrl,
                 Notes = obj.Notes,
                 Weather = obj.Weather,
+                GroundType = obj.GroundType,
                 DelayTime = obj.DelayTime,
                 LostPersonTrackLength = obj.LostPersonTrackLength
             };
@@ -85,6 +86,7 @@ namespace DogsServer.Controllers
                 LostPersonTrackBlobUrl = t.LostPersonTrackBlobUrl,
                 Notes = t.Notes,
                 Weather = t.Weather,
+                GroundType = t.GroundType,
                 DelayTime = t.DelayTime,
                 LostPersonTrackLength = t.LostPersonTrackLength,
                 Comments = t.Comments.Select(c => new CommentModel
@@ -116,6 +118,7 @@ namespace DogsServer.Controllers
                 if(updatedTraining.Weather != dogTraining.Training.Weather)
                     dogTraining.Weather = updatedTraining.Weather;
                 dogTraining.Notes = updatedTraining.Notes;
+                dogTraining.GroundType = updatedTraining.GroundType;
                 dogTraining.LostPersonTrackLength = updatedTraining.LostPersonTrackLength;
                 dogTraining.DelayTime = updatedTraining.DelayTime;
                 //TODO not sure if it should be updated here or not
@@ -298,6 +301,7 @@ namespace DogsServer.Controllers
                     LostPerson = t.LostPerson,
                     LostPersonTrackBlobUrl = t.LostPersonTrackBlobUrl,
                     Notes = t.Notes,
+                    GroundType = t.GroundType,
                     Weather = t.Weather ?? t.Training.Weather,
                     DelayTime = t.DelayTime,
                     LostPersonTrackLength = t.LostPersonTrackLength
@@ -352,6 +356,7 @@ namespace DogsServer.Controllers
                     LostPerson = t.LostPerson,
                     LostPersonTrackBlobUrl = t.LostPersonTrackBlobUrl,
                     Notes = t.Notes,
+                    GroundType = t.GroundType,
                     Weather = t.Weather ?? t.Training.Weather,
                     DelayTime = t.DelayTime,
                     LostPersonTrackLength = t.LostPersonTrackLength
