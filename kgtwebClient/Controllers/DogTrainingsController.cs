@@ -104,7 +104,7 @@ namespace kgtwebClient.Controllers
                             {
                                 var t = trkseg.Trkpt;
                                 dogTrainingViewModel.DogTrackPoints = t;
-                                dogTrainingViewModel.DogTrackLength = DogTrainingHelper.CalculateGPSTrackLength(trkseg);
+                                //dogTrainingViewModel.DogTrackLength = DogTrainingHelper.CalculateGPSTrackLength(trkseg);
                                 dogTrainingViewModel.Duration = DogTrainingHelper.CalculateDuration(trkseg);
                                 dogTrainingViewModel.TimeOfDogStart = DogTrainingHelper.CalculateGPSTrackStartTime(trkseg);
                             }
@@ -133,7 +133,7 @@ namespace kgtwebClient.Controllers
                             {
                                 var t = trkseg.Trkpt;
                                 dogTrainingViewModel.LostPersonTrackPoints = t;
-                                dogTrainingViewModel.LostPersonTrackLength = DogTrainingHelper.CalculateGPSTrackLength(trkseg);
+                                //dogTrainingViewModel.LostPersonTrackLength = DogTrainingHelper.CalculateGPSTrackLength(trkseg);
                                 dogTrainingViewModel.TimeOfLostPersonStart = DogTrainingHelper.CalculateGPSTrackStartTime(trkseg);
                                 dogTrainingViewModel.DelayTime = dogTrainingViewModel.TimeOfDogStart - dogTrainingViewModel.TimeOfLostPersonStart;
                             }
@@ -277,7 +277,7 @@ namespace kgtwebClient.Controllers
 
                 //calculate lost person track length and time of lost person start
                 lostPersonStartTime = DogTrainingHelper.CalculateGPSTrackStartTime(trkSeg);
-                lostPersonTrackLength = DogTrainingHelper.CalculateGPSTrackLength(trkSeg);
+                //lostPersonTrackLength = DogTrainingHelper.CalculateGPSTrackLength(trkSeg);
 
                 var cleanedFileSerializer = new XmlSerializer(typeof(Trkseg));
                 cleanedFileSerializer.Serialize(cleanedLostPersonTrackStream, trkSeg);
@@ -335,7 +335,7 @@ namespace kgtwebClient.Controllers
 
                 //add lost person track length and delay time to model
                 model.DelayTime = dogStartTime - lostPersonStartTime;
-                model.LostPersonTrackLength = lostPersonTrackLength;
+                //model.LostPersonTrackLength = lostPersonTrackLength;
 
                 //add dogtraining
                 client.DefaultRequestHeaders.Accept.Clear();
@@ -427,18 +427,18 @@ namespace kgtwebClient.Controllers
 
         }
 
-        //[HttpPost]
-        public JsonResult CalculateGPSTrackLength(List<TrkptModel> trkpts)
-        {
-            if (!LoginHelper.IsAuthenticated())
-                return Json(new { success = false, errorCode = 403 });
-            else if (!LoginHelper.IsCurrentUserAdmin() && !LoginHelper.IsCurrentUserMember())
-                return Json(new { success = false, errorCode = 403 });
+        ////[HttpPost]
+        //public JsonResult CalculateGPSTrackLength(List<TrkptModel> trkpts)
+        //{
+        //    if (!LoginHelper.IsAuthenticated())
+        //        return Json(new { success = false, errorCode = 403 });
+        //    else if (!LoginHelper.IsCurrentUserAdmin() && !LoginHelper.IsCurrentUserMember())
+        //        return Json(new { success = false, errorCode = 403 });
 
-            var trkptList = DogTrainingHelper.ConvertTrkptModelListToTrkptList(trkpts);
-            var length = DogTrainingHelper.CalculateGPSTrackLength(new Trkseg() { Trkpt = trkptList });
-            return Json(new { success = true, result = length });
-        }
+        //    var trkptList = DogTrainingHelper.ConvertTrkptModelListToTrkptList(trkpts);
+        //    var length = DogTrainingHelper.CalculateGPSTrackLength(new Trkseg() { Trkpt = trkptList });
+        //    return Json(new { success = true, result = length });
+        //}
         ///?
         //public JsonResult CalculateDelayTime(List<TrkptModel> personTrkpts, List<TrkptModel> dogTrkpts)
         //{
