@@ -35,25 +35,7 @@
 <body><div style="margin:60px; position:static;">
     <div id="map" style="width:55%; height:500px; display:inline-block;"></div>
     <div style="display:inline-block; width:20%; margin:20px;">
-        <div class="form-group">
-            @Html.LabelFor(m => m.DogTrackLength, new { @class = "control-label form-field" })
-            <div class="col-md-10  form-field">
-                @Html.TextBoxFor(m => m.DogTrackLength, new { @id = "dogTrackLength", @class = "form-control", disabled = "true" })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.TimeOfDogStart, new { @class = "control-label form-field" })
-            <div class="col-md-10  form-field">
-                @Html.TextBoxFor(m => m.TimeOfDogStart, new { @id = "timeOfDogStart", @class = "form-control", disabled = "true" })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.Duration, new { @class = "control-label form-field" })
-            <div class="col-md-10  form-field">
-                @Html.TextBoxFor(m => m.Duration, new { @id = "duration", @class = "form-control", disabled = "true" })
-            </div>
-        </div>
-        <div class="form-group">
+		<div class="form-group">
             @Html.LabelFor(m => m.LostPersonTrackLength, new { @class = "control-label form-field" })
             <div class="col-md-10  form-field">
                 @Html.TextBoxFor(m => m.LostPersonTrackLength, new { @id = "lostPersonTrackLength", @class = "form-control", disabled = "true" })
@@ -70,6 +52,24 @@
             @Html.LabelFor(m => m.DelayTime, new { @class = "control-label form-field" })
             <div class="col-md-10  form-field">
                 @Html.TextBoxFor(m => m.DelayTime, new { @id = "delayTime", @class = "form-control", disabled = "true" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.DogTrackLength, new { @class = "control-label form-field" })
+            <div class="col-md-10  form-field">
+                @Html.TextBoxFor(m => m.DogTrackLength, new { @id = "dogTrackLength", @class = "form-control", disabled = "true" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.TimeOfDogStart, new { @class = "control-label form-field" })
+            <div class="col-md-10  form-field">
+                @Html.TextBoxFor(m => m.TimeOfDogStart, new { @id = "timeOfDogStart", @class = "form-control", disabled = "true" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Duration, new { @class = "control-label form-field" })
+            <div class="col-md-10  form-field">
+                @Html.TextBoxFor(m => m.Duration, new { @id = "duration", @class = "form-control", disabled = "true" })
             </div>
         </div>
     </div>
