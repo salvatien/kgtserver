@@ -14,7 +14,7 @@ namespace DogsServer.Controllers
 {
     public abstract class BlobUploaderControllerBase : BaseController
     {
-        public async Task<IActionResult> Upload(string blobContainerName)
+        protected async Task<IActionResult> Upload(string blobContainerName)
         {
             try
             {
@@ -110,7 +110,7 @@ namespace DogsServer.Controllers
 
         }
 
-        public HttpResponseMessage GetFile(IFileProvider fileProvider, string filename)
+        protected HttpResponseMessage GetFile(IFileProvider fileProvider, string filename)
         {
             var fileContents = fileProvider.GetDirectoryContents("");
             var fileList = fileContents.ToList();
