@@ -35,7 +35,7 @@
 <body><div style="margin:60px; position:static;">
     <div id="map" style="width:55%; height:500px; display:inline-block;"></div>
     <div style="display:inline-block; width:20%; margin:20px;">
-		<div class="form-group">
+        <div class="form-group">
             @Html.LabelFor(m => m.LostPersonTrackLength, new { @class = "control-label form-field" })
             <div class="col-md-10  form-field">
                 @Html.TextBoxFor(m => m.LostPersonTrackLength, new { @id = "lostPersonTrackLength", @class = "form-control", disabled = "true" })
@@ -72,6 +72,8 @@
                 @Html.TextBoxFor(m => m.Duration, new { @id = "duration", @class = "form-control", disabled = "true" })
             </div>
         </div>
+
+        
     </div>
 
     <script>
@@ -574,42 +576,49 @@ var dogDistance = 0;
             @Html.HiddenFor(m => m.DogTrackLength)
             @Html.HiddenFor(m => m.Goal)
 
+
             if (LoginHelper.IsAuthenticated())
             {
-                <div @*style="display:inline-block;"*@>
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.LostPerson, new { @class = "col-md-2 control-label form-field" })
-                        <div class="col-md-10  form-field">
-                            @Html.TextBoxFor(m => m.LostPerson, new { @class = "form-control" })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.Notes, new { @class = "col-md-2 control-label form-field" })
-                        <div class="col-md-10  form-field">
-                            @Html.TextAreaFor(m => m.Notes, 6, 40, new { @class = "form-control" })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.Weather, new { @class = "col-md-2 control-label form-field" })
-                        <div class="col-md-10  form-field">
-                            @Html.TextAreaFor(m => m.Weather, 8, 40, new { @class = "form-control" })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.GroundType, new { @class = "col-md-2 control-label form-field" })
-                        <div class="col-md-10  form-field">
-                            @Html.TextAreaFor(m => m.GroundType, 3, 40, new { @class = "form-control" })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10">
-                            <input type="submit" class="btn btn-default form-field" value="Zapisz zmiany" onclick="return validateUpdateTraining()" />
-                        </div>
-                    </div>
+        <div @*style="display:inline-block;"*@>
+            <div class="form-group">
+                @Html.LabelFor(m => m.LostPerson, new { @class = "col-md-2 control-label form-field" })
+                <div class="col-md-10  form-field">
+                    @Html.TextBoxFor(m => m.LostPerson, new { @class = "form-control" })
                 </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Notes, new { @class = "col-md-2 control-label form-field" })
+                <div class="col-md-10  form-field">
+                    @Html.TextAreaFor(m => m.Notes, 6, 40, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Weather, new { @class = "col-md-2 control-label form-field" })
+                <div class="col-md-10  form-field">
+                    @Html.TextAreaFor(m => m.Weather, 6, 40, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.GroundType, new { @class = "col-md-2 control-label form-field" })
+                <div class="col-md-10  form-field">
+                    @Html.TextAreaFor(m => m.GroundType, 2, 40, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div>
+                    Zaktualizuj dodatkowe zdjęcie. Nie zapomnij zapisać zmian!
+                    @Html.TextBox("imageFile", "", new { type = "file" }) <br />
+                </div>
+            </div>
 
 
-
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" class="btn btn-default form-field" value="Zapisz zmiany" onclick="return validateUpdateTraining()" />
+                </div>
+            </div>
+        </div>
 
 
 
@@ -664,6 +673,7 @@ var dogDistance = 0;
                             </dd>
                         }*@
 
+
                     <div class="form-group">
                         <div class="col-md-offset-2 col-md-10">
                             <input type="submit" class="btn btn-default form-field" value="Zapisz zmiany" onclick="return validateUpdateTraining()" disabled />
@@ -671,73 +681,81 @@ var dogDistance = 0;
                     </div>
                 </div>
             }
-
+            
         }
     </div>
 
-    @if (LoginHelper.IsAuthenticated())
-    {
+    <div class="picture">
+        @if (!String.IsNullOrWhiteSpace(Model.AdditionalPictureBlobUrl))
+        {
+            <img src="@Model.AdditionalPictureBlobUrl" @*height="400" width="400"*@>
+        }
+    </div>
 
-        <div style="float:left; clear:left; min-width:50%;">
+        @if (LoginHelper.IsAuthenticated())
+        {
 
-            @if (Model.Comments != null && Model.Comments.Any())
-            {
-                <div style="font-weight:bold; font-size:20px">
-                    @Html.DisplayNameFor(model => model.Comments)
-                </div>
-                <div>
-                    <table id="commentsTable" style="width:100%; table-layout:fixed">
-                        @{
-                            foreach (var comment in Model.Comments)
-                            {
-                                <tr class="comment">
-                                    @if (comment.AuthorId == LoginHelper.GetCurrentUserId())
-                                    {
-                                        <td>Ja</td>
-                                    }
-                                    else
-                                    {
-                                        <td>@Html.DisplayFor(m => comment.AuthorName)</td>
-                                    }
-                                    <td>@Html.DisplayFor(m => comment.Date)</td>
-                                    <td style="max-width:25%; word-wrap:break-word; overflow-x:auto;">@Html.DisplayFor(m => comment.Content)</td>
-                                    @if (comment.Date > mostRecentCommentDate)
-                                    {
-                                        mostRecentCommentDate = comment.Date;
-                                    }
-                                    @{ if (LoginHelper.IsCurrentUserAdmin() || LoginHelper.GetCurrentUserId() == comment.AuthorId)
+            <div style="float:left; clear:left; min-width:50%;">
+
+                @if (Model.Comments != null && Model.Comments.Any())
+                {
+                    <div style="font-weight:bold; font-size:20px">
+                        @Html.DisplayNameFor(model => model.Comments)
+                    </div>
+                    <div>
+                        <table id="commentsTable" style="width:100%; table-layout:fixed">
+                            @{
+                                foreach (var comment in Model.Comments)
+                                {
+                                    <tr class="comment">
+                                        @if (comment.AuthorId == LoginHelper.GetCurrentUserId())
                                         {
-                                            <td style="background-color:white">
-                                                <button class="deleteButton" type="button" onclick="deleteComment(@comment.CommentId)" id="@("deleteCommentButton" + comment.CommentId)">usuń</button>
-                                            </td>
+                                            <td>Ja</td>
                                         }
-                                    }
-                                </tr>
+                                        else
+                                        {
+                                            <td>@Html.DisplayFor(m => comment.AuthorName)</td>
+                                        }
+                                        <td>@Html.DisplayFor(m => comment.Date)</td>
+                                        <td style="max-width:25%; word-wrap:break-word; overflow-x:auto;">@Html.DisplayFor(m => comment.Content)</td>
+                                        @if (comment.Date > mostRecentCommentDate)
+                                        {
+                                            mostRecentCommentDate = comment.Date;
+                                        }
+                                        @{ if (LoginHelper.IsCurrentUserAdmin() || LoginHelper.GetCurrentUserId() == comment.AuthorId)
+                                            {
+                                                <td style="background-color:white">
+                                                    <button class="deleteButton" type="button" onclick="deleteComment(@comment.CommentId)" id="@("deleteCommentButton" + comment.CommentId)">usuń</button>
+                                                </td>
+                                            }
+                                        }
+                                    </tr>
 
+                                }
                             }
-                        }
-                    </table>
+                        </table>
 
-                </div>
-            }
-            else
-            {
-                <div>
-                    @Html.DisplayNameFor(model => model.Comments)
-                </div>
-                <div>
-                    <table id="commentsTable" style="width:100%; table-layout:fixed"></table>
-                </div>
-            }
+                    </div>
+                }
+                else
+                {
+                    <div>
+                        @Html.DisplayNameFor(model => model.Comments)
+                    </div>
+                    <div>
+                        <table id="commentsTable" style="width:100%; table-layout:fixed"></table>
+                    </div>
+                }
 
-            @Html.TextArea("Message", new { id = "newCommentMessage", rows = 8, columns = 150 })<br />
-            <button class="displayButton" type="button" id="addNewComment">Dodaj komentarz</button>
-            <p id="newCommentWasAdded" hidden style="color:red"> Dodano nowy komentarz lub zmieniono istniejący! Odśwież stronę, aby zobaczyć najnowsze dane </p>
+                @Html.TextArea("Message", new { id = "newCommentMessage", rows = 8, columns = 150 })<br />
+                <button class="displayButton" type="button" id="addNewComment">Dodaj komentarz</button>
+                <p id="newCommentWasAdded" hidden style="color:red"> Dodano nowy komentarz lub zmieniono istniejący! Odśwież stronę, aby zobaczyć najnowsze dane </p>
 
-        </div>
-    }
-    <script src="https://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script>
-    <script>
+
+            </div>
+        }
+        <script src="https://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script>
+        <script>
 
     function showNewCommentMessage() {
         var ticks = @mostRecentCommentDate.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
@@ -847,7 +865,7 @@ var dogDistance = 0;
 
         });
     }
-    </script>
+        </script>
 
 </body>
 </html>

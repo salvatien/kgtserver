@@ -209,7 +209,8 @@ namespace DogsServer.Controllers
                     GroundType = t.GroundType,
                     Weather = t.Weather ?? t.Training.Weather,
                     DelayTime = t.DelayTime,
-                    LostPersonTrackLength = t.LostPersonTrackLength
+                    LostPersonTrackLength = t.LostPersonTrackLength,
+                    AdditionalPictureBlobUrl = t.AdditionalPictureBlobUrl
                     //,
                     //Comments = t.Comments.Select(c => new CommentModel
                     //{
@@ -264,7 +265,8 @@ namespace DogsServer.Controllers
                     GroundType = t.GroundType,
                     Weather = t.Weather ?? t.Training.Weather,
                     DelayTime = t.DelayTime,
-                    LostPersonTrackLength = t.LostPersonTrackLength
+                    LostPersonTrackLength = t.LostPersonTrackLength,
+                    AdditionalPictureBlobUrl = t.AdditionalPictureBlobUrl
                     //,
                     //Comments = t.Comments.Select(c => new CommentModel
                     //{

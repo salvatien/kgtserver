@@ -86,7 +86,8 @@ namespace kgtwebClient.Controllers
                     Training = dogTraining.Training,
                     TrainingId = dogTraining.TrainingId,
                     Weather = dogTraining.Weather,
-                    GroundType = dogTraining.GroundType
+                    GroundType = dogTraining.GroundType,
+                    AdditionalPictureBlobUrl = dogTraining.AdditionalPictureBlobUrl
                 };
                 if (!String.IsNullOrEmpty(dogTraining.DogTrackBlobUrl))
                 {
@@ -203,12 +204,37 @@ namespace kgtwebClient.Controllers
         }
 
         [HttpPost]
-        public ActionResult Update(DogTrainingViewModel model)
+        public ActionResult Update(DogTrainingViewModel model, HttpPostedFileBase imageFile)
         {
             if (!LoginHelper.IsAuthenticated())
                 return RedirectToAction("Login", "Account");
             else if (!LoginHelper.IsCurrentUserAdmin() && !LoginHelper.IsCurrentUserMember())
                 return RedirectToAction("Error", "Home", new { error = "Nie masz wystarczających uprawnień by zmieniać te dane" });
+
+
+            if (imageFile != null)
+            {
+                MultipartFormDataContent form = new MultipartFormDataContent();
+                var imageStreamContent = new StreamContent(imageFile.InputStream);
+                var byteArrayImageContent = new ByteArrayContent(imageStreamContent.ReadAsByteArrayAsync().Result);
+                byteArrayImageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
+                var imageFileName = imageFile.FileName + Guid.NewGuid().ToString();
+                form.Add(byteArrayImageContent, imageFileName, Path.GetFileName(imageFileName));
+                client.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
+                var response = client.PostAsync("DogTrainings/UploadImage", form).Result;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    model.AdditionalPictureBlobUrl = @"https://kgtstorage.blob.core.windows.net/images/" + imageFileName;
+                }
+                else
+                {
+                    ViewBag.Message = response.StatusCode;
+                    return View("Error");
+                }
+            }
+
             var lostPersonTrackPoints = new Trkseg { Trkpt = model.LostPersonTrackPoints };
             var dogTrackPoints = new Trkseg { Trkpt = model.DogTrackPoints };
             UpdateTracks(model.DogId, model.TrainingId, model.LostPersonTrackFilename, model.DogTrackFilename, lostPersonTrackPoints, dogTrackPoints);
@@ -223,7 +249,8 @@ namespace kgtwebClient.Controllers
                 DogId = model.DogId,
                 TrainingId = model.TrainingId,
                 LostPersonTrackLength = model.LostPersonTrackLength,
-                DelayTime = model.DelayTime
+                DelayTime = model.DelayTime,
+                AdditionalPictureBlobUrl = model.AdditionalPictureBlobUrl
             };
             
             client.DefaultRequestHeaders.Accept.Clear();
@@ -257,12 +284,41 @@ namespace kgtwebClient.Controllers
         }
 
         [HttpPost]
-        public ActionResult Add(DogTrainingModel model, HttpPostedFileBase lostPersonTrackFile, HttpPostedFileBase dogTrackFile)
+        public ActionResult Add(DogTrainingModel model, HttpPostedFileBase lostPersonTrackFile, HttpPostedFileBase dogTrackFile, HttpPostedFileBase imageFile)
         {
             if (!LoginHelper.IsAuthenticated())
                 return RedirectToAction("Login", "Account");
             else if (!LoginHelper.IsCurrentUserAdmin() && !LoginHelper.IsCurrentUserMember())
                 return RedirectToAction("Error", "Home", new { error = "Nie masz wystarczających uprawnień by zmieniać te dane" });
+
+            MultipartFormDataContent additionalPhotoForm = new MultipartFormDataContent();
+            if (imageFile != null)
+            {
+                var additionalPictureStream = imageFile.InputStream;
+                var additionalPictureStreamContent = new StreamContent(additionalPictureStream);
+                var additionalPictureByteArrayContent =
+                    new ByteArrayContent(additionalPictureStreamContent.ReadAsByteArrayAsync().Result);
+                additionalPictureByteArrayContent.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
+                var additionalPictureFileName = imageFile.FileName + Guid.NewGuid().ToString();
+                additionalPhotoForm.Add(additionalPictureByteArrayContent, additionalPictureFileName, Path.GetFileName(additionalPictureFileName));
+
+                client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
+
+                var additionalPhotoUploadResponse = client.PostAsync("DogTrainings/UploadImage", additionalPhotoForm).Result;
+
+                if (!additionalPhotoUploadResponse.IsSuccessStatusCode)
+                {
+                    ViewBag.Message = "image upload failed. Reason: " + additionalPhotoUploadResponse.StatusCode;
+                    return View("Error");
+                }
+
+                else
+                {
+                    model.AdditionalPictureBlobUrl = @"https://kgtstorage.blob.core.windows.net/images/" + additionalPictureFileName;
+                }
+            }
+
             var originalLostPersonTrackStream = lostPersonTrackFile.InputStream;
             var cleanedLostPersonTrackStream = new MemoryStream();
             DateTime lostPersonStartTime = new DateTime();
