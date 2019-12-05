@@ -42,6 +42,8 @@ namespace Dogs.ViewModels.Data.Models
         public string Goal { get; set; }
         [Display(Name = "Pogoda")]
         public string Weather { get; set; } //overrides entire training's weather if not empty
+        [Display(Name = "Dodatkowy obraz")]
+        public string AdditionalPictureBlobUrl { get; set; }
 
     }
 }

@@ -30,5 +30,7 @@ namespace Dogs.ViewModels.Data.Models
         public double LostPersonTrackLength { get; set; }
         [Display(Name = "Czas odłożenia")]
         public TimeSpan DelayTime { get; set; }
+        [Display(Name = "Dodatkowy obraz")]
+        public string AdditionalPictureBlobUrl { get; set; }
     }
 }
