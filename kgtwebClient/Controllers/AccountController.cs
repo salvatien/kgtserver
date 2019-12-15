@@ -133,7 +133,7 @@ namespace kgtwebClient.Controllers
             }
 
             //if user came from error page or reset password page, we shouldnt redirect back to those pages
-            if (returnUrl.Contains("Error") || returnUrl.Contains("ResetPassword"))
+            if (returnUrl != null && (returnUrl.Contains("Error") || returnUrl.Contains("ResetPassword")))
                 returnUrl = null;
 
             identityApiHttpClient.DefaultRequestHeaders.Accept.Clear();
