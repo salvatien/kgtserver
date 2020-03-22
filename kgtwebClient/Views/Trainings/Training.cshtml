@@ -19,7 +19,7 @@
         @Html.ActionLink("Wróć do listy", "Index")
     </p>
     <div class="data">
-        <h4>@Html.DisplayFor(model => model.GeneralLocation), @Html.DisplayFor(model => model.LocationDetails), @Html.DisplayFor(model => model.Date.ToString("dd/MM/yyyy hh:mm"))</h4>
+        <h4>@Html.DisplayFor(model => model.GeneralLocation), @Html.DisplayFor(model => model.LocationDetails), @Model.Date.ToString("dd/MM/yyyy hh:mm")</h4>
         <hr />
         <dl class="dl-horizontal" style="float:left">
 
