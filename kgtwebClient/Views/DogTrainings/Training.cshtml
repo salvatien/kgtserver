@@ -119,7 +119,7 @@
     {
         var t = pt.Time;
         @: var date = '@HttpUtility.JavaScriptStringEncode(t)';
-        @: var time = new Date(date).toLocaleTimeString();
+        @: var time = new Date(date).toLocaleTimeString('pl-PL', { timeZone: 'Europe/Warsaw' });
 
         @:  var marker = new google.maps.Marker({
         @:        position: { lat: @pt.Lat, lng: @pt.Lon },
@@ -154,7 +154,7 @@
         @:                      content: "<div class='personInfoWindow'>"
             @:                      + 'szerokość:' + @pt.Lat +  ',\n długość:' + @pt.Lon
             @:                      + ',\n czas:'
-            @:                      + new Date('@HttpUtility.JavaScriptStringEncode(pt.Time)').toLocaleTimeString()
+            @:                      + new Date('@HttpUtility.JavaScriptStringEncode(pt.Time)').toLocaleTimeString('pl-PL', { timeZone: 'Europe/Warsaw' })
             @:                      + "<br><input type='button' class='markerStartButton' value='Oznacz jako punkt początkowy' onclick='setStartPoint(" + new google.maps.Marker(this).label.text + ")'>"
             @:                      + "<input type='button' class='markerEndButton' value='Oznacz jako punkt końcowy' onclick='setEndPoint(" + new google.maps.Marker(this).label.text + ")'>"
             @:                      + "</div>"
@@ -197,7 +197,7 @@
     {
         var t = pt.Time;
         @: var date = '@HttpUtility.JavaScriptStringEncode(t)';
-        @: var time = new Date(date).toLocaleTimeString();
+        @: var time = new Date(date).toLocaleTimeString('pl-PL', { timeZone: 'Europe/Warsaw' });
 
         @:  var marker = new google.maps.Marker({
         @:        position: { lat: @pt.Lat, lng: @pt.Lon },
@@ -232,7 +232,7 @@
         @:                      content: "<div class='dogInfoWindow'>"
             @:                      + 'szerokość:' + @pt.Lat +  ',\n długość:' + @pt.Lon
             @:                      + ',\n czas:'
-            @:                      + new Date('@HttpUtility.JavaScriptStringEncode(pt.Time)').toLocaleTimeString()
+            @:                      + new Date('@HttpUtility.JavaScriptStringEncode(pt.Time)').toLocaleTimeString('pl-PL', { timeZone: 'Europe/Warsaw' })
             @:                      + "<br><input type='button' class='markerStartButton' value='Oznacz jako punkt początkowy' onclick='setStartPointForDog(" + new google.maps.Marker(this).label.text + ")'>"
             @:                      + "<input type='button' class='markerEndButton' value='Oznacz jako punkt końcowy' onclick='setEndPointForDog(" + new google.maps.Marker(this).label.text + ")'>"
             @:                      + "</div>"
