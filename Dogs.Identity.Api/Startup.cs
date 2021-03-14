@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using Dogs.Identity.Data.DbContexts;
 using Dogs.Identity.Data.Entities;
 using Swashbuckle.AspNetCore.Swagger;
+using System;
 
 namespace Dogs.Identity.Api
 {
@@ -33,8 +34,18 @@ namespace Dogs.Identity.Api
             }));
             #endregion
             #region Add Entity Framework and Identity Framework  
+
             services.AddDbContext<ApplicationUserDbContext>(options =>
-                            options.UseSqlServer(Configuration.GetConnectionString("DogsIdentityDb")));
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("DogsIdentityDb"),
+                sqlServerOptionsAction: sqlOptions =>
+                {
+                    sqlOptions.EnableRetryOnFailure(
+                    maxRetryCount: 5,
+                    maxRetryDelay: TimeSpan.FromSeconds(30),
+                    errorNumbersToAdd: null);
+                });
+            });
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
