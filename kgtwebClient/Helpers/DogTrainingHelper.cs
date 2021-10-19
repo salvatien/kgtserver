@@ -54,7 +54,11 @@ namespace kgtwebClient.Helpers
         public static DateTime CalculateGPSTrackStartTime(Trkseg track)
         {
             var trackPoints = track.Trkpt;
-            return DateTime.Parse(trackPoints[0].Time);
+            var date = DateTime.Parse(trackPoints[0].Time).ToUniversalTime();
+            var dateWithKind = DateTime.SpecifyKind(date, DateTimeKind.Utc);
+            TimeZoneInfo warsawTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central Europe Standard Time");
+            DateTime cstTime = TimeZoneInfo.ConvertTimeFromUtc(dateWithKind, warsawTimeZone);
+            return cstTime;
         }
 
         ////Haversine is distance between gps coordinates - https://en.wikipedia.org/wiki/Haversine_formula 
