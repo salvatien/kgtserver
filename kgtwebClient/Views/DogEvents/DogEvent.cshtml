@@ -69,8 +69,6 @@
                 @*: var time = new Date(date).toISOString(); *@
                 @: var dateObj = new Date(date);
                 @: var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
-                @: console.log(tzoffset);
-                @: console.log(new Date(dateObj.getMilliseconds() - tzoffset));
                 @: var time = (new Date(dateObj.getMilliseconds() - tzoffset)).toISOString().slice(0, -1);
                 @: dogTraceData.push({ latitude: @pt.Lat, longitude: @pt.Lon, time: time });
                 @: console.log( "init dog trace data" + @pt.Lat +  @pt.Lon + "time: " +  time);
