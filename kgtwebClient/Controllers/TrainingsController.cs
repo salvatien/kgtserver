@@ -104,6 +104,7 @@ namespace kgtwebClient.Controllers
 
             HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, client.BaseAddress + "trainings/");
 
+            addedTraining.Date = addedTraining.Date.ToUniversalTime();
             var trainingSerialized = JsonConvert.SerializeObject(addedTraining);
 
             message.Content = new StringContent(trainingSerialized, System.Text.Encoding.UTF8, "application/json");
@@ -196,8 +197,8 @@ namespace kgtwebClient.Controllers
             client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Put, client.BaseAddress + "trainings/" + updatedTraining.TrainingId.ToString());
-            
 
+            updatedTraining.Date = updatedTraining.Date.ToUniversalTime();
             var trainingSerialized = JsonConvert.SerializeObject(updatedTraining);
 
 

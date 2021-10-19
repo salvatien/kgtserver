@@ -80,6 +80,7 @@ namespace kgtwebClient.Controllers
                 new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, client.BaseAddress + "dogcertificates/");
 
+            addedDogCertificate.AcquiredOn = addedDogCertificate.AcquiredOn.ToUniversalTime();
             var dogCertificateSerialized = JsonConvert.SerializeObject(addedDogCertificate);
 
             message.Content = new StringContent(dogCertificateSerialized, System.Text.Encoding.UTF8, "application/json");
