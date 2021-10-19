@@ -84,7 +84,7 @@ namespace kgtwebClient.Controllers
                 new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, client.BaseAddress + "events/");
 
-
+            addedEvent.Date = addedEvent.Date.ToUniversalTime();
             var eventSerialized = JsonConvert.SerializeObject(addedEvent);
 
             message.Content = new StringContent(eventSerialized, System.Text.Encoding.UTF8, "application/json");
@@ -176,7 +176,7 @@ namespace kgtwebClient.Controllers
                 new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Put, client.BaseAddress + "events/" + updatedEvent.EventId.ToString());
 
-
+            updatedEvent.Date = updatedEvent.Date.ToUniversalTime();
             var eventSerialized = JsonConvert.SerializeObject(updatedEvent);
 
 

@@ -101,6 +101,7 @@ namespace kgtwebClient.Controllers
                 new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
             HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, client.BaseAddress + "dogs/");
 
+            addedDog.DateOfBirth = addedDog.DateOfBirth.ToUniversalTime();
             var dogSerialized = JsonConvert.SerializeObject(addedDog);
 
             message.Content = new StringContent(dogSerialized, System.Text.Encoding.UTF8, "application/json");
@@ -224,6 +225,8 @@ namespace kgtwebClient.Controllers
             System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
 
             HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Put, client.BaseAddress + "dogs/" + updatedDog.DogId.ToString());
+
+            updatedDog.DateOfBirth = updatedDog.DateOfBirth.ToUniversalTime();
 
             var dogSerialized = JsonConvert.SerializeObject(updatedDog);
 

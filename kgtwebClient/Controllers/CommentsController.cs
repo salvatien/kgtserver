@@ -65,6 +65,7 @@ namespace kgtwebClient.Controllers
 
             HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, client.BaseAddress + "comments/trainingcomment");
 
+            addedTrainingComment.Date = addedTrainingComment.Date.ToUniversalTime();
             var commentSerialized = JsonConvert.SerializeObject(addedTrainingComment);
 
             message.Content = new StringContent(commentSerialized, System.Text.Encoding.UTF8, "application/json");
@@ -166,6 +167,7 @@ namespace kgtwebClient.Controllers
 
             HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, client.BaseAddress + "comments/dogtrainingcomment");
 
+            addedDogTrainingComment.Date = addedDogTrainingComment.Date.ToUniversalTime();
             var commentSerialized = JsonConvert.SerializeObject(addedDogTrainingComment);
 
             message.Content = new StringContent(commentSerialized, System.Text.Encoding.UTF8, "application/json");

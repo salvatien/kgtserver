@@ -44,7 +44,7 @@
         <div class="form-group">
             @Html.LabelFor(m => m.Date, new { @class = "col-md-2 control-label form-field" })
             <div class="col-md-10  form-field">
-                @Html.TextBoxFor(m => m.Date, new { @id = "date", @Value = Model.Date.ToString("yyyy-MM-ddTHH:mm"), type = "datetime-local", @class = "form-control" })
+                @Html.TextBoxFor(m => m.Date, new { @id = "date", @Value = Model.Date.ToLocalTime().ToString("yyyy-MM-ddTHH:mm"), type = "datetime-local", @class = "form-control" })
             </div>
             <div id="dateValidationInfo" class="formValidation">
                 To pole musi być uzupełnione.

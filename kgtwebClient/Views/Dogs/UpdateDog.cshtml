@@ -72,7 +72,7 @@
         <div class="form-group">
             @Html.LabelFor(m => m.DateOfBirth, new { @class = "col-md-2 control-label form-field" })
             <div class="col-md-10  form-field">
-                @Html.TextBoxFor(m => m.DateOfBirth, new { @Value = Model.DateOfBirth.ToString("yyyy-MM-dd"), type = "date", @id = "updateDogDateOfBirth", @class = "form-control" })
+                @Html.TextBoxFor(m => m.DateOfBirth, new { @Value = Model.DateOfBirth.ToLocalTime().ToString("yyyy-MM-dd"), type = "date", @id = "updateDogDateOfBirth", @class = "form-control" })
             </div>
             <div id="updateDogDateOfBirthValidationInfo" class="formValidation">
                 To pole nie może być puste.
