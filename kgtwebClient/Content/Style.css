@@ -179,12 +179,12 @@ img {
 }
 
 .dogInfoWindow {
-    color: blue;
+    color: red;
     font-weight: bold;
 }
 
 .personInfoWindow {
-    color: red;
+    color: blue;
     font-weight: bold;
 }
 

@@ -137,12 +137,12 @@
         @:        icon: {
         if (counter == 0)
         {
-            @:          url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png'
+            @:          url: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png'
         }
         else
         {
             @:          path: google.maps.SymbolPath.CIRCLE,
-            @:          strokeColor: "red",
+            @:          strokeColor: "blue",
             @:          scale: 1
         }
         @:        },
@@ -186,7 +186,7 @@
 
     polyPerson = new google.maps.Polyline({
     path: personPoints,
-    strokeColor: '#FF0000',
+    strokeColor: '#0000FF',
     strokeOpacity: 1.0,
     strokeWeight: 3
     });
@@ -216,12 +216,12 @@
         @:        icon: {
         if (labelCounter == 0)
         {
-            @:          url: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+            @:          url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png'
         }
         else
         {
             @:          path: google.maps.SymbolPath.CIRCLE,
-            @:          strokeColor: "blue",
+            @:          strokeColor: "red",
             @:          scale: 1
         }
         @:        },
@@ -263,7 +263,7 @@
     }
     poly = new google.maps.Polyline({
     path: dogPoints,
-    strokeColor: '#0000FF',
+    strokeColor: '#FF0000',
     strokeOpacity: 1.0,
     strokeWeight: 3
     });
