@@ -15708,19 +15708,19 @@
   },
   "packageFolders": {
     "C:\\Users\\salva\\.nuget\\packages\\": {},
-    "C:\\Microsoft\\Xamarin\\NuGet\\": {}
+    "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\salva\\Source\\Repos\\salvatien\\kgtserver\\WebApplication4\\DogsServer.csproj",
+      "projectUniqueName": "C:\\Users\\salva\\source\\repos\\salvatien\\kgtserver\\WebApplication4\\DogsServer.csproj",
       "projectName": "DogsServer",
-      "projectPath": "C:\\Users\\salva\\Source\\Repos\\salvatien\\kgtserver\\WebApplication4\\DogsServer.csproj",
+      "projectPath": "C:\\Users\\salva\\source\\repos\\salvatien\\kgtserver\\WebApplication4\\DogsServer.csproj",
       "packagesPath": "C:\\Users\\salva\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\salva\\Source\\Repos\\salvatien\\kgtserver\\WebApplication4\\obj\\",
+      "outputPath": "C:\\Users\\salva\\source\\repos\\salvatien\\kgtserver\\WebApplication4\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Microsoft\\Xamarin\\NuGet\\"
+        "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
       ],
       "configFilePaths": [
         "C:\\Users\\salva\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -15736,9 +15736,10 @@
       },
       "frameworks": {
         "netcoreapp2.1": {
+          "targetAlias": "netcoreapp2.1",
           "projectReferences": {
-            "C:\\Users\\salva\\Source\\Repos\\salvatien\\kgtserver\\Dogs.ViewModels.Data\\Dogs.ViewModels.Data.csproj": {
-              "projectPath": "C:\\Users\\salva\\Source\\Repos\\salvatien\\kgtserver\\Dogs.ViewModels.Data\\Dogs.ViewModels.Data.csproj"
+            "C:\\Users\\salva\\source\\repos\\salvatien\\kgtserver\\Dogs.ViewModels.Data\\Dogs.ViewModels.Data.csproj": {
+              "projectPath": "C:\\Users\\salva\\source\\repos\\salvatien\\kgtserver\\Dogs.ViewModels.Data\\Dogs.ViewModels.Data.csproj"
             }
           }
         }
@@ -15751,6 +15752,7 @@
     },
     "frameworks": {
       "netcoreapp2.1": {
+        "targetAlias": "netcoreapp2.1",
         "dependencies": {
           "Google.Apis": {
             "target": "Package",
@@ -15829,7 +15831,7 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.300\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.408\\RuntimeIdentifierGraph.json"
       }
     }
   }
