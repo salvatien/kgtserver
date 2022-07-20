@@ -6,9 +6,9 @@ using System.Net.Http;
 using Microsoft.Extensions.FileProviders;
 using System.IO;
 using System.Net;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Blob;
-using Microsoft.AspNetCore.Http.Internal;
+using Microsoft.Azure.Storage;
+using Microsoft.Azure.Storage.Blob;
+using Microsoft.AspNetCore.Http;
 
 namespace DogsServer.Controllers
 {
@@ -18,7 +18,7 @@ namespace DogsServer.Controllers
         {
             try
             {
-                Request.EnableRewind();
+                Request.EnableBuffering();
                 var uploadSuccess = false;
                 if (Request.Form.Files.Count > 0)
                 {

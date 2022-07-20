@@ -13,6 +13,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using Strathweb.AspNetCore.AzureBlobFileProvider;
 using Swashbuckle.AspNetCore.Swagger;
 
@@ -89,21 +90,17 @@ namespace DogsServer
             var composite = new CompositeFileProvider(azureBlobFileProviderTracks, azureBlobFileProviderImages);
             services.AddSingleton(composite);
 
+            services.AddMvc().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 
-            services.AddMvc()
-                .AddJsonOptions(
-                    options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
-            });
+            services.AddSwaggerGen();
+
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseCors("Cors");
-            app.UseAuthentication();
 
             if (env.IsDevelopment())
             {
@@ -111,18 +108,15 @@ namespace DogsServer
             }
 
             var compositeFileProvider = app.ApplicationServices.GetRequiredService<CompositeFileProvider>();
-            //app.UseStaticFiles(new StaticFileOptions()
-            //{
-            //    FileProvider = compositeFileProvider,
-            //    RequestPath = "",
-            //});
 
-            //app.UseDirectoryBrowser(new DirectoryBrowserOptions
-            //{
-            //    FileProvider = compositeFileProvider,
-            //    RequestPath = "",
-            //});
-
+            app.UseAuthentication();
+            app.UseRouting();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+            app.UseHttpsRedirection();
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
 
@@ -133,9 +127,6 @@ namespace DogsServer
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Dogs Resource Server API V1");
                 c.RoutePrefix = string.Empty;
             });
-
-            app.UseMvc();
-            app.UseHttpsRedirection();
         }
     }
 }

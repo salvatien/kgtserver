@@ -82,24 +82,27 @@ namespace Dogs.Identity.Api
             });
             #endregion
 
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
-            });
-            services.AddMvc();
+            services.AddControllers();
+            services.AddSwaggerGen();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.  
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseCors("Cors");
-            app.UseAuthentication();
-
 
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseAuthentication();
+            app.UseRouting();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
@@ -111,8 +114,6 @@ namespace Dogs.Identity.Api
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Dogs Identity API V1");
                 c.RoutePrefix = string.Empty;
             });
-            app.UseMvc();
-
         }
     }
 }
