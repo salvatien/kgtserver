@@ -4,21 +4,17 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Dogs.ViewModels.Data.Models;
 using DogsServer.Models;
 using DogsServer.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.FileProviders;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Blob;
+using Microsoft.Azure.Storage;
+using Microsoft.Azure.Storage.Blob;
 using Newtonsoft.Json.Linq;
-using Strathweb.AspNetCore.AzureBlobFileProvider;
 
 namespace DogsServer.Controllers
 {
@@ -177,7 +173,7 @@ namespace DogsServer.Controllers
         [DisableRequestSizeLimit]
         public async Task<IActionResult> Upload()
         {
-            Request.EnableRewind();
+            Request.EnableBuffering();
             var uploadSuccess = false;
             if (Request.Form.Files.Count > 0)
             {
