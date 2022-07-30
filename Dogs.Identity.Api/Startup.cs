@@ -9,8 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Dogs.Identity.Data.DbContexts;
 using Dogs.Identity.Data.Entities;
-using Swashbuckle.AspNetCore.Swagger;
 using System;
+using Microsoft.Extensions.Hosting;
 
 namespace Dogs.Identity.Api
 {
@@ -87,7 +87,7 @@ namespace Dogs.Identity.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.  
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseCors("Cors");
 
