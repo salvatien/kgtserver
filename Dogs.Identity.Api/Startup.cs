@@ -10,7 +10,6 @@ using Microsoft.IdentityModel.Tokens;
 using Dogs.Identity.Data.DbContexts;
 using Dogs.Identity.Data.Entities;
 using System;
-using Microsoft.Extensions.Hosting;
 
 namespace Dogs.Identity.Api
 {
@@ -90,19 +89,6 @@ namespace Dogs.Identity.Api
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseCors("Cors");
-
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
-            app.UseAuthentication();
-            app.UseRouting();
-            app.UseAuthorization();
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
