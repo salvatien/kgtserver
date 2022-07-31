@@ -8,6 +8,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.FileProviders;
 using Newtonsoft.Json;
 using Strathweb.AspNetCore.AzureBlobFileProvider;
+using System;
+using DogsServer.DbContexts;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +22,18 @@ builder.Services.AddCors(options => options.AddPolicy("Cors", builder =>
     .AllowAnyHeader();
 }));
 #endregion
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("KgtSqlDb"),
+    sqlServerOptionsAction: sqlOptions =>
+    {
+        sqlOptions.EnableRetryOnFailure(
+        maxRetryCount: 5,
+        maxRetryDelay: TimeSpan.FromSeconds(90),
+        errorNumbersToAdd: null);
+    });
+});
 
 #region Add Authentication
 var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Tokens:Key"]));

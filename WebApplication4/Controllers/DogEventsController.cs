@@ -15,6 +15,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Azure.Storage;
 using Microsoft.Azure.Storage.Blob;
 using Newtonsoft.Json.Linq;
+using DogsServer.DbContexts;
 
 namespace DogsServer.Controllers
 {
@@ -23,15 +24,16 @@ namespace DogsServer.Controllers
     [Authorize]
     public class DogEventsController : BaseController
     {
-        private UnitOfWork unitOfWork = new UnitOfWork(new AppDbContext());
-        CompositeFileProvider provider;
+        private readonly UnitOfWork unitOfWork;
+        private readonly AppDbContext appDbContext;
+        private readonly CompositeFileProvider provider;
 
-        public DogEventsController(CompositeFileProvider fileProvider)
+        public DogEventsController(AppDbContext dbContext, CompositeFileProvider fileProvider) : base(dbContext)
         {
+            appDbContext = dbContext;
+            unitOfWork = new UnitOfWork(appDbContext);
             provider = fileProvider;
         }
-
-
 
         [HttpPost]
         public IActionResult Add([FromBody]DogEventModel obj)

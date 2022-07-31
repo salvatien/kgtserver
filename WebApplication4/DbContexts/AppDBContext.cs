@@ -1,10 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using DogsServer.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace DogsServer.Models
+namespace DogsServer.DbContexts
 {
     public class AppDbContext : DbContext
     {
@@ -19,19 +16,11 @@ namespace DogsServer.Models
         public virtual DbSet<DogEvent> DogEvents { get; set; }
         public virtual DbSet<TrainingComment> TrainingComments { get; set; }
         public virtual DbSet<DogTrainingComment> DogTrainingComments { get; set; }
-        protected override void OnConfiguring
-        (DbContextOptionsBuilder optionsBuilder)
+
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
-            optionsBuilder.UseSqlServer("Server = tcp:kgt.database.windows.net, 1433; Initial Catalog = kgtsqldb; Persist Security Info = False; User ID = kgtadmin; Password = Pieskina102; MultipleActiveResultSets = False; Encrypt = True; TrustServerCertificate = False; Connection Timeout = 30;", 
-                sqlServerOptionsAction: sqlOptions =>
-            {
-                sqlOptions.EnableRetryOnFailure(
-                maxRetryCount: 5,
-                maxRetryDelay: TimeSpan.FromSeconds(30),
-                errorNumbersToAdd: null);
-            });
-            //optionsBuilder.UseSqlServer(@"Data Source=WERNER777\SQL777;Initial Catalog=Employees;Integrated Security=SSPI;");
         }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<GuideEvent>().HasKey(ge => new { ge.GuideId, ge.EventId });

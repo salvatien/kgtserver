@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using DogsServer.DbContexts;
 using DogsServer.Models;
 using DogsServer.Repositories;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DogsServer.Controllers
@@ -13,7 +10,14 @@ namespace DogsServer.Controllers
     [ApiController]
     public class BaseController : ControllerBase
     {
-        private UnitOfWork unitOfWork = new UnitOfWork(new AppDbContext());
+        private readonly UnitOfWork unitOfWork;
+        private readonly AppDbContext appDbContext;
+
+        public BaseController(AppDbContext dbContext)
+        {
+            appDbContext = dbContext;
+            unitOfWork = new UnitOfWork(appDbContext);
+        }
 
         protected bool IsCurrentUserMember()
         {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Dogs.ViewModels.Data.Models;
+using DogsServer.DbContexts;
 using DogsServer.Models;
 using DogsServer.Repositories;
 using Microsoft.AspNetCore.Authorization;
@@ -15,7 +16,14 @@ namespace DogsServer.Controllers
     [Authorize]
     public class TrainingsController : BaseController
     {
-        private UnitOfWork unitOfWork = new UnitOfWork(new AppDbContext());
+        private readonly UnitOfWork unitOfWork;
+        private readonly AppDbContext appDbContext;
+
+        public TrainingsController(AppDbContext dbContext) : base(dbContext)
+        {
+            appDbContext = dbContext;
+            unitOfWork = new UnitOfWork(appDbContext);
+        }
 
 
         [HttpPost]

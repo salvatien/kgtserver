@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using DogsServer.Models;
-using Microsoft.EntityFrameworkCore;
 using DogsServer.Repositories;
 using Dogs.ViewModels.Data.Models;
 using Microsoft.AspNetCore.Authorization;
+using DogsServer.DbContexts;
 
 namespace DogsServer.Controllers
 {
@@ -15,7 +13,14 @@ namespace DogsServer.Controllers
     [Authorize]
     public class EventsController : BaseController
     {
-        private UnitOfWork unitOfWork = new UnitOfWork(new AppDbContext());
+        private readonly UnitOfWork unitOfWork;
+        private readonly AppDbContext appDbContext;
+
+        public EventsController(AppDbContext dbContext) : base(dbContext)
+        {
+            appDbContext = dbContext;
+            unitOfWork = new UnitOfWork(appDbContext);
+        }
 
         [HttpGet]
         [AllowAnonymous]

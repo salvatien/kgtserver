@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using DogsServer.Repositories;
 using Dogs.ViewModels.Data.Models;
 using Microsoft.AspNetCore.Authorization;
+using DogsServer.DbContexts;
 
 namespace DogsServer.Controllers
 {
@@ -15,7 +16,14 @@ namespace DogsServer.Controllers
     [Authorize]
     public class CommentsController : BaseController
     {
-        private UnitOfWork unitOfWork = new UnitOfWork(new AppDbContext());
+        private readonly UnitOfWork unitOfWork;
+        private readonly AppDbContext appDbContext;
+
+        public CommentsController(AppDbContext dbContext) : base(dbContext)
+        {
+            appDbContext = dbContext;
+            unitOfWork = new UnitOfWork(appDbContext);
+        }
 
         [HttpGet("TrainingComments")]
         public List<CommentModel> GetAllTrainingComments()
