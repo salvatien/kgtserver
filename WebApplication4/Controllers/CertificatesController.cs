@@ -1,20 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using DogsServer.Models;
-using Microsoft.EntityFrameworkCore;
 using DogsServer.Repositories;
 using Dogs.ViewModels.Data.Models;
 using Microsoft.AspNetCore.Authorization;
+using DogsServer.DbContexts;
 
 namespace DogsServer.Controllers
 {
     [Route("api/[controller]")]
     public class CertificatesController : BaseController
     {
-        private UnitOfWork unitOfWork = new UnitOfWork(new AppDbContext());
+        private readonly UnitOfWork unitOfWork;
+        private readonly AppDbContext appDbContext;
+
+        public CertificatesController(AppDbContext dbContext) : base(dbContext)
+        {
+            appDbContext = dbContext;
+            unitOfWork = new UnitOfWork(appDbContext);
+        }
 
         [HttpGet]
         public List<CertificateModel> Get()

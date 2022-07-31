@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Dogs.ViewModels.Data.Models;
+using DogsServer.DbContexts;
 using DogsServer.Models;
 using DogsServer.Repositories;
 using Microsoft.AspNetCore.Authorization;
@@ -18,11 +19,14 @@ namespace DogsServer.Controllers
     [Authorize]
     public class DogTrainingsController : BlobUploaderControllerBase
     {
-        private UnitOfWork unitOfWork = new UnitOfWork(new AppDbContext());
-        private CompositeFileProvider fileProvider;
+        private readonly UnitOfWork unitOfWork;
+        private readonly AppDbContext appDbContext;
+        private readonly CompositeFileProvider fileProvider;
 
-        public DogTrainingsController(CompositeFileProvider provider)
+        public DogTrainingsController(AppDbContext dbContext, CompositeFileProvider provider) : base(dbContext)
         {
+            appDbContext = dbContext;
+            unitOfWork = new UnitOfWork(appDbContext);
             fileProvider = provider;
         }
 
