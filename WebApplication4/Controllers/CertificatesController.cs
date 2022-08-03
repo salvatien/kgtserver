@@ -6,6 +6,7 @@ using DogsServer.Repositories;
 using Dogs.ViewModels.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using DogsServer.DbContexts;
+using DogsServer.Services;
 
 namespace DogsServer.Controllers
 {
@@ -15,7 +16,7 @@ namespace DogsServer.Controllers
         private readonly UnitOfWork unitOfWork;
         private readonly AppDbContext appDbContext;
 
-        public CertificatesController(AppDbContext dbContext) : base(dbContext)
+        public CertificatesController(IUserService userService, AppDbContext dbContext) : base(userService)
         {
             appDbContext = dbContext;
             unitOfWork = new UnitOfWork(appDbContext);
@@ -62,7 +63,7 @@ namespace DogsServer.Controllers
         [HttpPost]
         public IActionResult Post([FromBody]CertificateModel obj)
         {
-            if (!IsCurrentUserAdmin())
+            if (!UserService.IsCurrentUserAdmin(User))
                 return Forbid();
             var cert = new Certificate
             {
@@ -79,7 +80,7 @@ namespace DogsServer.Controllers
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody]CertificateModel obj)
         {
-            if (!IsCurrentUserAdmin())
+            if (!UserService.IsCurrentUserAdmin(User))
                 return Forbid();
             var certificate = unitOfWork.CertificateRepository.GetById(id);
             certificate.Name = obj.Name;
@@ -93,7 +94,7 @@ namespace DogsServer.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            if (!IsCurrentUserAdmin())
+            if (!UserService.IsCurrentUserAdmin(User))
                 return Forbid();
             unitOfWork.CertificateRepository.Delete(unitOfWork.CertificateRepository.GetById(id));
             unitOfWork.Commit();

@@ -11,6 +11,7 @@ using System.Net.Http;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.Authorization;
 using DogsServer.DbContexts;
+using DogsServer.Services;
 
 namespace DogsServer.Controllers
 {
@@ -22,7 +23,7 @@ namespace DogsServer.Controllers
         private readonly AppDbContext appDbContext;
         private readonly CompositeFileProvider fileProvider;
 
-        public DogsController(AppDbContext dbContext, CompositeFileProvider provider) : base(dbContext)
+        public DogsController(AppDbContext dbContext, CompositeFileProvider provider, IUserService userService) : base(userService)
         {
             appDbContext = dbContext;
             unitOfWork = new UnitOfWork(appDbContext);
@@ -147,7 +148,7 @@ namespace DogsServer.Controllers
         public IActionResult Delete(int id)
         {
             var dog = unitOfWork.DogRepository.GetById(id);
-            if (!IsCurrentUserAdmin() && GetCurrentUserId() != dog.Guide.GuideId)
+            if (!UserService.IsCurrentUserAdmin(User) && UserService.GetCurrentUserId(User) != dog.Guide.GuideId)
             {
                 return Forbid();
             }

@@ -16,6 +16,7 @@ using Microsoft.Azure.Storage;
 using Microsoft.Azure.Storage.Blob;
 using Newtonsoft.Json.Linq;
 using DogsServer.DbContexts;
+using DogsServer.Services;
 
 namespace DogsServer.Controllers
 {
@@ -28,7 +29,8 @@ namespace DogsServer.Controllers
         private readonly AppDbContext appDbContext;
         private readonly CompositeFileProvider provider;
 
-        public DogEventsController(AppDbContext dbContext, CompositeFileProvider fileProvider) : base(dbContext)
+        public DogEventsController(AppDbContext dbContext, CompositeFileProvider fileProvider, IUserService userService) 
+            : base(userService)
         {
             appDbContext = dbContext;
             unitOfWork = new UnitOfWork(appDbContext);
@@ -38,7 +40,7 @@ namespace DogsServer.Controllers
         [HttpPost]
         public IActionResult Add([FromBody]DogEventModel obj)
         {
-            if (!IsCurrentUserAdmin() && !IsCurrentUserMember())
+            if (!UserService.IsCurrentUserAdmin(User) && !UserService.IsCurrentUserMember(User))
                 return Forbid();
             //dogs will be added to the event later
             var dogEvent = new DogEvent
@@ -164,7 +166,7 @@ namespace DogsServer.Controllers
         [HttpDelete("DogEvent")]
         public IActionResult Delete(int dogId, int eventId)
         {
-            if (!IsCurrentUserAdmin() && !IsCurrentUserMember())
+            if (!UserService.IsCurrentUserAdmin(User) && !UserService.IsCurrentUserMember(User))
                 return Forbid();
             unitOfWork.DogEventRepository.Delete(unitOfWork.DogEventRepository.GetByIds(dogId, eventId));
             unitOfWork.Commit();

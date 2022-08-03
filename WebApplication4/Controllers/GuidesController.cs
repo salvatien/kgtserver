@@ -6,6 +6,7 @@ using DogsServer.Repositories;
 using Dogs.ViewModels.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using DogsServer.DbContexts;
+using DogsServer.Services;
 
 namespace DogsServer.Controllers
 {
@@ -16,7 +17,7 @@ namespace DogsServer.Controllers
         private readonly UnitOfWork unitOfWork;
         private readonly AppDbContext appDbContext;
 
-        public GuidesController(AppDbContext dbContext) : base(dbContext)
+        public GuidesController(AppDbContext dbContext, IUserService userService) : base(userService)
         {
             appDbContext = dbContext;
             unitOfWork = new UnitOfWork(appDbContext);
@@ -79,7 +80,7 @@ namespace DogsServer.Controllers
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody]GuideModel obj)
         {
-            if (!IsCurrentUserAdmin() && id != GetCurrentUserId())
+            if (!UserService.IsCurrentUserAdmin(User) && id != UserService.GetCurrentUserId(User))
                 return Forbid();
             var guide = unitOfWork.GuideRepository.GetById(id);
             var guideModel = obj;
@@ -106,7 +107,7 @@ namespace DogsServer.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            if (!IsCurrentUserAdmin())
+            if (!UserService.IsCurrentUserAdmin(User))
                 return Forbid();
             unitOfWork.GuideRepository.Delete(unitOfWork.GuideRepository.GetById(id));
             unitOfWork.Commit();
@@ -129,7 +130,7 @@ namespace DogsServer.Controllers
                 City = obj.City,
                 Email = obj.Email,
                 FirstName = obj.FirstName,
-                IdentityId = GetCurrentUserIdentityId(),
+                IdentityId = UserService.GetCurrentUserIdentityId(User),
                 IsAdmin = false,
                 IsMember = false,
                 LastName = obj.LastName,

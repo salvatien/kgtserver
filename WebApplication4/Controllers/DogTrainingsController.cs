@@ -7,6 +7,7 @@ using Dogs.ViewModels.Data.Models;
 using DogsServer.DbContexts;
 using DogsServer.Models;
 using DogsServer.Repositories;
+using DogsServer.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
@@ -23,7 +24,8 @@ namespace DogsServer.Controllers
         private readonly AppDbContext appDbContext;
         private readonly CompositeFileProvider fileProvider;
 
-        public DogTrainingsController(AppDbContext dbContext, CompositeFileProvider provider) : base(dbContext)
+        public DogTrainingsController(AppDbContext dbContext, CompositeFileProvider provider, IUserService userService) 
+            : base(userService)
         {
             appDbContext = dbContext;
             unitOfWork = new UnitOfWork(appDbContext);
@@ -33,7 +35,7 @@ namespace DogsServer.Controllers
         [HttpPost]
         public IActionResult Add([FromBody]DogTrainingModel obj)
         {
-            if (!IsCurrentUserAdmin() && !IsCurrentUserMember())
+            if (!UserService.IsCurrentUserAdmin(User) && !UserService.IsCurrentUserMember(User))
                 return Forbid();
             //dogs will be added to the training later
             var training = new DogTraining
@@ -62,7 +64,7 @@ namespace DogsServer.Controllers
         [HttpGet("Training")]
         public DogTrainingModel Get(int dogId, int trainingId)
         {
-            if (!IsCurrentUserAdmin() && !IsCurrentUserMember())
+            if (!UserService.IsCurrentUserAdmin(User) && !UserService.IsCurrentUserMember(User))
                 return null;
             //return unitOfWork.GuideRepository.GetById(id);
             var t = unitOfWork.DogTrainingRepository.GetByIds(dogId, trainingId);
@@ -101,7 +103,7 @@ namespace DogsServer.Controllers
         {
             try
             {
-                if (!IsCurrentUserAdmin() && !IsCurrentUserMember())
+                if (!UserService.IsCurrentUserAdmin(User) && !UserService.IsCurrentUserMember(User))
                     return Forbid();
                 var dogTraining = unitOfWork.DogTrainingRepository.GetByIds(dogId, trainingId);
                 var updatedTraining = obj.ToObject<DogTrainingModel>();
@@ -138,7 +140,7 @@ namespace DogsServer.Controllers
         [HttpDelete("Training")]
         public IActionResult Delete(int dogId, int trainingId)
         {
-            if (!IsCurrentUserAdmin() && !IsCurrentUserMember())
+            if (!UserService.IsCurrentUserAdmin(User) && !UserService.IsCurrentUserMember(User))
                 return Forbid();
             foreach (var comment in unitOfWork.DogTrainingCommentRepository.GetAllByDogIdAndTrainingId(dogId, trainingId))
                 unitOfWork.DogTrainingCommentRepository.Delete(comment);
@@ -151,7 +153,7 @@ namespace DogsServer.Controllers
         [DisableRequestSizeLimit]
         public async Task<IActionResult> UploadImage()
         {
-            if (!IsCurrentUserAdmin() && !IsCurrentUserMember())
+            if (!UserService.IsCurrentUserAdmin(User) && !UserService.IsCurrentUserMember(User))
                 return Forbid();
             return await Upload("images");
         }
@@ -166,7 +168,7 @@ namespace DogsServer.Controllers
         [DisableRequestSizeLimit]
         public async Task<IActionResult> UploadTracks()
         {
-            if (!IsCurrentUserAdmin() && !IsCurrentUserMember())
+            if (!UserService.IsCurrentUserAdmin(User) && !UserService.IsCurrentUserMember(User))
                 return Forbid();
             return await Upload("tracks");
         }
@@ -180,7 +182,7 @@ namespace DogsServer.Controllers
         [HttpGet("GetAllByDogId")]
         public List<DogTrainingModel> GetAllByDogId(int dogId)
         {
-            if (!IsCurrentUserAdmin() && !IsCurrentUserMember())
+            if (!UserService.IsCurrentUserAdmin(User) && !UserService.IsCurrentUserMember(User))
                 return null;
             //return unitOfWork.GuideRepository.GetById(id);
             var allDogTrainings = unitOfWork.DogTrainingRepository.GetAllByDogId(dogId);
@@ -232,7 +234,7 @@ namespace DogsServer.Controllers
         [HttpGet("GetAllByTrainingId")]
         public List<DogTrainingModel> GetAllByTrainingId(int trainingId)
         {
-            if (!IsCurrentUserAdmin() && !IsCurrentUserMember())
+            if (!UserService.IsCurrentUserAdmin(User) && !UserService.IsCurrentUserMember(User))
                 return null;
             //return unitOfWork.GuideRepository.GetById(id);
             var allDogTrainings = unitOfWork.DogTrainingRepository.GetAllByTrainingId(trainingId);

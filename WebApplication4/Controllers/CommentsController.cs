@@ -9,6 +9,7 @@ using DogsServer.Repositories;
 using Dogs.ViewModels.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using DogsServer.DbContexts;
+using DogsServer.Services;
 
 namespace DogsServer.Controllers
 {
@@ -19,7 +20,7 @@ namespace DogsServer.Controllers
         private readonly UnitOfWork unitOfWork;
         private readonly AppDbContext appDbContext;
 
-        public CommentsController(AppDbContext dbContext) : base(dbContext)
+        public CommentsController(IUserService userService, AppDbContext dbContext) : base(userService)
         {
             appDbContext = dbContext;
             unitOfWork = new UnitOfWork(appDbContext);

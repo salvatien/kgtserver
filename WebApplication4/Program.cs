@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using Strathweb.AspNetCore.AzureBlobFileProvider;
 using System;
 using DogsServer.DbContexts;
+using DogsServer.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -74,6 +75,8 @@ var azureBlobFileProviderImages = new AzureBlobFileProvider(blobOptionsImages);
 
 var composite = new CompositeFileProvider(azureBlobFileProviderTracks, azureBlobFileProviderImages);
 builder.Services.AddSingleton(composite);
+
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddMvc().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 

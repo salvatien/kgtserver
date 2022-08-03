@@ -9,17 +9,15 @@ using System.Net;
 using Microsoft.Azure.Storage;
 using Microsoft.Azure.Storage.Blob;
 using Microsoft.AspNetCore.Http;
-using DogsServer.DbContexts;
+using DogsServer.Services;
 
 namespace DogsServer.Controllers
 {
     public abstract class BlobUploaderControllerBase : BaseController
     {
-        private readonly AppDbContext appDbContext;
 
-        public BlobUploaderControllerBase(AppDbContext dbContext) : base(dbContext)
+        public BlobUploaderControllerBase(IUserService userService) : base(userService)
         {
-            appDbContext = dbContext;
         }
         protected async Task<IActionResult> Upload(string blobContainerName)
         {
