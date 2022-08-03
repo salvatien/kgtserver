@@ -10,6 +10,7 @@ using DogsServer.Repositories;
 using DogsServer.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.FileProviders;
 using Newtonsoft.Json.Linq;
 
@@ -24,8 +25,8 @@ namespace DogsServer.Controllers
         private readonly AppDbContext appDbContext;
         private readonly CompositeFileProvider fileProvider;
 
-        public DogTrainingsController(AppDbContext dbContext, CompositeFileProvider provider, IUserService userService) 
-            : base(userService)
+        public DogTrainingsController(AppDbContext dbContext, CompositeFileProvider provider, IUserService userService, IConfiguration configuration) 
+            : base(userService, configuration)
         {
             appDbContext = dbContext;
             unitOfWork = new UnitOfWork(appDbContext);

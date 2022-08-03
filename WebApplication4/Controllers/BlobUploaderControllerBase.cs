@@ -10,14 +10,16 @@ using Microsoft.Azure.Storage;
 using Microsoft.Azure.Storage.Blob;
 using Microsoft.AspNetCore.Http;
 using DogsServer.Services;
+using Microsoft.Extensions.Configuration;
 
 namespace DogsServer.Controllers
 {
     public abstract class BlobUploaderControllerBase : BaseController
     {
-
-        public BlobUploaderControllerBase(IUserService userService) : base(userService)
+        private readonly IConfiguration _configuration;
+        public BlobUploaderControllerBase(IUserService userService, IConfiguration configuration) : base(userService)
         {
+            _configuration = configuration; 
         }
         protected async Task<IActionResult> Upload(string blobContainerName)
         {
@@ -58,7 +60,7 @@ namespace DogsServer.Controllers
         {
             CloudStorageAccount storageAccount = null;
             CloudBlobContainer cloudBlobContainer = null;
-            string storageConnectionString = "DefaultEndpointsProtocol=https;AccountName=kgtstorage;AccountKey=PcFA7+GInK3Q/tqsavRf6tyGD0p8b2dsh7V2CsqKHukZsDyvIKuUBMK4XWhB+ygQbT23pJuXfIbDPJfh7EpQGw==;EndpointSuffix=core.windows.net";
+            string storageConnectionString = _configuration.GetConnectionString("BlobConnectionString");
 
             // Check whether the connection string can be parsed.
             if (CloudStorageAccount.TryParse(storageConnectionString, out storageAccount))

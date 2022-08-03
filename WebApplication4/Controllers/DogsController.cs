@@ -12,6 +12,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.Authorization;
 using DogsServer.DbContexts;
 using DogsServer.Services;
+using Microsoft.Extensions.Configuration;
 
 namespace DogsServer.Controllers
 {
@@ -23,7 +24,8 @@ namespace DogsServer.Controllers
         private readonly AppDbContext appDbContext;
         private readonly CompositeFileProvider fileProvider;
 
-        public DogsController(AppDbContext dbContext, CompositeFileProvider provider, IUserService userService) : base(userService)
+        public DogsController(AppDbContext dbContext, CompositeFileProvider provider, 
+            IUserService userService, IConfiguration configuration) : base(userService, configuration)
         {
             appDbContext = dbContext;
             unitOfWork = new UnitOfWork(appDbContext);

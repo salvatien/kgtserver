@@ -17,6 +17,7 @@ using Microsoft.Azure.Storage.Blob;
 using Newtonsoft.Json.Linq;
 using DogsServer.DbContexts;
 using DogsServer.Services;
+using Microsoft.Extensions.Configuration;
 
 namespace DogsServer.Controllers
 {
@@ -28,13 +29,16 @@ namespace DogsServer.Controllers
         private readonly UnitOfWork unitOfWork;
         private readonly AppDbContext appDbContext;
         private readonly CompositeFileProvider provider;
+        private readonly IConfiguration _configuration;
 
-        public DogEventsController(AppDbContext dbContext, CompositeFileProvider fileProvider, IUserService userService) 
+        public DogEventsController(AppDbContext dbContext, CompositeFileProvider fileProvider,
+            IUserService userService, IConfiguration configuration) 
             : base(userService)
         {
             appDbContext = dbContext;
             unitOfWork = new UnitOfWork(appDbContext);
             provider = fileProvider;
+            _configuration = configuration;
         }
 
         [HttpPost]
@@ -210,7 +214,7 @@ namespace DogsServer.Controllers
         {
             CloudStorageAccount storageAccount = null;
             CloudBlobContainer cloudBlobContainer = null;
-            string storageConnectionString = "DefaultEndpointsProtocol=https;AccountName=kgtstorage;AccountKey=PcFA7+GInK3Q/tqsavRf6tyGD0p8b2dsh7V2CsqKHukZsDyvIKuUBMK4XWhB+ygQbT23pJuXfIbDPJfh7EpQGw==;EndpointSuffix=core.windows.net";
+            string storageConnectionString = _configuration.GetConnectionString("BlobConnectionString");
 
             // Check whether the connection string can be parsed.
             if (CloudStorageAccount.TryParse(storageConnectionString, out storageAccount))

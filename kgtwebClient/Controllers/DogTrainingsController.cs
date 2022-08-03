@@ -3,6 +3,7 @@ using kgtwebClient.Helpers;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -24,10 +25,11 @@ namespace kgtwebClient.Controllers
         //The URL of the WEB API Service
         static string url = System.Configuration.ConfigurationManager.AppSettings["ServerBaseUrl"];
         private static readonly HttpClient client = new HttpClient { BaseAddress = new Uri(url) };
+        private static readonly string BlobStorageBaseAddress = ConfigurationManager.AppSettings["BlobStorageBaseAddress"];
 
 
         // GET: Trainings
-       // [HttpGet("{dogId}")]
+        // [HttpGet("{dogId}")]
         public async Task<ActionResult> Index(int dogId)
         {
             if (!LoginHelper.IsAuthenticated())
@@ -66,7 +68,7 @@ namespace kgtwebClient.Controllers
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
-            var blobTrackLinkBase = @"https://kgtstorage.blob.core.windows.net/tracks/";
+            var blobTrackLinkBase = $"{BlobStorageBaseAddress}/tracks/";
             HttpResponseMessage responseMessage =
                 await client.GetAsync($"dogtrainings/training?trainingId={trainingId}&dogId={dogId}");
             if (responseMessage.IsSuccessStatusCode)
@@ -226,7 +228,7 @@ namespace kgtwebClient.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
-                    model.AdditionalPictureBlobUrl = @"https://kgtstorage.blob.core.windows.net/images/" + imageFileName;
+                    model.AdditionalPictureBlobUrl = $"{BlobStorageBaseAddress}/images/" + imageFileName;
                 }
                 else
                 {
@@ -315,7 +317,7 @@ namespace kgtwebClient.Controllers
 
                 else
                 {
-                    model.AdditionalPictureBlobUrl = @"https://kgtstorage.blob.core.windows.net/images/" + additionalPictureFileName;
+                    model.AdditionalPictureBlobUrl = $"{BlobStorageBaseAddress}/images/" + additionalPictureFileName;
                 }
             }
 
@@ -382,8 +384,8 @@ namespace kgtwebClient.Controllers
             {
                 //get blob urls - is it that simple or it has to be returned?
 
-                var lostPersonTrackBlobUrl = @"https://kgtstorage.blob.core.windows.net/tracks/" + lostPersonFileName;
-                var dogTrackBlobUrl = @"https://kgtstorage.blob.core.windows.net/tracks/" + dogFileName;
+                var lostPersonTrackBlobUrl = $"{BlobStorageBaseAddress}/tracks/" + lostPersonFileName;
+                var dogTrackBlobUrl = $"{BlobStorageBaseAddress}/tracks/" + dogFileName;
 
                 //add blob urls to model 
                 model.LostPersonTrackBlobUrl = lostPersonTrackBlobUrl;

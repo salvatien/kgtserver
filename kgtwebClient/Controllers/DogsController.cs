@@ -11,6 +11,7 @@ using System.Web;
 using System.Web.Mvc;
 using kgtwebClient.Helpers;
 using System.IO;
+using System.Configuration;
 
 namespace kgtwebClient.Controllers
 {
@@ -18,6 +19,8 @@ namespace kgtwebClient.Controllers
     {
         static string url = System.Configuration.ConfigurationManager.AppSettings["ServerBaseUrl"];
         private static readonly HttpClient client = new HttpClient { BaseAddress = new Uri(url) };
+        private static readonly string BlobStorageBaseAddress = ConfigurationManager.AppSettings["BlobStorageBaseAddress"];
+
 
         // get all dogs from db
         public async Task<ActionResult> Index()
@@ -83,7 +86,7 @@ namespace kgtwebClient.Controllers
                 {
                     //get blob urls - is it that simple or it has to be returned?
 
-                    var imageBlobUrl = @"https://kgtstorage.blob.core.windows.net/images/" + imageFileName;
+                    var imageBlobUrl = $"{BlobStorageBaseAddress}/images/" + imageFileName;
 
                     //add blob urls to model 
                     addedDog.PhotoBlobUrl = imageBlobUrl;
@@ -205,7 +208,7 @@ namespace kgtwebClient.Controllers
                 {
                     //get blob urls - is it that simple or it has to be returned?
 
-                    var imageBlobUrl = @"https://kgtstorage.blob.core.windows.net/images/" + imageFileName;
+                    var imageBlobUrl = $"{BlobStorageBaseAddress}/images/" + imageFileName;
 
                     //add blob urls to model 
                     updatedDog.PhotoBlobUrl = imageBlobUrl;
