@@ -77,6 +77,7 @@ var composite = new CompositeFileProvider(azureBlobFileProviderTracks, azureBlob
 builder.Services.AddSingleton(composite);
 
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IBlobStorageService, BlobStorageService>();
 
 builder.Services.AddMvc().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Dogs.ViewModels.Data.Models;
@@ -25,8 +26,8 @@ namespace DogsServer.Controllers
         private readonly AppDbContext appDbContext;
         private readonly CompositeFileProvider fileProvider;
 
-        public DogTrainingsController(AppDbContext dbContext, CompositeFileProvider provider, IUserService userService, IConfiguration configuration) 
-            : base(userService, configuration)
+        public DogTrainingsController(AppDbContext dbContext, CompositeFileProvider provider, IUserService userService, IBlobStorageService blobStorageService) 
+            : base(userService, blobStorageService)
         {
             appDbContext = dbContext;
             unitOfWork = new UnitOfWork(appDbContext);
@@ -162,7 +163,9 @@ namespace DogsServer.Controllers
         [HttpGet("getimage/{filename}")]
         public HttpResponseMessage GetPhoto(string filename)
         {
-            return GetFile(fileProvider.FileProviders.ToList()[1], filename);
+            var stringStream = BlobStorageService.ReadFile(fileProvider.FileProviders.ToList()[1], filename);
+            return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(stringStream) };
+
         }
 
         [HttpPost("Upload")]
@@ -178,7 +181,8 @@ namespace DogsServer.Controllers
         [HttpGet("gettrack/{filename}")]
         public HttpResponseMessage GetTrack(string filename)
         {
-            return GetFile(fileProvider.FileProviders.ToList()[0], filename);
+            var stringStream = BlobStorageService.ReadFile(fileProvider.FileProviders.ToList()[0], filename);
+            return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(stringStream) };
         }
         [HttpGet("GetAllByDogId")]
         public List<DogTrainingModel> GetAllByDogId(int dogId)

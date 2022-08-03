@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 using DogsServer.DbContexts;
 using DogsServer.Services;
 using Microsoft.Extensions.Configuration;
+using System.Net;
 
 namespace DogsServer.Controllers
 {
@@ -25,7 +26,7 @@ namespace DogsServer.Controllers
         private readonly CompositeFileProvider fileProvider;
 
         public DogsController(AppDbContext dbContext, CompositeFileProvider provider, 
-            IUserService userService, IConfiguration configuration) : base(userService, configuration)
+            IUserService userService, IBlobStorageService blobStorageService) : base(userService, blobStorageService)
         {
             appDbContext = dbContext;
             unitOfWork = new UnitOfWork(appDbContext);
@@ -171,7 +172,8 @@ namespace DogsServer.Controllers
         [HttpGet("getimage/{filename}")]
         public HttpResponseMessage GetPhoto(string filename)
         {
-            return GetFile(fileProvider.FileProviders.ToList()[1], filename);
+            var stringStream = this.BlobStorageService.ReadFile(fileProvider.FileProviders.ToList()[1], filename);
+            return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(stringStream) };
         }
     }
 }
