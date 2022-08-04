@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Dogs.ViewModels.Data.Models;
 using DogsServer.DbContexts;
 using DogsServer.Models;
 using DogsServer.Repositories;
+using DogsServer.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.FileProviders;
 using Newtonsoft.Json.Linq;
 
 namespace DogsServer.Controllers
@@ -21,19 +20,18 @@ namespace DogsServer.Controllers
     {
         private readonly UnitOfWork unitOfWork;
         private readonly AppDbContext appDbContext;
-        private readonly CompositeFileProvider fileProvider;
 
-        public DogTrainingsController(AppDbContext dbContext, CompositeFileProvider provider) : base(dbContext)
+        public DogTrainingsController(AppDbContext dbContext, IUserService userService, IBlobStorageService blobStorageService) 
+            : base(userService, blobStorageService)
         {
             appDbContext = dbContext;
             unitOfWork = new UnitOfWork(appDbContext);
-            fileProvider = provider;
         }
 
         [HttpPost]
         public IActionResult Add([FromBody]DogTrainingModel obj)
         {
-            if (!IsCurrentUserAdmin() && !IsCurrentUserMember())
+            if (!UserService.IsCurrentUserAdmin(User) && !UserService.IsCurrentUserMember(User))
                 return Forbid();
             //dogs will be added to the training later
             var training = new DogTraining
@@ -62,7 +60,7 @@ namespace DogsServer.Controllers
         [HttpGet("Training")]
         public DogTrainingModel Get(int dogId, int trainingId)
         {
-            if (!IsCurrentUserAdmin() && !IsCurrentUserMember())
+            if (!UserService.IsCurrentUserAdmin(User) && !UserService.IsCurrentUserMember(User))
                 return null;
             //return unitOfWork.GuideRepository.GetById(id);
             var t = unitOfWork.DogTrainingRepository.GetByIds(dogId, trainingId);
@@ -101,7 +99,7 @@ namespace DogsServer.Controllers
         {
             try
             {
-                if (!IsCurrentUserAdmin() && !IsCurrentUserMember())
+                if (!UserService.IsCurrentUserAdmin(User) && !UserService.IsCurrentUserMember(User))
                     return Forbid();
                 var dogTraining = unitOfWork.DogTrainingRepository.GetByIds(dogId, trainingId);
                 var updatedTraining = obj.ToObject<DogTrainingModel>();
@@ -138,7 +136,7 @@ namespace DogsServer.Controllers
         [HttpDelete("Training")]
         public IActionResult Delete(int dogId, int trainingId)
         {
-            if (!IsCurrentUserAdmin() && !IsCurrentUserMember())
+            if (!UserService.IsCurrentUserAdmin(User) && !UserService.IsCurrentUserMember(User))
                 return Forbid();
             foreach (var comment in unitOfWork.DogTrainingCommentRepository.GetAllByDogIdAndTrainingId(dogId, trainingId))
                 unitOfWork.DogTrainingCommentRepository.Delete(comment);
@@ -151,36 +149,25 @@ namespace DogsServer.Controllers
         [DisableRequestSizeLimit]
         public async Task<IActionResult> UploadImage()
         {
-            if (!IsCurrentUserAdmin() && !IsCurrentUserMember())
+            if (!UserService.IsCurrentUserAdmin(User) && !UserService.IsCurrentUserMember(User))
                 return Forbid();
             return await Upload("images");
         }
 
-        [HttpGet("getimage/{filename}")]
-        public HttpResponseMessage GetPhoto(string filename)
-        {
-            return GetFile(fileProvider.FileProviders.ToList()[1], filename);
-        }
 
         [HttpPost("Upload")]
         [DisableRequestSizeLimit]
         public async Task<IActionResult> UploadTracks()
         {
-            if (!IsCurrentUserAdmin() && !IsCurrentUserMember())
+            if (!UserService.IsCurrentUserAdmin(User) && !UserService.IsCurrentUserMember(User))
                 return Forbid();
             return await Upload("tracks");
         }
 
-        
-        [HttpGet("gettrack/{filename}")]
-        public HttpResponseMessage GetTrack(string filename)
-        {
-            return GetFile(fileProvider.FileProviders.ToList()[0], filename);
-        }
         [HttpGet("GetAllByDogId")]
         public List<DogTrainingModel> GetAllByDogId(int dogId)
         {
-            if (!IsCurrentUserAdmin() && !IsCurrentUserMember())
+            if (!UserService.IsCurrentUserAdmin(User) && !UserService.IsCurrentUserMember(User))
                 return null;
             //return unitOfWork.GuideRepository.GetById(id);
             var allDogTrainings = unitOfWork.DogTrainingRepository.GetAllByDogId(dogId);
@@ -232,7 +219,7 @@ namespace DogsServer.Controllers
         [HttpGet("GetAllByTrainingId")]
         public List<DogTrainingModel> GetAllByTrainingId(int trainingId)
         {
-            if (!IsCurrentUserAdmin() && !IsCurrentUserMember())
+            if (!UserService.IsCurrentUserAdmin(User) && !UserService.IsCurrentUserMember(User))
                 return null;
             //return unitOfWork.GuideRepository.GetById(id);
             var allDogTrainings = unitOfWork.DogTrainingRepository.GetAllByTrainingId(trainingId);

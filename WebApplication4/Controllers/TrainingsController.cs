@@ -5,6 +5,7 @@ using Dogs.ViewModels.Data.Models;
 using DogsServer.DbContexts;
 using DogsServer.Models;
 using DogsServer.Repositories;
+using DogsServer.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
@@ -19,7 +20,7 @@ namespace DogsServer.Controllers
         private readonly UnitOfWork unitOfWork;
         private readonly AppDbContext appDbContext;
 
-        public TrainingsController(AppDbContext dbContext) : base(dbContext)
+        public TrainingsController(AppDbContext dbContext, IUserService userService) : base(userService)
         {
             appDbContext = dbContext;
             unitOfWork = new UnitOfWork(appDbContext);
@@ -29,7 +30,7 @@ namespace DogsServer.Controllers
         [HttpPost]
         public IActionResult Add([FromBody]TrainingModel obj)
         {
-            if (!IsCurrentUserAdmin() && !IsCurrentUserMember())
+            if (!UserService.IsCurrentUserAdmin(User) && !UserService.IsCurrentUserMember(User))
                 return Forbid();
             //dogs will be added to the training later
             var training = new Training
@@ -54,7 +55,7 @@ namespace DogsServer.Controllers
         [HttpGet]
         public List<TrainingModel> Get()
         {
-            if (!IsCurrentUserAdmin() && !IsCurrentUserMember())
+            if (!UserService.IsCurrentUserAdmin(User) && !UserService.IsCurrentUserMember(User))
                 return null;
             var trainings = unitOfWork.TrainingRepository.GetAll().ToList();
             var trainingModelList = new List<TrainingModel>();
@@ -105,7 +106,7 @@ namespace DogsServer.Controllers
         [HttpGet("{id}")]
         public TrainingModel Get(int id)
         {
-            if (!IsCurrentUserAdmin() && !IsCurrentUserMember())
+            if (!UserService.IsCurrentUserAdmin(User) && !UserService.IsCurrentUserMember(User))
                 return null;
             //return unitOfWork.GuideRepository.GetById(id);
             var t = unitOfWork.TrainingRepository.GetById(id);
@@ -151,7 +152,7 @@ namespace DogsServer.Controllers
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody]JObject obj)
         {
-            if (!IsCurrentUserAdmin() && !IsCurrentUserMember())
+            if (!UserService.IsCurrentUserAdmin(User) && !UserService.IsCurrentUserMember(User))
                 return Forbid();
             try
             {
@@ -175,7 +176,7 @@ namespace DogsServer.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            if (!IsCurrentUserAdmin())
+            if (!UserService.IsCurrentUserAdmin(User))
                 return Forbid();
             unitOfWork.TrainingRepository.Delete(unitOfWork.TrainingRepository.GetById(id));
             unitOfWork.Commit();

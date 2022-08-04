@@ -6,6 +6,7 @@ using DogsServer.Repositories;
 using Dogs.ViewModels.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using DogsServer.DbContexts;
+using DogsServer.Services;
 
 namespace DogsServer.Controllers
 {
@@ -16,7 +17,7 @@ namespace DogsServer.Controllers
         private readonly UnitOfWork unitOfWork;
         private readonly AppDbContext appDbContext;
 
-        public EventsController(AppDbContext dbContext) : base(dbContext)
+        public EventsController(AppDbContext dbContext, IUserService userService) : base(userService)
         {
             appDbContext = dbContext;
             unitOfWork = new UnitOfWork(appDbContext);
@@ -71,7 +72,7 @@ namespace DogsServer.Controllers
         [HttpPost]
         public IActionResult Post([FromBody]EventModel obj)
         {
-            if (!IsCurrentUserAdmin() && !IsCurrentUserMember())
+            if (!UserService.IsCurrentUserAdmin(User) && !UserService.IsCurrentUserMember(User))
                 return Forbid();
             var oneEvent = new Event
             {
@@ -92,7 +93,7 @@ namespace DogsServer.Controllers
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody]EventModel obj)
         {
-            if (!IsCurrentUserAdmin() && !IsCurrentUserMember())
+            if (!UserService.IsCurrentUserAdmin(User) && !UserService.IsCurrentUserMember(User))
                 return Forbid();
             var oldEvent = unitOfWork.EventRepository.GetById(id);
             oldEvent.City = obj.City;
@@ -109,7 +110,7 @@ namespace DogsServer.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            if (!IsCurrentUserAdmin() && !IsCurrentUserMember())
+            if (!UserService.IsCurrentUserAdmin(User) && !UserService.IsCurrentUserMember(User))
                 return Forbid();
             unitOfWork.EventRepository.Delete(unitOfWork.EventRepository.GetById(id));
             unitOfWork.Commit();

@@ -11,6 +11,9 @@ using System.Net.Http;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.Authorization;
 using DogsServer.DbContexts;
+using DogsServer.Services;
+using Microsoft.Extensions.Configuration;
+using System.Net;
 
 namespace DogsServer.Controllers
 {
@@ -20,13 +23,12 @@ namespace DogsServer.Controllers
     {
         private readonly UnitOfWork unitOfWork;
         private readonly AppDbContext appDbContext;
-        private readonly CompositeFileProvider fileProvider;
 
-        public DogsController(AppDbContext dbContext, CompositeFileProvider provider) : base(dbContext)
+        public DogsController(AppDbContext dbContext,
+            IUserService userService, IBlobStorageService blobStorageService) : base(userService, blobStorageService)
         {
             appDbContext = dbContext;
             unitOfWork = new UnitOfWork(appDbContext);
-            fileProvider = provider;
         }
 
         [HttpGet]
@@ -147,7 +149,7 @@ namespace DogsServer.Controllers
         public IActionResult Delete(int id)
         {
             var dog = unitOfWork.DogRepository.GetById(id);
-            if (!IsCurrentUserAdmin() && GetCurrentUserId() != dog.Guide.GuideId)
+            if (!UserService.IsCurrentUserAdmin(User) && UserService.GetCurrentUserId(User) != dog.Guide.GuideId)
             {
                 return Forbid();
             }
@@ -164,11 +166,5 @@ namespace DogsServer.Controllers
         {
             return await Upload("images");
         }       
-
-        [HttpGet("getimage/{filename}")]
-        public HttpResponseMessage GetPhoto(string filename)
-        {
-            return GetFile(fileProvider.FileProviders.ToList()[1], filename);
-        }
     }
 }

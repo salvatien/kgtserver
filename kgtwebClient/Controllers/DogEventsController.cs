@@ -3,6 +3,7 @@ using kgtwebClient.Helpers;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -20,6 +21,8 @@ namespace kgtwebClient.Controllers
     {
         static string url = System.Configuration.ConfigurationManager.AppSettings["ServerBaseUrl"];
         private static readonly HttpClient client = new HttpClient { BaseAddress = new Uri(url) };
+        private static readonly string BlobStorageBaseAddress = ConfigurationManager.AppSettings["BlobStorageBaseAddress"];
+
 
         public async Task<ActionResult> Index(int dogId)
         {
@@ -54,7 +57,7 @@ namespace kgtwebClient.Controllers
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             client.DefaultRequestHeaders.Authorization = 
                 new AuthenticationHeaderValue("Bearer", LoginHelper.GetToken());
-            var blobTrackLinkBase = @"https://kgtstorage.blob.core.windows.net/tracks/";
+            var blobTrackLinkBase = $"{BlobStorageBaseAddress}/tracks/";
             HttpResponseMessage responseMessage =
                 await client.GetAsync($"dogevents/dogevent?eventId={eventId}&dogId={dogId}");
             if (responseMessage.IsSuccessStatusCode)
@@ -287,8 +290,8 @@ namespace kgtwebClient.Controllers
                 {
                     //get blob urls - is it that simple or it has to be returned?
 
-                    var lostPersonTrackBlobUrl = @"https://kgtstorage.blob.core.windows.net/tracks/" + lostPersonFileName;
-                    var dogTrackBlobUrl = @"https://kgtstorage.blob.core.windows.net/tracks/" + dogFileName;
+                    var lostPersonTrackBlobUrl = $"{BlobStorageBaseAddress}/tracks/" + lostPersonFileName;
+                    var dogTrackBlobUrl = $"{BlobStorageBaseAddress}/tracks/" + dogFileName;
 
                     //add blob urls to model 
                     model.LostPersonTrackBlobUrl = lostPersonTrackBlobUrl;
