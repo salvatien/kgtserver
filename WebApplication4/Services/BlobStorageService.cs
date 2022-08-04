@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using System.IO;
 using Microsoft.Extensions.Configuration;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Blob;
+using Azure.Storage.Blobs;
+using Azure;
 
 namespace DogsServer.Services
 {
@@ -23,49 +23,30 @@ namespace DogsServer.Services
         public async Task<bool> UploadToBlob(string filename, Stream stream, string blobContainerName)
         {
             string storageConnectionString = _configuration.GetConnectionString("BlobConnectionString");
-
-            CloudStorageAccount storageAccount;
-            if (CloudStorageAccount.TryParse(storageConnectionString, out storageAccount))
+            try
             {
-                try
+                var containerClient = new BlobContainerClient(storageConnectionString, blobContainerName);
+                await containerClient.CreateIfNotExistsAsync(Azure.Storage.Blobs.Models.PublicAccessType.Blob);
+
+                if (stream != null)
                 {
-                    CloudBlobClient cloudBlobClient = storageAccount.CreateCloudBlobClient();
-
-                    CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference(blobContainerName);
-                    await cloudBlobContainer.CreateIfNotExistsAsync();
-
-                    BlobContainerPermissions permissions = new BlobContainerPermissions
-                    {
-                        PublicAccess = BlobContainerPublicAccessType.Blob
-                    };
-                    await cloudBlobContainer.SetPermissionsAsync(permissions);
-
-                    // Get a reference to the blob address, then upload the file to the blob.
-                    CloudBlockBlob cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(filename);
-
-
-                    if (stream != null)
-                    {
-                        //pass in memory stream directly
-                        await cloudBlockBlob.UploadFromStreamAsync(stream);
-                    }
-                    else
-                    {
-                        return false;
-                    }
-
+                    await UploadStream(containerClient, filename, stream);
                     return true;
                 }
-                catch (StorageException ex)
-                {
-                    return false;
-                }
-            }
-            else
-            {
                 return false;
             }
+            catch (RequestFailedException ex)
+            {
+                //TODO logging
+                return false;
+            }
+        }
 
+        public static async Task UploadStream (BlobContainerClient containerClient, string fileName, Stream fileStream)
+        {
+            BlobClient blobClient = containerClient.GetBlobClient(fileName);
+            await blobClient.UploadAsync(fileStream, true);
+            fileStream.Close();
         }
     }
 }
