@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Dogs.ViewModels.Data.Models;
 using DogsServer.Models;
@@ -11,13 +9,12 @@ using DogsServer.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.FileProviders;
-using Microsoft.Azure.Storage;
-using Microsoft.Azure.Storage.Blob;
 using Newtonsoft.Json.Linq;
 using DogsServer.DbContexts;
 using DogsServer.Services;
 using Microsoft.Extensions.Configuration;
+using Microsoft.WindowsAzure.Storage.Blob;
+using Microsoft.WindowsAzure.Storage;
 
 namespace DogsServer.Controllers
 {
@@ -28,16 +25,14 @@ namespace DogsServer.Controllers
     {
         private readonly UnitOfWork unitOfWork;
         private readonly AppDbContext appDbContext;
-        private readonly CompositeFileProvider provider;
         private readonly IConfiguration _configuration;
 
-        public DogEventsController(AppDbContext dbContext, CompositeFileProvider fileProvider,
+        public DogEventsController(AppDbContext dbContext,
             IUserService userService, IConfiguration configuration) 
             : base(userService)
         {
             appDbContext = dbContext;
             unitOfWork = new UnitOfWork(appDbContext);
-            provider = fileProvider;
             _configuration = configuration;
         }
 
@@ -271,23 +266,7 @@ namespace DogsServer.Controllers
 
         }
 
-        [HttpGet("gettrack/{filename}")]
-        //[DisableRequestSizeLimit]
-        public HttpResponseMessage GetTrack(string filename)
-        {
-            var trackContents = provider.FileProviders.ToList()[0].GetDirectoryContents("");
-            //IDirectoryContents contents = provider.GetDirectoryContents("/tracks");
-            var fileList = trackContents.ToList();
-            var requestedFile = fileList.Where(x => x.Name == filename).FirstOrDefault();
-            var a = provider.FileProviders.ToList()[0].GetFileInfo("/" + filename);
-            var stream = requestedFile.CreateReadStream();
-
-            var reader = new StreamReader(stream);
-            var stringStream = reader.ReadToEnd();
-
-
-            return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(stringStream) };
-        }
+       
 
         [HttpGet("GetAllByDogId")]
         public List<DogEventModel> GetAllByDogId(int dogId)

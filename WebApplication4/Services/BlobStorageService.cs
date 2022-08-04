@@ -1,20 +1,14 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using System.Net.Http;
-using Microsoft.Extensions.FileProviders;
+﻿using System.Threading.Tasks;
 using System.IO;
-using System.Net;
-using Microsoft.Azure.Storage;
-using Microsoft.Azure.Storage.Blob;
 using Microsoft.Extensions.Configuration;
-
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace DogsServer.Services
 {
     public interface IBlobStorageService
     {
         public Task<bool> UploadToBlob(string filename, Stream stream, string blobContainerName);
-        public string ReadFile(IFileProvider fileProvider, string filename);
     }
 
     public class BlobStorageService : IBlobStorageService
@@ -72,19 +66,6 @@ namespace DogsServer.Services
                 return false;
             }
 
-        }
-
-        public string ReadFile(IFileProvider fileProvider, string filename)
-        {
-            var fileContents = fileProvider.GetDirectoryContents("");
-            var fileList = fileContents.ToList();
-            var requestedFile = fileList.Where(x => x.Name == filename).FirstOrDefault();
-            var stream = requestedFile.CreateReadStream();
-
-            var reader = new StreamReader(stream);
-            var stringStream = reader.ReadToEnd();
-
-            return stringStream;
         }
     }
 }

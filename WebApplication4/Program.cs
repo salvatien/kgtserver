@@ -5,9 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.Extensions.FileProviders;
 using Newtonsoft.Json;
-using Strathweb.AspNetCore.AzureBlobFileProvider;
 using System;
 using DogsServer.DbContexts;
 using DogsServer.Services;
@@ -59,22 +57,6 @@ builder.Services.AddAuthentication(options =>
 });
 #endregion
 
-var blobOptionsTracks = new AzureBlobOptions
-{
-    ConnectionString = builder.Configuration.GetConnectionString("BlobConnectionString"),
-    DocumentContainer = "tracks"
-};
-var azureBlobFileProviderTracks = new AzureBlobFileProvider(blobOptionsTracks);
-
-var blobOptionsImages = new AzureBlobOptions
-{
-    ConnectionString = builder.Configuration.GetConnectionString("BlobConnectionString"),
-    DocumentContainer = "images"
-};
-var azureBlobFileProviderImages = new AzureBlobFileProvider(blobOptionsImages);
-
-var composite = new CompositeFileProvider(azureBlobFileProviderTracks, azureBlobFileProviderImages);
-builder.Services.AddSingleton(composite);
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IBlobStorageService, BlobStorageService>();
@@ -86,8 +68,6 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
 var app = builder.Build();
-
-var compositeFileProvider = app.Services.GetRequiredService<CompositeFileProvider>();
 
 app.UseCors("Cors");
 app.UseSwagger();

@@ -23,14 +23,12 @@ namespace DogsServer.Controllers
     {
         private readonly UnitOfWork unitOfWork;
         private readonly AppDbContext appDbContext;
-        private readonly CompositeFileProvider fileProvider;
 
-        public DogsController(AppDbContext dbContext, CompositeFileProvider provider, 
+        public DogsController(AppDbContext dbContext,
             IUserService userService, IBlobStorageService blobStorageService) : base(userService, blobStorageService)
         {
             appDbContext = dbContext;
             unitOfWork = new UnitOfWork(appDbContext);
-            fileProvider = provider;
         }
 
         [HttpGet]
@@ -168,12 +166,5 @@ namespace DogsServer.Controllers
         {
             return await Upload("images");
         }       
-
-        [HttpGet("getimage/{filename}")]
-        public HttpResponseMessage GetPhoto(string filename)
-        {
-            var stringStream = this.BlobStorageService.ReadFile(fileProvider.FileProviders.ToList()[1], filename);
-            return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(stringStream) };
-        }
     }
 }

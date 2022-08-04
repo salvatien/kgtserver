@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Dogs.ViewModels.Data.Models;
 using DogsServer.DbContexts;
@@ -11,8 +9,6 @@ using DogsServer.Repositories;
 using DogsServer.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.FileProviders;
 using Newtonsoft.Json.Linq;
 
 namespace DogsServer.Controllers
@@ -24,14 +20,12 @@ namespace DogsServer.Controllers
     {
         private readonly UnitOfWork unitOfWork;
         private readonly AppDbContext appDbContext;
-        private readonly CompositeFileProvider fileProvider;
 
-        public DogTrainingsController(AppDbContext dbContext, CompositeFileProvider provider, IUserService userService, IBlobStorageService blobStorageService) 
+        public DogTrainingsController(AppDbContext dbContext, IUserService userService, IBlobStorageService blobStorageService) 
             : base(userService, blobStorageService)
         {
             appDbContext = dbContext;
             unitOfWork = new UnitOfWork(appDbContext);
-            fileProvider = provider;
         }
 
         [HttpPost]
@@ -160,13 +154,6 @@ namespace DogsServer.Controllers
             return await Upload("images");
         }
 
-        [HttpGet("getimage/{filename}")]
-        public HttpResponseMessage GetPhoto(string filename)
-        {
-            var stringStream = BlobStorageService.ReadFile(fileProvider.FileProviders.ToList()[1], filename);
-            return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(stringStream) };
-
-        }
 
         [HttpPost("Upload")]
         [DisableRequestSizeLimit]
@@ -177,13 +164,6 @@ namespace DogsServer.Controllers
             return await Upload("tracks");
         }
 
-        
-        [HttpGet("gettrack/{filename}")]
-        public HttpResponseMessage GetTrack(string filename)
-        {
-            var stringStream = BlobStorageService.ReadFile(fileProvider.FileProviders.ToList()[0], filename);
-            return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(stringStream) };
-        }
         [HttpGet("GetAllByDogId")]
         public List<DogTrainingModel> GetAllByDogId(int dogId)
         {
