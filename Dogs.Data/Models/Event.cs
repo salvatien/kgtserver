@@ -17,12 +17,12 @@ namespace Dogs.Data.Models
         [Required]
         public DateTime Date { get; set; }
         [Required]
-        public string City { get; set; }
-        public string StreetOrLocation { get; set; }
-        public string Description { get; set; }
-        public string Notes { get; set; }
+        public string? City { get; set; }
+        public string? StreetOrLocation { get; set; }
+        public string? Description { get; set; }
+        public string? Notes { get; set; }
         public bool IsCommercialTraining { get; set; }
-        public virtual IList<GuideEvent> GuideEvents { get; set; }
-        public virtual IList<DogEvent> DogEvents { get; set; }
+        public virtual IList<GuideEvent>? GuideEvents { get; set; }
+        public virtual IList<DogEvent>? DogEvents { get; set; }
     }
 }

@@ -5,15 +5,13 @@ VisualStudioVersion = 17.2.32526.322
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DogsServer", "WebApplication4\DogsServer.csproj", "{5FCA1924-C207-4464-A1FB-C03EA8D3DADF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dogs.Identity.Data", "Dogs.Identity.Data\Dogs.Identity.Data.csproj", "{C1D3EB7D-26DE-4954-957B-31BD6CE31F20}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dogs.Identity.Api", "Dogs.Identity.Api\Dogs.Identity.Api.csproj", "{95490FCD-B23C-41D7-9A14-A877E06AB571}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kgtwebClient", "kgtwebClient\kgtwebClient.csproj", "{C36557A3-9157-48AC-A04E-F0DC589FB5D9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dogs.ViewModels.Data", "Dogs.ViewModels.Data\Dogs.ViewModels.Data.csproj", "{C3E85D17-4F0E-4243-9F80-E8B3F746F410}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dogs.Data", "Dogs.Data\Dogs.Data.csproj", "{AB1418A5-D7EB-4C94-B7D5-3D57D77DFF90}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dogs.Data", "Dogs.Data\Dogs.Data.csproj", "{AB1418A5-D7EB-4C94-B7D5-3D57D77DFF90}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,10 +23,6 @@ Global
 		{5FCA1924-C207-4464-A1FB-C03EA8D3DADF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5FCA1924-C207-4464-A1FB-C03EA8D3DADF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5FCA1924-C207-4464-A1FB-C03EA8D3DADF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C1D3EB7D-26DE-4954-957B-31BD6CE31F20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C1D3EB7D-26DE-4954-957B-31BD6CE31F20}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C1D3EB7D-26DE-4954-957B-31BD6CE31F20}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C1D3EB7D-26DE-4954-957B-31BD6CE31F20}.Release|Any CPU.Build.0 = Release|Any CPU
 		{95490FCD-B23C-41D7-9A14-A877E06AB571}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{95490FCD-B23C-41D7-9A14-A877E06AB571}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95490FCD-B23C-41D7-9A14-A877E06AB571}.Release|Any CPU.ActiveCfg = Release|Any CPU

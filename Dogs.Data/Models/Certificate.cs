@@ -13,9 +13,9 @@ namespace Dogs.Data.Models
         public int CertificateId { get; set; }
         [Required]
         public string Name { get; set; }
-        public string Level { get; set; }
-        public string Description { get; set; }
+        public string? Level { get; set; }
+        public string? Description { get; set; }
         public int ValidThroughMonths { get; set; }
-        public virtual List<DogCertificate> DogCertificates { get; set; }
+        public virtual List<DogCertificate>? DogCertificates { get; set; }
     }
 }

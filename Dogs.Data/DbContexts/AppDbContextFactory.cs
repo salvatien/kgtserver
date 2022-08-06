@@ -13,7 +13,7 @@ namespace Dogs.Data.DbContexts
                new ConfigurationBuilder()
                    .AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), $"appsettings.json"))
                    .Build()
-                   .GetConnectionString("KgtSqlDb")
+                   .GetConnectionString("KgtDataDb")
                ).Options);
 
             dbContext.Database.Migrate();

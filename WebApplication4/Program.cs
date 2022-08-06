@@ -24,7 +24,7 @@ builder.Services.AddCors(options => options.AddPolicy("Cors", builder =>
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("KgtSqlDb"),
+    options.UseSqlServer(builder.Configuration.GetConnectionString("KgtDataDb"),
     sqlServerOptionsAction: sqlOptions =>
     {
         sqlOptions.EnableRetryOnFailure(

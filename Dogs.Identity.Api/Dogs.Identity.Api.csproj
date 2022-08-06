@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -20,8 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Dogs.Identity.Data\Dogs.Identity.Data.csproj" />
-    <ProjectReference Include="..\Dogs.ViewModels.Data\Dogs.ViewModels.Data.csproj" />
+    <ProjectReference Include="..\Dogs.Data\Dogs.Data.csproj" />
   </ItemGroup>
 
 </Project>

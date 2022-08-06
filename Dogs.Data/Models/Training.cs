@@ -15,10 +15,10 @@ namespace Dogs.Data.Models
         public DateTime Date { get; set; }
         [Required]
         public string GeneralLocation { get; set; }
-        public string LocationDetails { get; set; }
-        public string Notes { get; set; }
-        public string Weather { get; set; }
-        public virtual IList<DogTraining> DogTrainings { get; set; }
-        public virtual IList<TrainingComment> Comments { get; set; }
+        public string? LocationDetails { get; set; }
+        public string? Notes { get; set; }
+        public string? Weather { get; set; }
+        public virtual IList<DogTraining>? DogTrainings { get; set; }
+        public virtual IList<TrainingComment>? Comments { get; set; }
     }
 }
