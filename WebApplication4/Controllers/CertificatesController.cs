@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using DogsServer.Models;
+using Dogs.Data.Models;
 using DogsServer.Repositories;
-using Dogs.ViewModels.Data.Models;
+using Dogs.Data.DataTransferObjects;
 using Microsoft.AspNetCore.Authorization;
-using DogsServer.DbContexts;
+using Dogs.Data.DbContexts;
 using DogsServer.Services;
 
 namespace DogsServer.Controllers

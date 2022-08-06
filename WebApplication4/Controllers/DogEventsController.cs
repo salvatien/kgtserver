@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Dogs.ViewModels.Data.Models;
-using DogsServer.Models;
 using DogsServer.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
-using DogsServer.DbContexts;
 using DogsServer.Services;
+using Dogs.Data.Models;
+using Dogs.Data.DbContexts;
+using Dogs.Data.DataTransferObjects;
 
 namespace DogsServer.Controllers
 {

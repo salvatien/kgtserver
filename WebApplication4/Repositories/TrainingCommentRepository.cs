@@ -1,15 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
-using DogsServer.Models;
+using Dogs.Data.Models;
 
 
 namespace DogsServer.Repositories
 {
-    public class TrainingCommentRepository : Repository<DogsServer.Models.TrainingComment>
+    public class TrainingCommentRepository : Repository<TrainingComment>
     {
         protected new DbSet<TrainingComment> DbSet;
 

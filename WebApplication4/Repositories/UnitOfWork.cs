@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using DogsServer.DbContexts;
+﻿using System.Linq;
+using Dogs.Data.DbContexts;
 using Microsoft.EntityFrameworkCore;
 
 namespace DogsServer.Repositories

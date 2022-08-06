@@ -7,8 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System;
-using DogsServer.DbContexts;
 using DogsServer.Services;
+using Dogs.Data.DbContexts;
 
 var builder = WebApplication.CreateBuilder(args);
 

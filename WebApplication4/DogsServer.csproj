@@ -8,11 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20190108215418_ChangedTheRelationshipsOfTrainingCommentsToWorkTheOtherWayAround.cs" />
-    <Compile Remove="Migrations\20190108220026_ChangedOnDeleteTrainingForDogTrainingComments.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
@@ -32,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Dogs.ViewModels.Data\Dogs.ViewModels.Data.csproj" />
+    <ProjectReference Include="..\Dogs.Data\Dogs.Data.csproj" />
   </ItemGroup>
 
 

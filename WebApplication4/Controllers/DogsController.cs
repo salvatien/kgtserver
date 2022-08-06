@@ -3,17 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using DogsServer.Models;
 using DogsServer.Repositories;
 using Newtonsoft.Json.Linq;
-using Dogs.ViewModels.Data.Models;
-using System.Net.Http;
-using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.Authorization;
-using DogsServer.DbContexts;
 using DogsServer.Services;
-using Microsoft.Extensions.Configuration;
-using System.Net;
+using Dogs.Data.Models;
+using Dogs.Data.DbContexts;
+using Dogs.Data.DataTransferObjects;
 
 namespace DogsServer.Controllers
 {
@@ -49,11 +45,11 @@ namespace DogsServer.Controllers
                         Id = dog.Guide != null ? dog.Guide.GuideId : 0,
                         Name = dog.Guide != null ? dog.Guide.FirstName + " " + dog.Guide.LastName : "Pies nie ma jeszcze przewodnika"
                     },
-                    Level = dog.Level,
+                    Level = (Dogs.Data.DataTransferObjects.Enums.DogLevel)dog.Level,
                     Name = dog.Name,
                     Notes = dog.Notes,
                     PhotoBlobUrl = dog.PhotoBlobUrl,
-                    Workmodes = dog.Workmodes,
+                    Workmodes = (Dogs.Data.DataTransferObjects.Enums.DogWorkmode?)dog.Workmodes,
                     CertificateIds = dog.DogCertificates?.Select(x=>x.CertificateId).ToList(),
                     EventIds = dog.DogEvents?.Select(x=>x.EventId).ToList(),
                     TrainingIds = dog.DogTrainings?.Select(x=>x.TrainingId).ToList()
@@ -78,11 +74,11 @@ namespace DogsServer.Controllers
                     Id = dog.Guide != null ? dog.Guide.GuideId : 0,
                     Name = dog.Guide != null ? dog.Guide.FirstName + " " + dog.Guide.LastName : "Pies nie ma jeszcze przewodnika"
                 },
-                Level = dog.Level,
+                Level = (Dogs.Data.DataTransferObjects.Enums.DogLevel)dog.Level,
                 Name = dog.Name,
                 Notes = dog.Notes,
                 PhotoBlobUrl = dog.PhotoBlobUrl,
-                Workmodes = dog.Workmodes,
+                Workmodes = (Dogs.Data.DataTransferObjects.Enums.DogWorkmode?)dog.Workmodes,
                 CertificateIds = dog.DogCertificates?.Select(x => x.CertificateId).ToList(),
                 EventIds = dog.DogEvents?.Select(x => x.EventId).ToList(),
                 TrainingIds = dog.DogTrainings?.Select(x => x.TrainingId).ToList()
@@ -100,10 +96,10 @@ namespace DogsServer.Controllers
             {
                 DateOfBirth = dogModel.DateOfBirth,
                 Guide = guide,
-                Level = dogModel.Level,
+                Level = (Dogs.Data.Models.Enums.DogLevel)dogModel.Level,
                 Name = dogModel.Name,
                 Notes = dogModel.Notes,
-                Workmodes = dogModel.Workmodes,
+                Workmodes = (Dogs.Data.Models.Enums.DogWorkmode?)dogModel.Workmodes,
                 Breed = dogModel.Breed,
                 PhotoBlobUrl = dogModel.PhotoBlobUrl
             };
@@ -124,9 +120,9 @@ namespace DogsServer.Controllers
                 dog.Name = updatedDog.Name;
                 dog.Breed = updatedDog.Breed;
                 dog.DateOfBirth = updatedDog.DateOfBirth;
-                dog.Level = updatedDog.Level;
+                dog.Level = (Dogs.Data.Models.Enums.DogLevel)updatedDog.Level;
                 dog.Notes = updatedDog.Notes;
-                dog.Workmodes = updatedDog.Workmodes;
+                dog.Workmodes = (Dogs.Data.Models.Enums.DogWorkmode?)updatedDog.Workmodes;
                 dog.PhotoBlobUrl = updatedDog.PhotoBlobUrl;
                 if (updatedDog.GuideIdAndName != null)
                 {
