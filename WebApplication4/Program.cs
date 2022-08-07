@@ -7,8 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System;
-using DogsServer.DbContexts;
 using DogsServer.Services;
+using Dogs.Data.DbContexts;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,7 +24,7 @@ builder.Services.AddCors(options => options.AddPolicy("Cors", builder =>
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("KgtSqlDb"),
+    options.UseSqlServer(builder.Configuration.GetConnectionString("KgtDataDb"),
     sqlServerOptionsAction: sqlOptions =>
     {
         sqlOptions.EnableRetryOnFailure(

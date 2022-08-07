@@ -1,8 +1,8 @@
-﻿using DogsServer.DbContexts;
-using DogsServer.Models;
-using DogsServer.Repositories;
+﻿using DogsServer.Repositories;
 using System;
 using System.Security.Claims;
+using Dogs.Data.Models;
+using Dogs.Data.DbContexts;
 
 namespace DogsServer.Services
 {

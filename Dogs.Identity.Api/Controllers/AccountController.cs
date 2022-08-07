@@ -10,13 +10,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using Dogs.Identity.Data.Entities;
-using Dogs.ViewModels.Data.Models.Account;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using System.Net.Mail;
 using System.Net;
+using Dogs.Data.IdentityModels;
+using Dogs.Data.DataTransferObjects.Account;
 
 namespace Dogs.Identity.Api.Controllers
 {

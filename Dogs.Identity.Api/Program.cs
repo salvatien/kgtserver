@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using Dogs.Identity.Data.DbContexts;
-using Dogs.Identity.Data.Entities;
 using System;
+using Dogs.Data.IdentityModels;
+using Dogs.Data.DbContexts;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,9 +23,9 @@ builder.Services.AddCors(options => options.AddPolicy("Cors", builder =>
 #endregion
 #region Add Entity Framework and Identity Framework  
 
-builder.Services.AddDbContext<ApplicationUserDbContext>(options =>
+builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DogsIdentityDb"),
+    options.UseSqlServer(builder.Configuration.GetConnectionString("KgtDataDb"),
     sqlServerOptionsAction: sqlOptions =>
     {
         sqlOptions.EnableRetryOnFailure(
@@ -43,7 +43,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     options.Password.RequireNonAlphanumeric = false;
 })
     .AddDefaultTokenProviders()
-    .AddEntityFrameworkStores<ApplicationUserDbContext>();
+    .AddEntityFrameworkStores<AppDbContext>();
 
 #endregion
 
