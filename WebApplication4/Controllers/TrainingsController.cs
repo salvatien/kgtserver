@@ -59,7 +59,7 @@ namespace DogsServer.Controllers
         {
             if (!IsCurrentUserAdmin() && !IsCurrentUserMember())
                 return null;
-            var trainings = unitOfWork.TrainingRepository.GetAll().ToList();
+            var trainings = unitOfWork.TrainingRepository.GetAll().OrderByDescending(t => t.Date).ToList();
             var trainingModelList = new List<TrainingModel>();
             foreach (var t in trainings)
             {
